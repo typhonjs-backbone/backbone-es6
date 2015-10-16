@@ -6,7 +6,11 @@ Backbone-ES6 is a fork of Backbone 1.2.3 (https://github.com/jashkenas/backbone)
 
 This repository contains several pre-packed downloads in the `dist/` directory. There are AMD, CJS, and Global distributions. The "global-inclusive" bundle includes the latest jQuery and Underscore libraries.
 
+Please view the wiki for build instructions and other pertinent info:
+https://github.com/typhonjs/backbone-es6/wiki
+
 API documentation can be found in the `docs/` directory and online here:
+https://doc.esdoc.org/github.com/typhonjs/backbone-es6/'
 
 For original Backbone Docs, License, Tests, pre-packed downloads, and everything else, really, see:
 http://backbonejs.org
