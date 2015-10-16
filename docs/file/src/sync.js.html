@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../">
+  <title data-ice="title">src/sync.js | Backbone-ES6 API Document</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  
+  
+</head>
+<body class="layout-container">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <a data-ice="repoURL" href="https://github.com/typhonrt/backbone-es6/" class="repo-url-github">Repository</a>
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/Backbone.js~Backbone.html">Backbone</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/Collection.js~Collection.html">Collection</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/Debug.js~Debug.html">Debug</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/Events.js~Events.html">Events</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/History.js~History.html">History</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/Model.js~Model.html">Model</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/Router.js~Router.html">Router</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/Utils.js~Utils.html">Utils</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/View.js~View.html">View</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-extend">extend</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-sync">sync</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-BackboneProxy">BackboneProxy</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-collection">collection</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-model">model</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">src/sync.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">&apos;use strict&apos;;
+
+import _             from &apos;underscore&apos;;
+import BackboneProxy from &apos;./BackboneProxy.js&apos;;
+import Utils         from &apos;./Utils.js&apos;;
+
+/**
+ * Map from CRUD to HTTP for our default `Backbone.sync` implementation.
+ * @type {{create: string, update: string, patch: string, delete: string, read: string}}
+ */
+const s_METHOD_MAP =
+{
+   &apos;create&apos;: &apos;POST&apos;,
+   &apos;update&apos;: &apos;PUT&apos;,
+   &apos;patch&apos;: &apos;PATCH&apos;,
+   &apos;delete&apos;: &apos;DELETE&apos;,
+   &apos;read&apos;: &apos;GET&apos;
+};
+
+/**
+ * Backbone.sync - Persists models to the server. (http://backbonejs.org/#Sync)
+ * -------------
+ *
+ * Override this function to change the manner in which Backbone persists models to the server. You will be passed the
+ * type of request, and the model in question. By default, makes a RESTful Ajax request to the model&apos;s `url()`. Some
+ * possible customizations could be:
+ *
+ * Use `setTimeout` to batch rapid-fire updates into a single request.
+ * Send up the models as XML instead of JSON.
+ * Persist models via WebSockets instead of Ajax.
+ *
+ * Turn on `Backbone.emulateHTTP` in order to send `PUT` and `DELETE` requests as `POST`, with a `_method` parameter
+ * containing the true HTTP method, as well as all requests with the body as `application/x-www-form-urlencoded`
+ * instead of `application/json` with the model in a param named `model`. Useful when interfacing with server-side
+ * languages like **PHP** that make it difficult to read the body of `PUT` requests.
+ *
+ * @param {string}            method   - A string that defines the synchronization action to perform.
+ * @param {Model|Collection}  model    - The model or collection instance to synchronize.
+ * @param {object}            options  - Optional parameters
+ * @returns {XMLHttpRequest}  An XMLHttpRequest
+ */
+export default function sync(method, model, options = {})
+{
+   const type = s_METHOD_MAP[method];
+
+   // Default options, unless specified.
+   _.defaults(options,
+   {
+      emulateHTTP: BackboneProxy.backbone.emulateHTTP,
+      emulateJSON: BackboneProxy.backbone.emulateJSON
+   });
+
+   // Default JSON-request options.
+   const params = { type, dataType: &apos;json&apos; };
+
+   // Ensure that we have a URL.
+   if (!options.url)
+   {
+      params.url = _.result(model, &apos;url&apos;) || Utils.urlError();
+   }
+
+   // Ensure that we have the appropriate request data.
+   if (options.data === null &amp;&amp; model &amp;&amp; (method === &apos;create&apos; || method === &apos;update&apos; || method === &apos;patch&apos;))
+   {
+      params.contentType = &apos;application/json&apos;;
+      params.data = JSON.stringify(options.attrs || model.toJSON(options));
+   }
+
+   // For older servers, emulate JSON by encoding the request into an HTML-form.
+   if (options.emulateJSON)
+   {
+      params.contentType = &apos;application/x-www-form-urlencoded&apos;;
+      params.data = params.data ? { model: params.data } : {};
+   }
+
+   // For older servers, emulate HTTP by mimicking the HTTP method with `_method`
+   // And an `X-HTTP-Method-Override` header.
+   if (options.emulateHTTP &amp;&amp; (type === &apos;PUT&apos; || type === &apos;DELETE&apos; || type === &apos;PATCH&apos;))
+   {
+      params.type = &apos;POST&apos;;
+
+      if (options.emulateJSON) { params.data._method = type; }
+
+      const beforeSend = options.beforeSend;
+
+      options.beforeSend = function(xhr)
+      {
+         xhr.setRequestHeader(&apos;X-HTTP-Method-Override&apos;, type);
+         if (beforeSend) { return beforeSend.apply(this, arguments); }
+      };
+   }
+
+   // Don&apos;t process data on a non-GET request.
+   if (params.type !== &apos;GET&apos; &amp;&amp; !options.emulateJSON)
+   {
+      params.processData = false;
+   }
+
+   // Pass along `textStatus` and `errorThrown` from jQuery.
+   const error = options.error;
+
+   options.error = function(xhr, textStatus, errorThrown)
+   {
+      options.textStatus = textStatus;
+      options.errorThrown = errorThrown;
+      if (error) { error.call(options.context, xhr, textStatus, errorThrown); }
+   };
+
+   // Make the request, allowing the user to override any Ajax options.
+   const xhr = options.xhr = BackboneProxy.backbone.ajax(_.extend(params, options));
+
+   model.trigger(&apos;request&apos;, model, xhr, options);
+
+   return xhr;
+}</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(0.4.0)</span></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

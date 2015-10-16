@@ -1,0 +1,34 @@
+{
+  "name": "backbone-es6",
+  "version": "0.1.0",
+  "homepage": "https://github.com/typhonrt/backbone-es6",
+  "description": "A fork of Backbone converting it to ES6.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/typhonrt/backbone-es6/"
+  },
+  "bugs": {
+    "url": "https://github.com/typhonrt/backbone-es6/issues"
+  },
+  "jspm": {
+    "main": "src/ModuleRuntime.js",
+    "devDependencies": {
+      "babel": "npm:babel-core@^5.8.25",
+      "babel-runtime": "npm:babel-runtime@^5.8.25",
+      "core-js": "npm:core-js@^1.2.1",
+      "jquery": "npm:jquery@^2.1.4",
+      "underscore": "npm:underscore@^1.8.3"
+    }
+  },
+  "devDependencies": {
+    "bluebird": "^2.10.2",
+    "jspm": "^0.16.12",
+    "gulp": "^3.9.0",
+    "gulp-esdoc": "^0.1.0",
+    "gulp-eslint": "^1.0.0",
+    "gulp-run": "^1.6.11",
+    "mkdirp": "^0.5.1",
+    "systemjs-builder": "^0.14.8"
+  }
+}

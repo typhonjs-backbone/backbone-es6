@@ -1,0 +1,104 @@
+{
+   "entryPoints":
+   [
+      {
+         "destBaseDir": "./dist/",
+         "destFilename": "backbone.js",
+         "formats": ["amd", "cjs"],
+         "mangle": false,
+         "minify": false,
+         "src": "src/ModuleRuntime.js - [jquery] - [underscore]",
+         "extraConfig":
+         {
+            "meta":
+            {
+               "jquery": { "build": false },
+               "underscore": { "build": false }
+            }
+         }
+      },
+
+      {
+         "destBaseDir": "./dist/",
+         "destFilename": "backbone.min.js",
+         "formats": ["amd", "cjs"],
+         "mangle": true,
+         "minify": true,
+         "src": "src/ModuleRuntime.js - [jquery] - [underscore]",
+         "extraConfig":
+         {
+            "meta":
+            {
+               "jquery": { "build": false },
+               "underscore": { "build": false }
+            }
+         }
+      },
+
+      {
+         "destBaseDir": "./dist/",
+         "destFilename": "backbone.js",
+         "formats": ["global"],
+         "mangle": false,
+         "minify": false,
+         "src": "src/GlobalRuntime.js",
+         "extraConfig":
+         {
+            "map":
+            {
+               "jquery": "src/delegateGlobalJQuery.js",
+               "underscore": "src/delegateGlobalUnderscore.js"
+            }
+         }
+      },
+
+      {
+         "destBaseDir": "./dist/",
+         "destFilename": "backbone.min.js",
+         "formats": ["global"],
+         "mangle": true,
+         "minify": true,
+         "src": "src/GlobalRuntime.js",
+         "extraConfig":
+         {
+            "map":
+            {
+               "jquery": "src/delegateGlobalJQuery.js",
+               "underscore": "src/delegateGlobalUnderscore.js"
+            }
+         }
+      },
+
+      {
+         "destBaseDir": "./dist/",
+         "destFilename": "backbone-inclusive.js",
+         "formats": ["global"],
+         "mangle": false,
+         "minify": false,
+         "src": "src/GlobalInclusiveRuntime.js",
+         "extraConfig":
+         {
+            "meta":
+            {
+               "src/GlobalInclusiveRuntime.js": { "format": "cjs" }
+            }
+         }
+      },
+
+      {
+         "destBaseDir": "./dist/",
+         "destFilename": "backbone-inclusive.min.js",
+         "formats": ["global"],
+         "mangle": true,
+         "minify": true,
+         "src": "src/GlobalInclusiveRuntime.js",
+         "extraConfig":
+         {
+            "meta":
+            {
+               "src/GlobalInclusiveRuntime.js": { "format": "cjs" }
+            }
+         }
+      }
+   ]
+}
