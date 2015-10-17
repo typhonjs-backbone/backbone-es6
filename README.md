@@ -1,5 +1,7 @@
 ![Backbone-ES6](http://i.imgur.com/vyFIbER.png)
 
+[![Documentation](https://doc.esdoc.org/github.com/typhonjs/backbone-es6/badge.svg)](https://doc.esdoc.org/github.com/typhonjs/backbone-es6/)
+
 Backbone supplies structure to JavaScript-heavy applications by providing models with key-value binding and custom events, collections with a rich API of enumerable functions, views with declarative event handling, and connects it all to your existing application over a RESTful JSON interface.
 
 Backbone-ES6 is a fork of Backbone 1.2.3 (https://github.com/jashkenas/backbone) converting and modularizing it into idiomatic ES6. The impetus for this fork is to experiment with modernizing and making Backbone easier to modify in a granular fashion. In particular the Parse JS SDK (http://www.parse.com) previously also was a fork of Backbone, but with the 1.6+ SDK release the Backbone API was unceremoniously removed. Backbone-ES6 provides the base for Backbone-Parse-ES6 (https://github.com/typhonjs/backbone-parse-es6) which provides a solution for Backbone dependent Parse users. 
