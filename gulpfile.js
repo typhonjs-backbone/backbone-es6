@@ -5,6 +5,7 @@
  * bundle - Creates one or more bundles defined in './bundle-config.js'
  * docs - Creates documentation and outputs it in './docs'
  * lint - Runs ESLint outputting to console.
+ * jspm-inspect - Executes 'jspm inspect'
  * jspm-install - Executes 'jspm install'
  * jspm-update - Executes 'jspm update'
  * npm-install - Executes 'npm install'
@@ -116,6 +117,20 @@ gulp.task('lint', function()
     .pipe(eslint({ useEslintrc: true }))
     .pipe(eslint.formatEach('compact', process.stderr))
     .pipe(eslint.failOnError());
+});
+
+/**
+ * Runs "jspm inspect"
+ */
+gulp.task('jspm-inspect', function(cb)
+{
+   var exec = require('child_process').exec;
+   exec('jspm inspect', function (err, stdout, stderr)
+   {
+      console.log(stdout);
+      console.log(stderr);
+      cb(err);
+   });
 });
 
 /**
