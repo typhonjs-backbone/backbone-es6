@@ -1,5 +1,5 @@
 languages:
-  JavaScri pt: true
+  JavaScript: true
 engines:
   eslint:
     enabled: true
