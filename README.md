@@ -11,6 +11,8 @@ Backbone supplies structure to JavaScript-heavy applications by providing models
 
 Backbone-ES6 is a fork of Backbone (https://github.com/jashkenas/backbone) converting and modularizing it into idiomatic ES6. The impetus for this fork is to experiment with modernizing and making Backbone easier to modify in a granular fashion. In particular the Parse JS SDK (http://www.parse.com) previously also was a fork of Backbone, but with the 1.6+ SDK release the Backbone API was unceremoniously removed. Backbone-ES6 provides the base for Backbone-Parse-ES6 (https://github.com/typhonjs/backbone-parse-es6) which provides a solution for Backbone dependent Parse users. Another reason for Backbone-ES6 is supporting end to end documentation via ESDoc for ES6 frameworks and apps built on top of Backbone. 
 
+Backbone-ES6 uses SystemJS / JSPM (www.jspm.io) for dependency management and bundling distributions. For an example of using SystemJS / JSPM directly, albeit w/ Parse via Backbone-Parse-ES6 please see this demo repo: https://github.com/typhonjs/backbone-parse-es6-demo
+
 When a new Backbone release is made (next 1.2.4) Backbone-ES6 will be updated. Tests from Backbone will be ported to Backbone-ES6 with the upcoming 1.2.4 release. 
 
 This repository contains several pre-packed downloads in the `dist/` directory. There are AMD, CJS, and Global distributions. The "global-inclusive" bundle includes the latest jQuery (2.1.4) and Underscore (1.8.3) libraries.
