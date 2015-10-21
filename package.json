@@ -23,12 +23,9 @@
   },
   "devDependencies": {
     "bluebird": "^2.10.2",
-    "jspm": "^0.16.12",
+    "jspm": "^0.16.13",
     "gulp": "^3.9.0",
     "gulp-esdoc": "^0.1.0",
-    "gulp-eslint": "^1.0.0",
-    "gulp-run": "^1.6.11",
-    "mkdirp": "^0.5.1",
-    "systemjs-builder": "^0.14.8"
+    "gulp-eslint": "^1.0.0"
   }
 }

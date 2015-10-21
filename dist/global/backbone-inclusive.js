@@ -8018,8 +8018,7 @@ $__System.registerDynamic("12", [], true, function(req, exports, module) {
   var global = this,
       __define = global.define;
   global.define = undefined;
-  var UNDEFINED = 'undefined';
-  var global = module.exports = typeof window != UNDEFINED && window.Math == Math ? window : typeof self != UNDEFINED && self.Math == Math ? self : Function('return this')();
+  var global = module.exports = typeof window != 'undefined' && window.Math == Math ? window : typeof self != 'undefined' && self.Math == Math ? self : Function('return this')();
   if (typeof __g == 'number')
     __g = global;
   global.define = __define;
@@ -8031,7 +8030,7 @@ $__System.registerDynamic("13", [], true, function(req, exports, module) {
   var global = this,
       __define = global.define;
   global.define = undefined;
-  var core = module.exports = {version: '1.2.1'};
+  var core = module.exports = {version: '1.2.2'};
   if (typeof __e == 'number')
     __e = core;
   global.define = __define;
@@ -9245,17 +9244,20 @@ $__System.registerDynamic("35", [], true, function(req, exports, module) {
   return module.exports;
 });
 
-$__System.registerDynamic("36", ["31", "2f", "34"], true, function(req, exports, module) {
+$__System.registerDynamic("36", ["d", "31", "34"], true, function(req, exports, module) {
   ;
   var global = this,
       __define = global.define;
   global.define = undefined;
-  var has = req('31'),
-      hide = req('2f'),
+  var def = req('d').setDesc,
+      has = req('31'),
       TAG = req('34')('toStringTag');
   module.exports = function(it, tag, stat) {
     if (it && !has(it = stat ? it : it.prototype, TAG))
-      hide(it, TAG, tag);
+      def(it, TAG, {
+        configurable: true,
+        value: tag
+      });
   };
   global.define = __define;
   return module.exports;
@@ -9495,8 +9497,8 @@ $__System.registerDynamic("40", ["34"], true, function(req, exports, module) {
       throw 2;
     });
   } catch (e) {}
-  module.exports = function(exec) {
-    if (!SAFE_CLOSING)
+  module.exports = function(exec, skipClosing) {
+    if (!skipClosing && !SAFE_CLOSING)
       return false;
     var safe = false;
     try {
@@ -9534,7 +9536,9 @@ $__System.registerDynamic("41", ["20", "14", "3a", "3b", "3c", "3d", "3f", "40"]
   }), 'Array', {from: function from(arrayLike) {
       var O = toObject(arrayLike),
           C = typeof this == 'function' ? this : Array,
-          mapfn = arguments[1],
+          $$ = arguments,
+          $$len = $$.length,
+          mapfn = $$len > 1 ? $$[1] : undefined,
           mapping = mapfn !== undefined,
           index = 0,
           iterFn = getIterFn(O),
@@ -9543,7 +9547,7 @@ $__System.registerDynamic("41", ["20", "14", "3a", "3b", "3c", "3d", "3f", "40"]
           step,
           iterator;
       if (mapping)
-        mapfn = ctx(mapfn, arguments[2], 2);
+        mapfn = ctx(mapfn, $$len > 2 ? $$[2] : undefined, 2);
       if (iterFn != undefined && !(C == Array && isArrayIter(iterFn))) {
         for (iterator = iterFn.call(O), result = new C; !(step = iterator.next()).done; index++) {
           result[index] = mapping ? call(iterator, mapfn, [step.value, index], true) : step.value;

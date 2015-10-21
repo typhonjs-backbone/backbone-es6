@@ -15,12 +15,13 @@ var gulp =        require('gulp');
 
 var esdoc =       require('gulp-esdoc');
 var eslint =      require('gulp-eslint');
-var run =         require('gulp-run');
-var mkdirp =      require('mkdirp');
-var Promise =     require("bluebird");
-var Builder =     require('systemjs-builder');
+var fs =          require('fs');
+var jspm =        require('jspm');
 
-var bundleInfo =  require('./bundle-config.json');
+var Promise =     require("bluebird");
+
+// Set the package path to the local root where config.js is located.
+jspm.setPackagePath('.');
 
 /**
  * Bundles Backbone-ES6 via the config file found in './bundle-config.json'. This file contains an array of
@@ -47,6 +48,8 @@ var bundleInfo =  require('./bundle-config.json');
 gulp.task('bundle', function()
 {
    var promiseList = [];
+
+   var bundleInfo =  require('./bundle-config.json');
 
    for (var cntr = 0; cntr < bundleInfo.entryPoints.length; cntr++)
    {
@@ -102,17 +105,57 @@ gulp.task('lint', function()
 /**
  * Runs "jspm install"
  */
-gulp.task('jspm-install', function()
+gulp.task('jspm-install', function(cb)
 {
-   return run('jspm install').exec();
+   var exec = require('child_process').exec;
+   exec('jspm install', function (err, stdout, stderr)
+   {
+      console.log(stdout);
+      console.log(stderr);
+      cb(err);
+   });
+});
+
+/**
+ * Runs "jspm update"
+ */
+gulp.task('jspm-update', function(cb)
+{
+   var exec = require('child_process').exec;
+   exec('jspm update', function (err, stdout, stderr)
+   {
+      console.log(stdout);
+      console.log(stderr);
+      cb(err);
+   });
 });
 
 /**
  * Runs "npm install"
  */
-gulp.task('npm-install', function()
+gulp.task('npm-install', function(cb)
 {
-   return run('npm install').exec();
+   var exec = require('child_process').exec;
+   exec('npm install', function (err, stdout, stderr)
+   {
+      console.log(stdout);
+      console.log(stderr);
+      cb(err);
+   });
+});
+
+/**
+ * Runs "npm uninstall"
+ */
+gulp.task('npm-uninstall', function(cb)
+{
+   var exec = require('child_process').exec;
+   exec('npm uninstall', function (err, stdout, stderr)
+   {
+      console.log(stdout);
+      console.log(stderr);
+      cb(err);
+   });
 });
 
 /**
@@ -131,50 +174,52 @@ function buildStatic(srcFilename, destDir, destFilepath, minify, mangle, format,
 {
    return new Promise(function(resolve, reject)
    {
-      mkdirp(destDir, function(err)
+      // Attempt to create destDir if it does not exist.
+      if (!fs.existsSync(destDir))
       {
-         if (err)
+         fs.mkdirSync(destDir);
+      }
+
+      // Error out early if destDir does not exist.
+      if (!fs.existsSync(destDir))
+      {
+         console.error('Could not create destination directory: ' +destDir);
+         reject();
+      }
+
+      var builder = new jspm.Builder();
+      builder.loadConfig('./config.js').then(function()
+      {
+         if (typeof extraConfig !== 'undefined')
          {
-            console.error(err);
-            reject();
+            builder.config(extraConfig);
          }
-         else
+
+         console.log('Bundle queued - srcFilename: ' +srcFilename +'; format: ' +format  +'; mangle: ' +mangle
+          +'; minify: ' +minify +'; destDir: ' +destDir +'; destFilepath: ' +destFilepath);
+
+         builder.buildStatic(srcFilename, destFilepath,
          {
-            var builder = new Builder();
-            builder.loadConfig('./config.js').then(function()
-            {
-               if (typeof extraConfig !== 'undefined')
-               {
-                  builder.config(extraConfig);
-               }
+            minify: minify,
+            mangle: mangle,
+            format: format
+         })
+         .then(function ()
+         {
+            console.log('Bundle complete - filename: ' +destFilepath +' minify: ' +minify +'; mangle: ' +mangle
+             +'; format: ' +format);
 
-               console.log("Bundle queued - srcFilename: " +srcFilename +"; format: " +format  +"; mangle: " +mangle
-                +"; minify: " +minify +"; destDir: " +destDir +"; destFilepath: " +destFilepath);
+            resolve();
+         })
+         .catch(function (err)
+         {
+            console.log('Bundle error - filename: ' +destFilepath +' minify: ' +minify + '; mangle: ' +mangle
+             +'; format: ' +format);
 
-               builder.buildStatic(srcFilename, destFilepath,
-                {
-                   minify: minify,
-                   mangle: mangle,
-                   format: format
-                })
-                .then(function ()
-                {
-                   console.log('Bundle complete - filename: ' +destFilepath +' minify: ' +minify +'; mangle: ' +mangle
-                    +'; format: ' +format);
+            console.log(err);
 
-                   resolve();
-                })
-                .catch(function (err)
-                {
-                   console.log('Bundle error - filename: ' +destFilepath +' minify: ' +minify + '; mangle: ' +mangle
-                    +'; format: ' +format);
-
-                   console.log(err);
-
-                   resolve();
-                });
-            });
-         }
+            resolve();
+         });
       });
    });
 }

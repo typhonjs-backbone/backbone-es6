@@ -444,7 +444,7 @@
   // etc UMD / module pattern
 })*/
 
-(['1'], ["5","6","6","6","6","6","6","6","6","6","6"], function($__System) {
+(['1'], ["6","5","6","6","6","6","6","6","6","6","6"], function($__System) {
 
 $__System.registerDynamic("2", [], true, function(req, exports, module) {
   ;
@@ -736,8 +736,7 @@ $__System.registerDynamic("c", [], true, function(req, exports, module) {
   var global = this,
       __define = global.define;
   global.define = undefined;
-  var UNDEFINED = 'undefined';
-  var global = module.exports = typeof window != UNDEFINED && window.Math == Math ? window : typeof self != UNDEFINED && self.Math == Math ? self : Function('return this')();
+  var global = module.exports = typeof window != 'undefined' && window.Math == Math ? window : typeof self != 'undefined' && self.Math == Math ? self : Function('return this')();
   if (typeof __g == 'number')
     __g = global;
   global.define = __define;
@@ -749,7 +748,7 @@ $__System.registerDynamic("d", [], true, function(req, exports, module) {
   var global = this,
       __define = global.define;
   global.define = undefined;
-  var core = module.exports = {version: '1.2.1'};
+  var core = module.exports = {version: '1.2.2'};
   if (typeof __e == 'number')
     __e = core;
   global.define = __define;
@@ -1963,17 +1962,20 @@ $__System.registerDynamic("2f", [], true, function(req, exports, module) {
   return module.exports;
 });
 
-$__System.registerDynamic("30", ["2b", "29", "2e"], true, function(req, exports, module) {
+$__System.registerDynamic("30", ["7", "2b", "2e"], true, function(req, exports, module) {
   ;
   var global = this,
       __define = global.define;
   global.define = undefined;
-  var has = req('2b'),
-      hide = req('29'),
+  var def = req('7').setDesc,
+      has = req('2b'),
       TAG = req('2e')('toStringTag');
   module.exports = function(it, tag, stat) {
     if (it && !has(it = stat ? it : it.prototype, TAG))
-      hide(it, TAG, tag);
+      def(it, TAG, {
+        configurable: true,
+        value: tag
+      });
   };
   global.define = __define;
   return module.exports;
@@ -2213,8 +2215,8 @@ $__System.registerDynamic("3a", ["2e"], true, function(req, exports, module) {
       throw 2;
     });
   } catch (e) {}
-  module.exports = function(exec) {
-    if (!SAFE_CLOSING)
+  module.exports = function(exec, skipClosing) {
+    if (!skipClosing && !SAFE_CLOSING)
       return false;
     var safe = false;
     try {
@@ -2252,7 +2254,9 @@ $__System.registerDynamic("3b", ["1a", "e", "34", "35", "36", "37", "39", "3a"],
   }), 'Array', {from: function from(arrayLike) {
       var O = toObject(arrayLike),
           C = typeof this == 'function' ? this : Array,
-          mapfn = arguments[1],
+          $$ = arguments,
+          $$len = $$.length,
+          mapfn = $$len > 1 ? $$[1] : undefined,
           mapping = mapfn !== undefined,
           index = 0,
           iterFn = getIterFn(O),
@@ -2261,7 +2265,7 @@ $__System.registerDynamic("3b", ["1a", "e", "34", "35", "36", "37", "39", "3a"],
           step,
           iterator;
       if (mapping)
-        mapfn = ctx(mapfn, arguments[2], 2);
+        mapfn = ctx(mapfn, $$len > 2 ? $$[2] : undefined, 2);
       if (iterFn != undefined && !(C == Array && isArrayIter(iterFn))) {
         for (iterator = iterFn.call(O), result = new C; !(step = iterator.next()).done; index++) {
           result[index] = mapping ? call(iterator, mapfn, [step.value, index], true) : step.value;
@@ -6396,7 +6400,7 @@ $__System.register('1', ['4', '23', '40', '42', '43', '44', '45', '46', '47'], f
 })
 (function(factory) {
   if (typeof define == 'function' && define.amd)
-    define(["jquery","underscore","underscore","underscore","underscore","underscore","underscore","underscore","underscore","underscore","underscore"], factory);
+    define(["underscore","jquery","underscore","underscore","underscore","underscore","underscore","underscore","underscore","underscore","underscore"], factory);
   else
     factory();
 });
