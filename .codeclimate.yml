@@ -1,0 +1,15 @@
+languages:
+  JavaScript: true
+engines:
+  eslint:
+    enabled: true
+ratings:
+   paths:
+   - src/**
+exclude_paths:
+- dist/**/*
+- docs/**/*
+- jspm_packages/**/*
+- node_modules/**/*
+- config.js
+- gulpfile.js
