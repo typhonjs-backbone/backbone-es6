@@ -262,8 +262,7 @@ const s_TRIGGER_EVENTS = (events, args) =>
  * <p>
  * Catalog of Events:<br>
  * Here's the complete list of built-in Backbone events, with arguments. You're also free to trigger your own events on
- * Models, Collections and Views as you see fit. The Backbone object itself mixes in Events, and can be used to emit any
- * global events that your application needs.
+ * Models, Collections and Views as you see fit.
  * <p>
  * "add" (model, collection, options) — when a model is added to a collection.<br>
  * "remove" (model, collection, options) — when a model is removed from a collection.<br>
