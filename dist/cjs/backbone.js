@@ -444,7 +444,7 @@
   // etc UMD / module pattern
 })*/
 
-(['1'], ["5","6","6","6","6","6","6","6","6","6","6"], function($__System) {
+(['1'], ["6","6","6","5","6","6","6","6","6","6","6"], function($__System) {
 
 $__System.registerDynamic("2", [], true, function(req, exports, module) {
   ;
@@ -6399,5 +6399,5 @@ $__System.register('1', ['4', '23', '40', '42', '43', '44', '45', '46', '47'], f
 
 })
 (function(factory) {
-  module.exports = factory(require("jquery"), require("underscore"), require("underscore"), require("underscore"), require("underscore"), require("underscore"), require("underscore"), require("underscore"), require("underscore"), require("underscore"), require("underscore"));
+  module.exports = factory(require("underscore"), require("underscore"), require("underscore"), require("jquery"), require("underscore"), require("underscore"), require("underscore"), require("underscore"), require("underscore"), require("underscore"), require("underscore"));
 });

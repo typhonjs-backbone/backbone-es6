@@ -1,0 +1,21 @@
+{
+   "entryPoints":
+   [
+      {
+         "destBaseDir": "./dist/",
+         "destFilename": "backbone.js",
+         "formats": ["amd"],
+         "mangle": false,
+         "minify": false,
+         "src": "src/ModuleRuntime.js - [jquery] - [underscore]",
+         "extraConfig":
+         {
+            "meta":
+            {
+               "jquery": { "build": false },
+               "underscore": { "build": false }
+            }
+         }
+      }
+   ]
+}
