@@ -6,7 +6,10 @@
  * docs - Creates documentation and outputs it in './docs'
  * lint - Runs ESLint outputting to console.
  * jspm-install - Executes 'jspm install'
+ * jspm-update - Executes 'jspm update'
  * npm-install - Executes 'npm install'
+ * npm-uninstall - Executes 'npm uninstall'
+ * test - Runs lint and bundle tasks.
  */
 
 /* eslint-disable */
@@ -51,6 +54,12 @@ gulp.task('bundle', function()
 
    var bundleInfo =  require('./bundle-config.json');
 
+   // Attempt to create './dist' directory if it does not exist.
+   if (!fs.existsSync('dist'))
+   {
+      fs.mkdirSync('dist');
+   }
+
    for (var cntr = 0; cntr < bundleInfo.entryPoints.length; cntr++)
    {
       var entry = bundleInfo.entryPoints[cntr];
@@ -77,6 +86,11 @@ gulp.task('bundle', function()
    return Promise.all(promiseList).then(function()
    {
       console.log('All Bundle Tasks Complete');
+   })
+   .catch(function (err)
+   {
+      console.log('Bundle error: ' +err);
+      process.exit(1);
    });
 });
 
@@ -159,6 +173,11 @@ gulp.task('npm-uninstall', function(cb)
 });
 
 /**
+ * Runs "lint" and "bundle"; useful for testing and Travis CI.
+ */
+gulp.task('test', ['lint', 'bundle']);
+
+/**
  * Returns a Promise which encapsulates an execution of SystemJS Builder.
  *
  * @param srcFilename
@@ -218,7 +237,7 @@ function buildStatic(srcFilename, destDir, destFilepath, minify, mangle, format,
 
             console.log(err);
 
-            resolve();
+            reject(err);
          });
       });
    });
