@@ -1,5 +1,6 @@
 ![Backbone-ES6](http://i.imgur.com/KKkgP8P.png)
 
+[![Backbone](https://img.shields.io/badge/backbone-1.2.3-brightgreen.svg?style=flat)](https://github.com/jashkenas/backbone)
 [![Documentation](https://doc.esdoc.org/github.com/typhonjs/backbone-es6/badge.svg)](https://doc.esdoc.org/github.com/typhonjs/backbone-es6/)
 [![Code Style](https://img.shields.io/badge/code%20style-allman-brightgreen.svg?style=flat)](https://en.wikipedia.org/wiki/Indent_style#Allman_style)
 
