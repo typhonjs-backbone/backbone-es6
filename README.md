@@ -1,8 +1,9 @@
 ![Backbone-ES6](http://i.imgur.com/KKkgP8P.png)
 
-[![Backbone](https://img.shields.io/badge/backbone-1.2.3-brightgreen.svg?style=flat)](https://github.com/jashkenas/backbone)
+[![Backbone](https://img.shields.io/badge/backbone-1.2.3-yellowgreen.svg?style=flat)](https://github.com/jashkenas/backbone)
 [![Documentation](https://doc.esdoc.org/github.com/typhonjs/backbone-es6/badge.svg)](https://doc.esdoc.org/github.com/typhonjs/backbone-es6/)
-[![Code Style](https://img.shields.io/badge/code%20style-allman-brightgreen.svg?style=flat)](https://en.wikipedia.org/wiki/Indent_style#Allman_style)
+[![Code Style](https://img.shields.io/badge/code%20style-allman-yellowgreen.svg?style=flat)](https://en.wikipedia.org/wiki/Indent_style#Allman_style)
+[![License](https://img.shields.io/badge/license-MIT-yellowgreen.svg?style=flat)](https://github.com/typhonjs/backbone-es6/blob/master/LICENSE)
 
 [![Build Status](https://travis-ci.org/typhonjs/backbone-es6.svg)](https://travis-ci.org/typhonjs/backbone-es6)
 [![Dependency Status](https://www.versioneye.com/user/projects/5627b86536d0ab0021000f46/badge.svg?style=flat)](https://www.versioneye.com/user/projects/5627b86536d0ab0021000f46)
