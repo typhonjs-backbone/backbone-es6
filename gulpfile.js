@@ -176,12 +176,12 @@ gulp.task('npm-install', function(cb)
 });
 
 /**
- * Runs "npm uninstall"
+ * Runs "npm uninstall <package> for all node modules installed."
  */
 gulp.task('npm-uninstall', function(cb)
 {
    var exec = require('child_process').exec;
-   exec('npm uninstall', function (err, stdout, stderr)
+   exec('for package in `ls node_modules`; do npm uninstall $package; done;', function (err, stdout, stderr)
    {
       console.log(stdout);
       console.log(stderr);
