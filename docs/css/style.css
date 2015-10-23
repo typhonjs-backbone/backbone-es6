@@ -69,7 +69,7 @@ del {
 
 p {
   margin-bottom: 15px;
-  line-height: 19px;
+  line-height: 1.5;
 }
 
 p > code {
@@ -793,8 +793,37 @@ h1 .esdoc-coverage {
   padding-left: 0;
 }
 
-.manual-toc-title a {
+/** manual */
+
+.manual-root .navigation {
+  padding-left: 0;
+}
+
+.navigation .manual-toc-title {
+  margin: 0;
+  padding: 0.5em 0 0.5em 1em;
+  border: none;
+  font-size: 1em;
+  font-weight: normal;
+}
+
+.navigation .manual-toc-title:first-child {
+  margin-top: 0;
+}
+
+.navigation .manual-toc {
+  display: none;
+  margin-left: 0.5em;
+  margin-top: -0.25em;
+}
+
+.github-markdown .manual-toc-title a {
   color: inherit;
+}
+
+.manual-breadcrumb-list {
+  font-size: 0.8em;
+  margin-bottom: 1em;
 }
 
 .manual-toc-title a:hover {
@@ -906,4 +935,10 @@ h1 .esdoc-coverage {
 
 .github-markdown table tr:nth-child(2n) {
   background-color: #f8f8f8;
+}
+
+/** badge(.svg) does not have border */
+.github-markdown img:not([src*=".svg"]) {
+  max-width: 100%;
+  box-shadow: 1px 1px 1px rgba(0,0,0,0.5);
 }

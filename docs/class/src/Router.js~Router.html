@@ -9,8 +9,9 @@
   <script src="script/prettify/prettify.js"></script>
   
   
+  <script src="script/manual.js"></script>
 </head>
-<body class="layout-container">
+<body class="layout-container" data-ice="rootContainer">
 
 <header>
   <a href="./">Home</a>
@@ -83,29 +84,22 @@ recently, hash fragments (#page) were used to provide these permalinks, but with
 it&apos;s now possible to use standard URLs (/page). Backbone.Router provides methods for routing client-side pages, and
 connecting them to actions and events. For browsers which don&apos;t yet support the History API, the Router handles
 graceful fallback and transparent translation to the fragment version of the URL.</p>
-<p></p><p>
-During page load, after your application has finished creating all of its routers, be sure to call
+<p>During page load, after your application has finished creating all of its routers, be sure to call
 Backbone.history.start() or Backbone.history.start({pushState: true}) to route the initial URL.</p>
-<p></p><p>
-routes - router.routes<br>
+<p>routes - router.routes
 The routes hash maps URLs with parameters to functions on your router (or just direct function definitions, if you
 prefer), similar to the View&apos;s events hash. Routes can contain parameter parts, :param, which match a single URL
 component between slashes; and splat parts *splat, which can match any number of URL components. Part of a route can
 be made optional by surrounding it in parentheses (/:optional).</p>
-<p></p><p>
-For example, a route of &quot;search/:query/p:page&quot; will match a fragment of #search/obama/p2, passing &quot;obama&quot; and &quot;2&quot; to
+<p>For example, a route of &quot;search/:query/p:page&quot; will match a fragment of #search/obama/p2, passing &quot;obama&quot; and &quot;2&quot; to
 the action.</p>
-<p></p><p>
-A route of &quot;file/*path&quot; will match #file/nested/folder/file.txt, passing &quot;nested/folder/file.txt&quot; to the action.</p>
-<p></p><p>
-A route of &quot;docs/:section(/:subsection)&quot; will match #docs/faq and #docs/faq/installing, passing &quot;faq&quot; to the action
+<p>A route of &quot;file/*path&quot; will match #file/nested/folder/file.txt, passing &quot;nested/folder/file.txt&quot; to the action.</p>
+<p>A route of &quot;docs/:section(/:subsection)&quot; will match #docs/faq and #docs/faq/installing, passing &quot;faq&quot; to the action
 in the first case, and passing &quot;faq&quot; and &quot;installing&quot; to the action in the second.</p>
-<p></p><p>
-Trailing slashes are treated as part of the URL, and (correctly) treated as a unique route when accessed. docs and
+<p>Trailing slashes are treated as part of the URL, and (correctly) treated as a unique route when accessed. docs and
 docs/ will fire different callbacks. If you can&apos;t avoid generating both types of URLs, you can define a &quot;docs(/)&quot;
 matcher to capture both cases.</p>
-<p></p><p>
-When the visitor presses the back button, or enters a URL, and a particular route is matched, the name of the action
+<p>When the visitor presses the back button, or enters a URL, and a particular route is matched, the name of the action
 will be fired as an event, so that other objects can listen to the router, and be notified. In the following example,
 visiting #help/uploading will fire a route:help event from the router.</p>
 </div>
@@ -207,7 +201,8 @@ new Backbone.Router({ routes: { &apos;*actions&apos;: &apos;defaultRoute&apos; }
       <div>
         
         
-        <div data-ice="description">When creating a new router, you may pass its routes hash directly as an option, if you choose.</div>
+        <div data-ice="description"><p>When creating a new router, you may pass its routes hash directly as an option, if you choose.</p>
+</div>
       </div>
     </td>
     <td>
@@ -239,7 +234,8 @@ new Backbone.Router({ routes: { &apos;*actions&apos;: &apos;defaultRoute&apos; }
       <div>
         
         
-        <div data-ice="description">Stores the routes hash.</div>
+        <div data-ice="description"><p>Stores the routes hash.</p>
+</div>
       </div>
     </td>
     <td>
@@ -271,7 +267,8 @@ new Backbone.Router({ routes: { &apos;*actions&apos;: &apos;defaultRoute&apos; }
       <div>
         
         
-        <div data-ice="description">Execute a route handler with the provided parameters.</div>
+        <div data-ice="description"><p>Execute a route handler with the provided parameters.</p>
+</div>
       </div>
     </td>
     <td>
@@ -296,7 +293,8 @@ new Backbone.Router({ routes: { &apos;*actions&apos;: &apos;defaultRoute&apos; }
       <div>
         
         
-        <div data-ice="description">Initialize is an empty function by default.</div>
+        <div data-ice="description"><p>Initialize is an empty function by default.</p>
+</div>
       </div>
     </td>
     <td>
@@ -321,7 +319,8 @@ new Backbone.Router({ routes: { &apos;*actions&apos;: &apos;defaultRoute&apos; }
       <div>
         
         
-        <div data-ice="description">Simple proxy to `Backbone.history` to save a fragment into the history.</div>
+        <div data-ice="description"><p>Simple proxy to <code>Backbone.history</code> to save a fragment into the history.</p>
+</div>
       </div>
     </td>
     <td>
@@ -346,7 +345,8 @@ new Backbone.Router({ routes: { &apos;*actions&apos;: &apos;defaultRoute&apos; }
       <div>
         
         
-        <div data-ice="description">Manually bind a single named route to a callback.</div>
+        <div data-ice="description"><p>Manually bind a single named route to a callback.</p>
+</div>
       </div>
     </td>
     <td>
@@ -379,7 +379,8 @@ new Backbone.Router({ routes: { &apos;*actions&apos;: &apos;defaultRoute&apos; }
       <div>
         
         
-        <div data-ice="description">Delegates to `on`.</div>
+        <div data-ice="description"><p>Delegates to <code>on</code>.</p>
+</div>
       </div>
     </td>
     <td>
@@ -404,7 +405,8 @@ new Backbone.Router({ routes: { &apos;*actions&apos;: &apos;defaultRoute&apos; }
       <div>
         
         
-        <div data-ice="description">Tell an object to listen to a particular event on an other object.</div>
+        <div data-ice="description"><p>Tell an object to listen to a particular event on an other object.</p>
+</div>
       </div>
     </td>
     <td>
@@ -429,7 +431,8 @@ new Backbone.Router({ routes: { &apos;*actions&apos;: &apos;defaultRoute&apos; }
       <div>
         
         
-        <div data-ice="description">Just like `listenTo`, but causes the bound callback to fire only once before being removed.</div>
+        <div data-ice="description"><p>Just like <code>listenTo</code>, but causes the bound callback to fire only once before being removed.</p>
+</div>
       </div>
     </td>
     <td>
@@ -454,7 +457,8 @@ new Backbone.Router({ routes: { &apos;*actions&apos;: &apos;defaultRoute&apos; }
       <div>
         
         
-        <div data-ice="description">Remove a previously-bound callback function from an object.</div>
+        <div data-ice="description"><p>Remove a previously-bound callback function from an object.</p>
+</div>
       </div>
     </td>
     <td>
@@ -479,7 +483,8 @@ new Backbone.Router({ routes: { &apos;*actions&apos;: &apos;defaultRoute&apos; }
       <div>
         
         
-        <div data-ice="description">Bind a callback function to an object.</div>
+        <div data-ice="description"><p>Bind a callback function to an object.</p>
+</div>
       </div>
     </td>
     <td>
@@ -504,7 +509,8 @@ new Backbone.Router({ routes: { &apos;*actions&apos;: &apos;defaultRoute&apos; }
       <div>
         
         
-        <div data-ice="description">Just like `on`, but causes the bound callback to fire only once before being removed.</div>
+        <div data-ice="description"><p>Just like <code>on</code>, but causes the bound callback to fire only once before being removed.</p>
+</div>
       </div>
     </td>
     <td>
@@ -529,7 +535,8 @@ new Backbone.Router({ routes: { &apos;*actions&apos;: &apos;defaultRoute&apos; }
       <div>
         
         
-        <div data-ice="description">Tell an object to stop listening to events.</div>
+        <div data-ice="description"><p>Tell an object to stop listening to events.</p>
+</div>
       </div>
     </td>
     <td>
@@ -554,7 +561,8 @@ new Backbone.Router({ routes: { &apos;*actions&apos;: &apos;defaultRoute&apos; }
       <div>
         
         
-        <div data-ice="description">Trigger callbacks for the given event, or space-delimited list of events.</div>
+        <div data-ice="description"><p>Trigger callbacks for the given event, or space-delimited list of events.</p>
+</div>
       </div>
     </td>
     <td>
@@ -579,7 +587,8 @@ new Backbone.Router({ routes: { &apos;*actions&apos;: &apos;defaultRoute&apos; }
       <div>
         
         
-        <div data-ice="description">Delegates to `off`.</div>
+        <div data-ice="description"><p>Delegates to <code>off</code>.</p>
+</div>
       </div>
     </td>
     <td>
@@ -987,7 +996,7 @@ post-route cleanup.</p>
 </div>
 
 <footer class="footer">
-  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(0.4.0)</span></a>
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(0.4.1)</span></a>
 </footer>
 
 <script src="script/search_index.js"></script>

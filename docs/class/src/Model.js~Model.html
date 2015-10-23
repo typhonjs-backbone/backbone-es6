@@ -9,8 +9,9 @@
   <script src="script/prettify/prettify.js"></script>
   
   
+  <script src="script/manual.js"></script>
 </head>
-<body class="layout-container">
+<body class="layout-container" data-ice="rootContainer">
 
 <header>
   <a href="./">Home</a>
@@ -83,24 +84,18 @@
   <div class="description" data-ice="description"><h2 id="backbone-model-models-are-the-heart-of-any-javascript-application-http-backbonejs-org-model-">Backbone.Model - Models are the heart of any JavaScript application. (<a href="http://backbonejs.org/#Model">http://backbonejs.org/#Model</a>)</h2>
 <p>Models are the heart of any JavaScript application, containing the interactive data as well as a large part of the
 logic surrounding it: conversions, validations, computed properties, and access control.</p>
-<p></p><p>
-Backbone-ES6 supports the older &quot;extend&quot; functionality of Backbone. You can still use &quot;extend&quot; to extend
+<p>Backbone-ES6 supports the older &quot;extend&quot; functionality of Backbone. You can still use &quot;extend&quot; to extend
 Backbone.Model with your domain-specific methods, and Model provides a basic set of functionality for managing
 changes.</p>
-<p></p><p>
-It is recommended though to use ES6 syntax for working with Backbone-ES6 foregoing the older &quot;extend&quot; mechanism.</p>
-<p></p><p>
-Create a new model with the specified attributes. A client id (<code>cid</code>) is automatically generated &amp; assigned for you.</p>
-<p></p><p>
-If you pass a {collection: ...} as the options, the model gains a collection property that will be used to indicate
+<p>It is recommended though to use ES6 syntax for working with Backbone-ES6 foregoing the older &quot;extend&quot; mechanism.</p>
+<p>Create a new model with the specified attributes. A client id (<code>cid</code>) is automatically generated &amp; assigned for you.</p>
+<p>If you pass a {collection: ...} as the options, the model gains a collection property that will be used to indicate
 which collection the model belongs to, and is used to help compute the model&apos;s url. The model.collection property is
 normally created automatically when you first add a model to a collection. Note that the reverse is not true, as
 passing this option to the constructor will not automatically add the model to the collection. Useful, sometimes.</p>
-<p></p><p>
-If {parse: true} is passed as an option, the attributes will first be converted by parse before being set on the
+<p>If {parse: true} is passed as an option, the attributes will first be converted by parse before being set on the
 model.</p>
-<p></p><p>
-Underscore methods available to Model:</p>
+<p>Underscore methods available to Model:</p>
 </div>
 
   <div data-ice="see"><h4>See:</h4><ul><li><span><a href="http://underscorejs.org/#chain">http://underscorejs.org/#chain</a></span></li>
@@ -263,8 +258,9 @@ class Note extends Backbone.Model {
       <div>
         
         
-        <div data-ice="description">When creating an instance of a model, you can pass in the initial values of the attributes, which will be set on
-the model.</div>
+        <div data-ice="description"><p>When creating an instance of a model, you can pass in the initial values of the attributes, which will be set on
+the model.</p>
+</div>
       </div>
     </td>
     <td>
@@ -296,7 +292,8 @@ the model.</div>
       <div>
         
         
-        <div data-ice="description">The hash of attributes for this model.</div>
+        <div data-ice="description"><p>The hash of attributes for this model.</p>
+</div>
       </div>
     </td>
     <td>
@@ -321,7 +318,8 @@ the model.</div>
       <div>
         
         
-        <div data-ice="description">A hash of attributes whose current and previous value differ.</div>
+        <div data-ice="description"><p>A hash of attributes whose current and previous value differ.</p>
+</div>
       </div>
     </td>
     <td>
@@ -346,7 +344,8 @@ the model.</div>
       <div>
         
         
-        <div data-ice="description">Client side ID</div>
+        <div data-ice="description"><p>Client side ID</p>
+</div>
       </div>
     </td>
     <td>
@@ -371,7 +370,8 @@ the model.</div>
       <div>
         
         
-        <div data-ice="description">The prefix is used to create the client id which is used to identify models locally.</div>
+        <div data-ice="description"><p>The prefix is used to create the client id which is used to identify models locally.</p>
+</div>
       </div>
     </td>
     <td>
@@ -396,7 +396,8 @@ the model.</div>
       <div>
         
         
-        <div data-ice="description">A potentially associated collection.</div>
+        <div data-ice="description"><p>A potentially associated collection.</p>
+</div>
       </div>
     </td>
     <td>
@@ -421,7 +422,8 @@ the model.</div>
       <div>
         
         
-        <div data-ice="description">Update the `id`.</div>
+        <div data-ice="description"><p>Update the <code>id</code>.</p>
+</div>
       </div>
     </td>
     <td>
@@ -446,7 +448,8 @@ the model.</div>
       <div>
         
         
-        <div data-ice="description">The value returned during the last failed validation.</div>
+        <div data-ice="description"><p>The value returned during the last failed validation.</p>
+</div>
       </div>
     </td>
     <td>
@@ -478,10 +481,11 @@ the model.</div>
       <div>
         
         
-        <div data-ice="description">Retrieve a hash of only the model&apos;s attributes that have changed since the last set, or false if there are none.
+        <div data-ice="description"><p>Retrieve a hash of only the model&apos;s attributes that have changed since the last set, or false if there are none.
 Optionally, an external attributes hash can be passed in, returning the attributes in that hash which differ from
 the model. This can be used to figure out which portions of a view should be updated, or what calls need to be
-made to sync the changes to the server.</div>
+made to sync the changes to the server.</p>
+</div>
       </div>
     </td>
     <td>
@@ -506,7 +510,8 @@ made to sync the changes to the server.</div>
       <div>
         
         
-        <div data-ice="description">Removes all attributes from the model, including the id attribute.</div>
+        <div data-ice="description"><p>Removes all attributes from the model, including the id attribute.</p>
+</div>
       </div>
     </td>
     <td>
@@ -531,7 +536,8 @@ made to sync the changes to the server.</div>
       <div>
         
         
-        <div data-ice="description">Returns a new instance of the model with identical attributes.</div>
+        <div data-ice="description"><p>Returns a new instance of the model with identical attributes.</p>
+</div>
       </div>
     </td>
     <td>
@@ -556,7 +562,8 @@ made to sync the changes to the server.</div>
       <div>
         
         
-        <div data-ice="description">Destroys the model on the server by delegating an HTTP DELETE request to Backbone.sync.</div>
+        <div data-ice="description"><p>Destroys the model on the server by delegating an HTTP DELETE request to Backbone.sync.</p>
+</div>
       </div>
     </td>
     <td>
@@ -581,8 +588,9 @@ made to sync the changes to the server.</div>
       <div>
         
         
-        <div data-ice="description">Similar to get, but returns the HTML-escaped version of a model&apos;s attribute. If you&apos;re interpolating data from
-the model into HTML, using escape to retrieve attributes will prevent XSS attacks.</div>
+        <div data-ice="description"><p>Similar to get, but returns the HTML-escaped version of a model&apos;s attribute. If you&apos;re interpolating data from
+the model into HTML, using escape to retrieve attributes will prevent XSS attacks.</p>
+</div>
       </div>
     </td>
     <td>
@@ -607,9 +615,10 @@ the model into HTML, using escape to retrieve attributes will prevent XSS attack
       <div>
         
         
-        <div data-ice="description">Merges the model&apos;s state with attributes fetched from the server by delegating to Backbone.sync. Returns a jqXHR.
+        <div data-ice="description"><p>Merges the model&apos;s state with attributes fetched from the server by delegating to Backbone.sync. Returns a jqXHR.
 Useful if the model has never been populated with data, or if you&apos;d like to ensure that you have the latest
-server state.</div>
+server state.</p>
+</div>
       </div>
     </td>
     <td>
@@ -634,7 +643,8 @@ server state.</div>
       <div>
         
         
-        <div data-ice="description">Get the current value of an attribute from the model.</div>
+        <div data-ice="description"><p>Get the current value of an attribute from the model.</p>
+</div>
       </div>
     </td>
     <td>
@@ -659,7 +669,8 @@ server state.</div>
       <div>
         
         
-        <div data-ice="description">Returns true if the attribute is set to a non-null or non-undefined value.</div>
+        <div data-ice="description"><p>Returns true if the attribute is set to a non-null or non-undefined value.</p>
+</div>
       </div>
     </td>
     <td>
@@ -684,8 +695,9 @@ server state.</div>
       <div>
         
         
-        <div data-ice="description">Has the model changed since its last set? If an attribute is passed, returns true if that specific attribute has
-changed.</div>
+        <div data-ice="description"><p>Has the model changed since its last set? If an attribute is passed, returns true if that specific attribute has
+changed.</p>
+</div>
       </div>
     </td>
     <td>
@@ -710,7 +722,8 @@ changed.</div>
       <div>
         
         
-        <div data-ice="description">Initialize is an empty function by default.</div>
+        <div data-ice="description"><p>Initialize is an empty function by default.</p>
+</div>
       </div>
     </td>
     <td>
@@ -735,7 +748,8 @@ changed.</div>
       <div>
         
         
-        <div data-ice="description">Has this model been saved to the server yet? If the model does not yet have an id, it is considered to be new.</div>
+        <div data-ice="description"><p>Has this model been saved to the server yet? If the model does not yet have an id, it is considered to be new.</p>
+</div>
       </div>
     </td>
     <td>
@@ -760,7 +774,8 @@ changed.</div>
       <div>
         
         
-        <div data-ice="description">Run validate to check the model state.</div>
+        <div data-ice="description"><p>Run validate to check the model state.</p>
+</div>
       </div>
     </td>
     <td>
@@ -785,7 +800,8 @@ changed.</div>
       <div>
         
         
-        <div data-ice="description">Special-cased proxy to the `_.matches` function from Underscore.</div>
+        <div data-ice="description"><p>Special-cased proxy to the <code>_.matches</code> function from Underscore.</p>
+</div>
       </div>
     </td>
     <td>
@@ -810,10 +826,11 @@ changed.</div>
       <div>
         
         
-        <div data-ice="description">parse is called whenever a model&apos;s data is returned by the server, in fetch, and save. The function is passed the
+        <div data-ice="description"><p>parse is called whenever a model&apos;s data is returned by the server, in fetch, and save. The function is passed the
 raw response object, and should return the attributes hash to be set on the model. The default implementation is
 a no-op, simply passing through the JSON response. Override this if you need to work with a preexisting API, or
-better namespace your responses.</div>
+better namespace your responses.</p>
+</div>
       </div>
     </td>
     <td>
@@ -838,7 +855,8 @@ better namespace your responses.</div>
       <div>
         
         
-        <div data-ice="description">During a &quot;change&quot; event, this method can be used to get the previous value of a changed attribute.</div>
+        <div data-ice="description"><p>During a &quot;change&quot; event, this method can be used to get the previous value of a changed attribute.</p>
+</div>
       </div>
     </td>
     <td>
@@ -863,8 +881,9 @@ better namespace your responses.</div>
       <div>
         
         
-        <div data-ice="description">Return a copy of the model&apos;s previous attributes. Useful for getting a diff between versions of a model, or
-getting back to a valid state after an error occurs.</div>
+        <div data-ice="description"><p>Return a copy of the model&apos;s previous attributes. Useful for getting a diff between versions of a model, or
+getting back to a valid state after an error occurs.</p>
+</div>
       </div>
     </td>
     <td>
@@ -889,7 +908,8 @@ getting back to a valid state after an error occurs.</div>
       <div>
         
         
-        <div data-ice="description">Save a model to your database (or alternative persistence layer), by delegating to Backbone.sync.</div>
+        <div data-ice="description"><p>Save a model to your database (or alternative persistence layer), by delegating to Backbone.sync.</p>
+</div>
       </div>
     </td>
     <td>
@@ -914,7 +934,8 @@ getting back to a valid state after an error occurs.</div>
       <div>
         
         
-        <div data-ice="description">Set a hash of attributes (one or many) on the model.</div>
+        <div data-ice="description"><p>Set a hash of attributes (one or many) on the model.</p>
+</div>
       </div>
     </td>
     <td>
@@ -939,7 +960,8 @@ getting back to a valid state after an error occurs.</div>
       <div>
         
         
-        <div data-ice="description">Uses Backbone.sync to persist the state of a model to the server.</div>
+        <div data-ice="description"><p>Uses Backbone.sync to persist the state of a model to the server.</p>
+</div>
       </div>
     </td>
     <td>
@@ -964,10 +986,11 @@ getting back to a valid state after an error occurs.</div>
       <div>
         
         
-        <div data-ice="description">Return a shallow copy of the model&apos;s attributes for JSON stringification. This can be used for persistence,
+        <div data-ice="description"><p>Return a shallow copy of the model&apos;s attributes for JSON stringification. This can be used for persistence,
 serialization, or for augmentation before being sent to the server. The name of this method is a bit confusing,
 as it doesn&apos;t actually return a JSON string &#x2014; but I&apos;m afraid that it&apos;s the way that the JavaScript API for
-JSON.stringify works.</div>
+JSON.stringify works.</p>
+</div>
       </div>
     </td>
     <td>
@@ -992,7 +1015,8 @@ JSON.stringify works.</div>
       <div>
         
         
-        <div data-ice="description">Remove an attribute by deleting it from the internal attributes hash.</div>
+        <div data-ice="description"><p>Remove an attribute by deleting it from the internal attributes hash.</p>
+</div>
       </div>
     </td>
     <td>
@@ -1017,14 +1041,14 @@ JSON.stringify works.</div>
       <div>
         
         
-        <div data-ice="description">Returns the relative URL where the model&apos;s resource would be located on the server. If your models are located
+        <div data-ice="description"><p>Returns the relative URL where the model&apos;s resource would be located on the server. If your models are located
 somewhere else, override this method with the correct logic. Generates URLs of the form: &quot;[collection.url]/[id]&quot;
 by default, but you may override by specifying an explicit urlRoot if the model&apos;s collection shouldn&apos;t be taken
-into account.
-<p>
-Delegates to Collection#url to generate the URL, so make sure that you have it defined, or a urlRoot property,
+into account.</p>
+<p>Delegates to Collection#url to generate the URL, so make sure that you have it defined, or a urlRoot property,
 if all models of this class share a common root URL. A model with an id of 101, stored in a Backbone.Collection
-with a url of &quot;/documents/7/notes&quot;, would have this URL: &quot;/documents/7/notes/101&quot;</p></div>
+with a url of &quot;/documents/7/notes&quot;, would have this URL: &quot;/documents/7/notes/101&quot;</p>
+</div>
       </div>
     </td>
     <td>
@@ -1055,7 +1079,8 @@ with a url of &quot;/documents/7/notes&quot;, would have this URL: &quot;/docume
       <div>
         
         
-        <div data-ice="description">Run validation against the next complete set of model attributes, returning `true` if all is well.</div>
+        <div data-ice="description"><p>Run validation against the next complete set of model attributes, returning <code>true</code> if all is well.</p>
+</div>
       </div>
     </td>
     <td>
@@ -1088,7 +1113,8 @@ with a url of &quot;/documents/7/notes&quot;, would have this URL: &quot;/docume
       <div>
         
         
-        <div data-ice="description">Delegates to `on`.</div>
+        <div data-ice="description"><p>Delegates to <code>on</code>.</p>
+</div>
       </div>
     </td>
     <td>
@@ -1113,7 +1139,8 @@ with a url of &quot;/documents/7/notes&quot;, would have this URL: &quot;/docume
       <div>
         
         
-        <div data-ice="description">Tell an object to listen to a particular event on an other object.</div>
+        <div data-ice="description"><p>Tell an object to listen to a particular event on an other object.</p>
+</div>
       </div>
     </td>
     <td>
@@ -1138,7 +1165,8 @@ with a url of &quot;/documents/7/notes&quot;, would have this URL: &quot;/docume
       <div>
         
         
-        <div data-ice="description">Just like `listenTo`, but causes the bound callback to fire only once before being removed.</div>
+        <div data-ice="description"><p>Just like <code>listenTo</code>, but causes the bound callback to fire only once before being removed.</p>
+</div>
       </div>
     </td>
     <td>
@@ -1163,7 +1191,8 @@ with a url of &quot;/documents/7/notes&quot;, would have this URL: &quot;/docume
       <div>
         
         
-        <div data-ice="description">Remove a previously-bound callback function from an object.</div>
+        <div data-ice="description"><p>Remove a previously-bound callback function from an object.</p>
+</div>
       </div>
     </td>
     <td>
@@ -1188,7 +1217,8 @@ with a url of &quot;/documents/7/notes&quot;, would have this URL: &quot;/docume
       <div>
         
         
-        <div data-ice="description">Bind a callback function to an object.</div>
+        <div data-ice="description"><p>Bind a callback function to an object.</p>
+</div>
       </div>
     </td>
     <td>
@@ -1213,7 +1243,8 @@ with a url of &quot;/documents/7/notes&quot;, would have this URL: &quot;/docume
       <div>
         
         
-        <div data-ice="description">Just like `on`, but causes the bound callback to fire only once before being removed.</div>
+        <div data-ice="description"><p>Just like <code>on</code>, but causes the bound callback to fire only once before being removed.</p>
+</div>
       </div>
     </td>
     <td>
@@ -1238,7 +1269,8 @@ with a url of &quot;/documents/7/notes&quot;, would have this URL: &quot;/docume
       <div>
         
         
-        <div data-ice="description">Tell an object to stop listening to events.</div>
+        <div data-ice="description"><p>Tell an object to stop listening to events.</p>
+</div>
       </div>
     </td>
     <td>
@@ -1263,7 +1295,8 @@ with a url of &quot;/documents/7/notes&quot;, would have this URL: &quot;/docume
       <div>
         
         
-        <div data-ice="description">Trigger callbacks for the given event, or space-delimited list of events.</div>
+        <div data-ice="description"><p>Trigger callbacks for the given event, or space-delimited list of events.</p>
+</div>
       </div>
     </td>
     <td>
@@ -1288,7 +1321,8 @@ with a url of &quot;/documents/7/notes&quot;, would have this URL: &quot;/docume
       <div>
         
         
-        <div data-ice="description">Delegates to `off`.</div>
+        <div data-ice="description"><p>Delegates to <code>off</code>.</p>
+</div>
       </div>
     </td>
     <td>
@@ -1377,7 +1411,7 @@ the model. If you define an initialize function, it will be invoked when the mod
       
       <pre class="prettyprint source-code"><code data-ice="exampleCode">ES6 example: If you&apos;re looking to get fancy, you may want to override constructor, which allows you to replace
 the actual constructor function for your model.
-&lt;br&gt;
+
 class Library extends Backbone.Model {
    constructor() {
       super(...arguments);
@@ -2298,8 +2332,7 @@ note.get(&quot;title&quot;)</code></pre>
   
   <div data-ice="description"><p>Has the model changed since its last set? If an attribute is passed, returns true if that specific attribute has
 changed.</p>
-<p></p><p>
-Note that this method, and the following change-related ones, are only useful during the course of a &quot;change&quot;
+<p>Note that this method, and the following change-related ones, are only useful during the course of a &quot;change&quot;
 event.</p>
 </div>
 
@@ -2854,15 +2887,12 @@ resource will be sent to the server. As with set, you may pass individual keys a
 the model has a validate method, and validation fails, the model will not be saved. If the model isNew, the save
 will be a &quot;create&quot; (HTTP POST), if the model already exists on the server, the save will be an &quot;update&quot;
 (HTTP PUT).</p>
-<p></p><p>
-If instead, you&apos;d only like the changed attributes to be sent to the server, call model.save(attrs,
+<p>If instead, you&apos;d only like the changed attributes to be sent to the server, call model.save(attrs,
 {patch: true}). You&apos;ll get an HTTP PATCH request to the server with just the passed-in attributes.</p>
-<p></p><p>
-Calling save with new attributes will cause a &quot;change&quot; event immediately, a &quot;request&quot; event as the Ajax request
+<p>Calling save with new attributes will cause a &quot;change&quot; event immediately, a &quot;request&quot; event as the Ajax request
 begins to go to the server, and a &quot;sync&quot; event after the server has acknowledged the successful change. Pass
 {wait: true} if you&apos;d like to wait for the server before setting the new attributes on the model.</p>
-<p></p><p>
-In the following example, notice how our overridden version of Backbone.sync receives a &quot;create&quot; request the
+<p>In the following example, notice how our overridden version of Backbone.sync receives a &quot;create&quot; request the
 first time the model is saved and an &quot;update&quot; request the second time.</p>
 </div>
 
@@ -3257,8 +3287,7 @@ passed as an option.</p>
 somewhere else, override this method with the correct logic. Generates URLs of the form: &quot;[collection.url]/[id]&quot;
 by default, but you may override by specifying an explicit urlRoot if the model&apos;s collection shouldn&apos;t be taken
 into account.</p>
-<p></p><p>
-Delegates to Collection#url to generate the URL, so make sure that you have it defined, or a urlRoot property,
+<p>Delegates to Collection#url to generate the URL, so make sure that you have it defined, or a urlRoot property,
 if all models of this class share a common root URL. A model with an id of 101, stored in a Backbone.Collection
 with a url of &quot;/documents/7/notes&quot;, would have this URL: &quot;/documents/7/notes/101&quot;</p>
 </div>
@@ -3376,7 +3405,7 @@ fire an <code>&quot;invalid&quot;</code> event.</p>
 </div>
 
 <footer class="footer">
-  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(0.4.0)</span></a>
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(0.4.1)</span></a>
 </footer>
 
 <script src="script/search_index.js"></script>

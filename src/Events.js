@@ -255,34 +255,34 @@ const s_TRIGGER_EVENTS = (events, args) =>
  *
  * An important consideration of Backbone-ES6 is that Events are no longer an object literal, but a full blown ES6
  * class. This is the biggest potential breaking change for Backbone-ES6 when compared to the original Backbone.
- * <p>
+ *
  * Previously Events could be mixed in to any object. This is no longer possible with Backbone-ES6 when working from
  * source or the bundled versions. It should be noted that Events is also no longer mixed into Backbone itself, so
  * Backbone is not a Global events instance.
- * <p>
- * Catalog of Events:<br>
+ *
+ * Catalog of Events:
  * Here's the complete list of built-in Backbone events, with arguments. You're also free to trigger your own events on
  * Models, Collections and Views as you see fit.
- * <p>
- * "add" (model, collection, options) — when a model is added to a collection.<br>
- * "remove" (model, collection, options) — when a model is removed from a collection.<br>
+ *
+ * "add" (model, collection, options) — when a model is added to a collection.
+ * "remove" (model, collection, options) — when a model is removed from a collection.
  * "update" (collection, options) — single event triggered after any number of models have been added or removed from a
- * collection.<br>
- * "reset" (collection, options) — when the collection's entire contents have been replaced.<br>
- * "sort" (collection, options) — when the collection has been re-sorted.<br>
- * "change" (model, options) — when a model's attributes have changed.<br>
- * "change:[attribute]" (model, value, options) — when a specific attribute has been updated.<br>
- * "destroy" (model, collection, options) — when a model is destroyed.<br>
- * "request" (model_or_collection, xhr, options) — when a model or collection has started a request to the server.<br>
+ * collection.
+ * "reset" (collection, options) — when the collection's entire contents have been replaced.
+ * "sort" (collection, options) — when the collection has been re-sorted.
+ * "change" (model, options) — when a model's attributes have changed.
+ * "change:[attribute]" (model, value, options) — when a specific attribute has been updated.
+ * "destroy" (model, collection, options) — when a model is destroyed.
+ * "request" (model_or_collection, xhr, options) — when a model or collection has started a request to the server.
  * "sync" (model_or_collection, resp, options) — when a model or collection has been successfully synced with the
- * server.<br>
- * "error" (model_or_collection, resp, options) — when a model's or collection's request to the server has failed.<br>
- * "invalid" (model, error, options) — when a model's validation fails on the client.<br>
- * "route:[name]" (params) — Fired by the router when a specific route is matched.<br>
- * "route" (route, params) — Fired by the router when any route has been matched.<br>
- * "route" (router, route, params) — Fired by history when any route has been matched.<br>
- * "all" — this special event fires for any triggered event, passing the event name as the first argument.<br>
- * <p>
+ * server.
+ * "error" (model_or_collection, resp, options) — when a model's or collection's request to the server has failed.
+ * "invalid" (model, error, options) — when a model's validation fails on the client.
+ * "route:[name]" (params) — Fired by the router when a specific route is matched.
+ * "route" (route, params) — Fired by the router when any route has been matched.
+ * "route" (router, route, params) — Fired by history when any route has been matched.
+ * "all" — this special event fires for any triggered event, passing the event name as the first argument.
+ *
  * Generally speaking, when calling a function that emits an event (model.set, collection.add, and so on...), if you'd
  * like to prevent the event from being triggered, you may pass {silent: true} as an option. Note that this is rarely,
  * perhaps even never, a good idea. Passing through a specific flag in the options for your event callback to look at,

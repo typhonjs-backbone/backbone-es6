@@ -158,13 +158,13 @@ const s_SPLICE = (array, insert, at) =>
  *
  * You can bind "change" events to be notified when any model in the collection has been modified, listen for "add"
  * and "remove" events, fetch the collection from the server, and use a full suite of Underscore.js methods.
- * <p>
+ *
  * Any event that is triggered on a model in a collection will also be triggered on the collection directly, for
  * convenience. This allows you to listen for changes to specific attributes in any model in a collection, for
  * example: documents.on("change:selected", ...)
  *
  * ---------
- * <p>
+ *
  * Underscore methods available to Collection (including aliases):
  *
  * @see http://underscorejs.org/#chain
@@ -236,7 +236,7 @@ class Collection extends Events
     * may be included as an option. Passing false as the comparator option will prevent sorting. If you define an
     * initialize function, it will be invoked when the collection is created. There are a couple of options that, if
     * provided, are attached to the collection directly: model and comparator.
-    * <p>
+    *
     * Pass null for models to create an empty Collection with options.
     *
     * @see http://backbonejs.org/#Collection-constructor
@@ -293,7 +293,7 @@ class Collection extends Events
     * splice the model into the collection at the specified index. If you're adding models to the collection that are
     * already in the collection, they'll be ignored, unless you pass {merge: true}, in which case their attributes will
     * be merged into the corresponding models, firing any appropriate "change" events.
-    * <p>
+    *
     * Note that adding the same model (a model with the same id) to a collection more than once is a no-op.
     *
     * @example
@@ -355,7 +355,7 @@ class Collection extends Events
     * created. Returns the new model. If client-side validation failed, the model will be unsaved, with validation
     * errors. In order for this to work, you should set the model property of the collection. The create method can
     * accept either an attributes hash or an existing, unsaved model object.
-    * <p>
+    *
     * Creating a model will cause an immediate "add" event to be triggered on the collection, a "request" event as the
     * new model is sent to the server, as well as a "sync" event, once the server has responded with the successful
     * creation of the model. Pass {wait: true} if you'd like to wait for the server before adding the new model to the
@@ -431,14 +431,14 @@ Debug.log(`Collection - get - id: ${id}`);
     * fetched models, unless you pass {reset: true}, in which case the collection will be (efficiently) reset.
     * Delegates to Backbone.sync under the covers for custom persistence strategies and returns a jqXHR. The server
     * handler for fetch requests should return a JSON array of models.
-    * <p>
+    *
     * The behavior of fetch can be customized by using the available set options. For example, to fetch a collection,
     * getting an "add" event for every new model, and a "change" event for every changed existing model, without
     * removing anything: collection.fetch({remove: false})
-    * <p>
+    *
     * jQuery.ajax options can also be passed directly as fetch options, so to fetch a specific page of a paginated
     * collection: Documents.fetch({data: {page: 3}})
-    * <p>
+    *
     * Note that fetch should not be used to populate collections on page load — all models needed at load time should
     * already be bootstrapped in to place. fetch is intended for lazily-loading models for interfaces that are not
     * needed immediately: for example, documents with collections of notes that may be toggled open and closed.
@@ -699,9 +699,9 @@ Debug.log(`Collection - _prepareModel - 1 - attrs.parseObject: ${attrs.parseObje
     * (or attribute hashes), triggering a single "reset" event at the end. Returns the newly-set models. For
     * convenience, within a "reset" event, the list of any previous models is available as options.previousModels.
     * Pass null for models to empty your Collection with options.
-    * <p>
+    *
     * Calling collection.reset() without passing any models as arguments will empty the entire collection.
-    * <p>
+    *
     * Here's an example using reset to bootstrap a collection during initial page load, in a Rails application:
     * @example
     * <script>

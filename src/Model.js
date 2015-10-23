@@ -11,23 +11,23 @@ import Utils         from './Utils.js';
  *
  * Models are the heart of any JavaScript application, containing the interactive data as well as a large part of the
  * logic surrounding it: conversions, validations, computed properties, and access control.
- * <p>
+ *
  * Backbone-ES6 supports the older "extend" functionality of Backbone. You can still use "extend" to extend
  * Backbone.Model with your domain-specific methods, and Model provides a basic set of functionality for managing
  * changes.
- * <p>
+ *
  * It is recommended though to use ES6 syntax for working with Backbone-ES6 foregoing the older "extend" mechanism.
- * <p>
+ *
  * Create a new model with the specified attributes. A client id (`cid`) is automatically generated & assigned for you.
- * <p>
+ *
  * If you pass a {collection: ...} as the options, the model gains a collection property that will be used to indicate
  * which collection the model belongs to, and is used to help compute the model's url. The model.collection property is
  * normally created automatically when you first add a model to a collection. Note that the reverse is not true, as
  * passing this option to the constructor will not automatically add the model to the collection. Useful, sometimes.
- * <p>
+ *
  * If {parse: true} is passed as an option, the attributes will first be converted by parse before being set on the
  * model.
- * <p>
+ *
  * Underscore methods available to Model:
  * @see http://underscorejs.org/#chain
  * @see http://underscorejs.org/#keys
@@ -165,7 +165,7 @@ class Model extends Events
     * @example
     * ES6 example: If you're looking to get fancy, you may want to override constructor, which allows you to replace
     * the actual constructor function for your model.
-    * <br>
+    *
     * class Library extends Backbone.Model {
     *    constructor() {
     *       super(...arguments);
@@ -443,7 +443,7 @@ class Model extends Events
    /**
     * Has the model changed since its last set? If an attribute is passed, returns true if that specific attribute has
     * changed.
-    * <p>
+    *
     * Note that this method, and the following change-related ones, are only useful during the course of a "change"
     * event.
     *
@@ -601,14 +601,14 @@ class Model extends Events
     * the model has a validate method, and validation fails, the model will not be saved. If the model isNew, the save
     * will be a "create" (HTTP POST), if the model already exists on the server, the save will be an "update"
     * (HTTP PUT).
-    * <p>
+    *
     * If instead, you'd only like the changed attributes to be sent to the server, call model.save(attrs,
     * {patch: true}). You'll get an HTTP PATCH request to the server with just the passed-in attributes.
-    * <p>
+    *
     * Calling save with new attributes will cause a "change" event immediately, a "request" event as the Ajax request
     * begins to go to the server, and a "sync" event after the server has acknowledged the successful change. Pass
     * {wait: true} if you'd like to wait for the server before setting the new attributes on the model.
-    * <p>
+    *
     * In the following example, notice how our overridden version of Backbone.sync receives a "create" request the
     * first time the model is saved and an "update" request the second time.
     *
@@ -860,7 +860,7 @@ class Model extends Events
     * somewhere else, override this method with the correct logic. Generates URLs of the form: "[collection.url]/[id]"
     * by default, but you may override by specifying an explicit urlRoot if the model's collection shouldn't be taken
     * into account.
-    * <p>
+    *
     * Delegates to Collection#url to generate the URL, so make sure that you have it defined, or a urlRoot property,
     * if all models of this class share a common root URL. A model with an id of 101, stored in a Backbone.Collection
     * with a url of "/documents/7/notes", would have this URL: "/documents/7/notes/101"

@@ -9,8 +9,9 @@
   <script src="script/prettify/prettify.js"></script>
   
   
+  <script src="script/manual.js"></script>
 </head>
-<body class="layout-container">
+<body class="layout-container" data-ice="rootContainer">
 
 <header>
   <a href="./">Home</a>
@@ -83,13 +84,11 @@
   <div class="description" data-ice="description"><h2 id="backbone-collection-collections-are-ordered-sets-of-models-http-backbonejs-org-collection-">Backbone.Collection - Collections are ordered sets of models. (<a href="http://backbonejs.org/#Collection">http://backbonejs.org/#Collection</a>)</h2>
 <p>You can bind &quot;change&quot; events to be notified when any model in the collection has been modified, listen for &quot;add&quot;
 and &quot;remove&quot; events, fetch the collection from the server, and use a full suite of Underscore.js methods.</p>
-<p></p><p>
-Any event that is triggered on a model in a collection will also be triggered on the collection directly, for
+<p>Any event that is triggered on a model in a collection will also be triggered on the collection directly, for
 convenience. This allows you to listen for changes to specific attributes in any model in a collection, for
 example: documents.on(&quot;change:selected&quot;, ...)</p>
 <hr>
-<p></p><p>
-Underscore methods available to Collection (including aliases):</p>
+<p>Underscore methods available to Collection (including aliases):</p>
 </div>
 
   <div data-ice="see"><h4>See:</h4><ul><li><span><a href="http://underscorejs.org/#chain">http://underscorejs.org/#chain</a></span></li>
@@ -188,7 +187,8 @@ export default new MyCollection();   // If desired drop &quot;new&quot; to expor
       <div>
         
         
-        <div data-ice="description">When creating a Collection, you may choose to pass in the initial array of models.</div>
+        <div data-ice="description"><p>When creating a Collection, you may choose to pass in the initial array of models.</p>
+</div>
       </div>
     </td>
     <td>
@@ -220,7 +220,8 @@ export default new MyCollection();   // If desired drop &quot;new&quot; to expor
       <div>
         
         
-        <div data-ice="description">A comparator string indicating the attribute to sort.</div>
+        <div data-ice="description"><p>A comparator string indicating the attribute to sort.</p>
+</div>
       </div>
     </td>
     <td>
@@ -245,7 +246,8 @@ export default new MyCollection();   // If desired drop &quot;new&quot; to expor
       <div>
         
         
-        <div data-ice="description">The length of the models array.</div>
+        <div data-ice="description"><p>The length of the models array.</p>
+</div>
       </div>
     </td>
     <td>
@@ -270,7 +272,8 @@ export default new MyCollection();   // If desired drop &quot;new&quot; to expor
       <div>
         
         
-        <div data-ice="description">The default Backbone.Model class to use as a prototype for this collection.</div>
+        <div data-ice="description"><p>The default Backbone.Model class to use as a prototype for this collection.</p>
+</div>
       </div>
     </td>
     <td>
@@ -295,7 +298,8 @@ export default new MyCollection();   // If desired drop &quot;new&quot; to expor
       <div>
         
         
-        <div data-ice="description">An array of models in the collection.</div>
+        <div data-ice="description"><p>An array of models in the collection.</p>
+</div>
       </div>
     </td>
     <td>
@@ -327,8 +331,9 @@ export default new MyCollection();   // If desired drop &quot;new&quot; to expor
       <div>
         
         
-        <div data-ice="description">Add a model (or an array of models) to the collection, firing an &quot;add&quot; event for each model, and an &quot;update&quot;
-event afterwards.</div>
+        <div data-ice="description"><p>Add a model (or an array of models) to the collection, firing an &quot;add&quot; event for each model, and an &quot;update&quot;
+event afterwards.</p>
+</div>
       </div>
     </td>
     <td>
@@ -353,7 +358,8 @@ event afterwards.</div>
       <div>
         
         
-        <div data-ice="description">Get a model from a collection, specified by index.</div>
+        <div data-ice="description"><p>Get a model from a collection, specified by index.</p>
+</div>
       </div>
     </td>
     <td>
@@ -378,7 +384,8 @@ event afterwards.</div>
       <div>
         
         
-        <div data-ice="description">Returns a new instance of the collection with an identical list of models.</div>
+        <div data-ice="description"><p>Returns a new instance of the collection with an identical list of models.</p>
+</div>
       </div>
     </td>
     <td>
@@ -403,7 +410,8 @@ event afterwards.</div>
       <div>
         
         
-        <div data-ice="description">Convenience to create a new instance of a model within a collection.</div>
+        <div data-ice="description"><p>Convenience to create a new instance of a model within a collection.</p>
+</div>
       </div>
     </td>
     <td>
@@ -428,8 +436,9 @@ event afterwards.</div>
       <div>
         
         
-        <div data-ice="description">Fetch the default set of models for this collection from the server, setting them on the collection when they
-arrive.</div>
+        <div data-ice="description"><p>Fetch the default set of models for this collection from the server, setting them on the collection when they
+arrive.</p>
+</div>
       </div>
     </td>
     <td>
@@ -454,8 +463,9 @@ arrive.</div>
       <div>
         
         
-        <div data-ice="description">Just like `where`, but directly returns only the first model in the collection that matches the passed
-attributes.</div>
+        <div data-ice="description"><p>Just like <code>where</code>, but directly returns only the first model in the collection that matches the passed
+attributes.</p>
+</div>
       </div>
     </td>
     <td>
@@ -480,7 +490,8 @@ attributes.</div>
       <div>
         
         
-        <div data-ice="description">Get a model from a collection, specified by an id, a cid, or by passing in a model.</div>
+        <div data-ice="description"><p>Get a model from a collection, specified by an id, a cid, or by passing in a model.</p>
+</div>
       </div>
     </td>
     <td>
@@ -505,7 +516,8 @@ attributes.</div>
       <div>
         
         
-        <div data-ice="description">Initialize is an empty function by default.</div>
+        <div data-ice="description"><p>Initialize is an empty function by default.</p>
+</div>
       </div>
     </td>
     <td>
@@ -530,7 +542,8 @@ attributes.</div>
       <div>
         
         
-        <div data-ice="description">Override this method to specify the attribute the collection will use to refer to its models in collection.get.</div>
+        <div data-ice="description"><p>Override this method to specify the attribute the collection will use to refer to its models in collection.get.</p>
+</div>
       </div>
     </td>
     <td>
@@ -555,10 +568,11 @@ attributes.</div>
       <div>
         
         
-        <div data-ice="description">`parse` is called by Backbone whenever a collection&apos;s models are returned by the server, in fetch. The function is
+        <div data-ice="description"><p><code>parse</code> is called by Backbone whenever a collection&apos;s models are returned by the server, in fetch. The function is
 passed the raw response object, and should return the array of model attributes to be added to the collection.
 The default implementation is a no-op, simply passing through the JSON response. Override this if you need to
-work with a preexisting API, or better namespace your responses.</div>
+work with a preexisting API, or better namespace your responses.</p>
+</div>
       </div>
     </td>
     <td>
@@ -583,7 +597,8 @@ work with a preexisting API, or better namespace your responses.</div>
       <div>
         
         
-        <div data-ice="description">Pluck an attribute from each model in the collection.</div>
+        <div data-ice="description"><p>Pluck an attribute from each model in the collection.</p>
+</div>
       </div>
     </td>
     <td>
@@ -608,7 +623,8 @@ work with a preexisting API, or better namespace your responses.</div>
       <div>
         
         
-        <div data-ice="description">Remove and return the last model from a collection.</div>
+        <div data-ice="description"><p>Remove and return the last model from a collection.</p>
+</div>
       </div>
     </td>
     <td>
@@ -633,7 +649,8 @@ work with a preexisting API, or better namespace your responses.</div>
       <div>
         
         
-        <div data-ice="description">Add a model at the end of a collection.</div>
+        <div data-ice="description"><p>Add a model at the end of a collection.</p>
+</div>
       </div>
     </td>
     <td>
@@ -658,7 +675,8 @@ work with a preexisting API, or better namespace your responses.</div>
       <div>
         
         
-        <div data-ice="description">Remove a model (or an array of models) from the collection, and return them.</div>
+        <div data-ice="description"><p>Remove a model (or an array of models) from the collection, and return them.</p>
+</div>
       </div>
     </td>
     <td>
@@ -683,15 +701,14 @@ work with a preexisting API, or better namespace your responses.</div>
       <div>
         
         
-        <div data-ice="description">Adding and removing models one at a time is all well and good, but sometimes you have so many models to change
+        <div data-ice="description"><p>Adding and removing models one at a time is all well and good, but sometimes you have so many models to change
 that you&apos;d rather just update the collection in bulk. Use reset to replace a collection with a new list of models
 (or attribute hashes), triggering a single &quot;reset&quot; event at the end. Returns the newly-set models. For
 convenience, within a &quot;reset&quot; event, the list of any previous models is available as options.previousModels.
-Pass null for models to empty your Collection with options.
-<p>
-Calling collection.reset() without passing any models as arguments will empty the entire collection.
-</p><p>
-Here&apos;s an example using reset to bootstrap a collection during initial page load, in a Rails application:</p></div>
+Pass null for models to empty your Collection with options.</p>
+<p>Calling collection.reset() without passing any models as arguments will empty the entire collection.</p>
+<p>Here&apos;s an example using reset to bootstrap a collection during initial page load, in a Rails application:</p>
+</div>
       </div>
     </td>
     <td>
@@ -716,7 +733,8 @@ Here&apos;s an example using reset to bootstrap a collection during initial page
       <div>
         
         
-        <div data-ice="description">The set method performs a &quot;smart&quot; update of the collection with the passed list of models.</div>
+        <div data-ice="description"><p>The set method performs a &quot;smart&quot; update of the collection with the passed list of models.</p>
+</div>
       </div>
     </td>
     <td>
@@ -741,7 +759,8 @@ Here&apos;s an example using reset to bootstrap a collection during initial page
       <div>
         
         
-        <div data-ice="description">Remove and return the first model from a collection.</div>
+        <div data-ice="description"><p>Remove and return the first model from a collection.</p>
+</div>
       </div>
     </td>
     <td>
@@ -766,7 +785,8 @@ Here&apos;s an example using reset to bootstrap a collection during initial page
       <div>
         
         
-        <div data-ice="description">Return a shallow copy of this collection&apos;s models, using the same options as native `Array#slice`.</div>
+        <div data-ice="description"><p>Return a shallow copy of this collection&apos;s models, using the same options as native <code>Array#slice</code>.</p>
+</div>
       </div>
     </td>
     <td>
@@ -791,7 +811,8 @@ Here&apos;s an example using reset to bootstrap a collection during initial page
       <div>
         
         
-        <div data-ice="description">Force a collection to re-sort itself.</div>
+        <div data-ice="description"><p>Force a collection to re-sort itself.</p>
+</div>
       </div>
     </td>
     <td>
@@ -816,7 +837,8 @@ Here&apos;s an example using reset to bootstrap a collection during initial page
       <div>
         
         
-        <div data-ice="description">Uses Backbone.sync to persist the state of a collection to the server.</div>
+        <div data-ice="description"><p>Uses Backbone.sync to persist the state of a collection to the server.</p>
+</div>
       </div>
     </td>
     <td>
@@ -841,7 +863,8 @@ Here&apos;s an example using reset to bootstrap a collection during initial page
       <div>
         
         
-        <div data-ice="description">Return an array containing the attributes hash of each model (via toJSON) in the collection.</div>
+        <div data-ice="description"><p>Return an array containing the attributes hash of each model (via toJSON) in the collection.</p>
+</div>
       </div>
     </td>
     <td>
@@ -866,7 +889,8 @@ Here&apos;s an example using reset to bootstrap a collection during initial page
       <div>
         
         
-        <div data-ice="description">Add a model at the beginning of a collection.</div>
+        <div data-ice="description"><p>Add a model at the beginning of a collection.</p>
+</div>
       </div>
     </td>
     <td>
@@ -891,7 +915,8 @@ Here&apos;s an example using reset to bootstrap a collection during initial page
       <div>
         
         
-        <div data-ice="description">Return an array of all the models in a collection that match the passed attributes.</div>
+        <div data-ice="description"><p>Return an array of all the models in a collection that match the passed attributes.</p>
+</div>
       </div>
     </td>
     <td>
@@ -922,7 +947,8 @@ Here&apos;s an example using reset to bootstrap a collection during initial page
       <div>
         
         
-        <div data-ice="description">Prepare a hash of attributes (or other model) to be added to this collection.</div>
+        <div data-ice="description"><p>Prepare a hash of attributes (or other model) to be added to this collection.</p>
+</div>
       </div>
     </td>
     <td>
@@ -947,7 +973,8 @@ Here&apos;s an example using reset to bootstrap a collection during initial page
       <div>
         
         
-        <div data-ice="description">Resets all internal state.</div>
+        <div data-ice="description"><p>Resets all internal state.</p>
+</div>
       </div>
     </td>
     <td>
@@ -980,7 +1007,8 @@ Here&apos;s an example using reset to bootstrap a collection during initial page
       <div>
         
         
-        <div data-ice="description">Delegates to `on`.</div>
+        <div data-ice="description"><p>Delegates to <code>on</code>.</p>
+</div>
       </div>
     </td>
     <td>
@@ -1005,7 +1033,8 @@ Here&apos;s an example using reset to bootstrap a collection during initial page
       <div>
         
         
-        <div data-ice="description">Tell an object to listen to a particular event on an other object.</div>
+        <div data-ice="description"><p>Tell an object to listen to a particular event on an other object.</p>
+</div>
       </div>
     </td>
     <td>
@@ -1030,7 +1059,8 @@ Here&apos;s an example using reset to bootstrap a collection during initial page
       <div>
         
         
-        <div data-ice="description">Just like `listenTo`, but causes the bound callback to fire only once before being removed.</div>
+        <div data-ice="description"><p>Just like <code>listenTo</code>, but causes the bound callback to fire only once before being removed.</p>
+</div>
       </div>
     </td>
     <td>
@@ -1055,7 +1085,8 @@ Here&apos;s an example using reset to bootstrap a collection during initial page
       <div>
         
         
-        <div data-ice="description">Remove a previously-bound callback function from an object.</div>
+        <div data-ice="description"><p>Remove a previously-bound callback function from an object.</p>
+</div>
       </div>
     </td>
     <td>
@@ -1080,7 +1111,8 @@ Here&apos;s an example using reset to bootstrap a collection during initial page
       <div>
         
         
-        <div data-ice="description">Bind a callback function to an object.</div>
+        <div data-ice="description"><p>Bind a callback function to an object.</p>
+</div>
       </div>
     </td>
     <td>
@@ -1105,7 +1137,8 @@ Here&apos;s an example using reset to bootstrap a collection during initial page
       <div>
         
         
-        <div data-ice="description">Just like `on`, but causes the bound callback to fire only once before being removed.</div>
+        <div data-ice="description"><p>Just like <code>on</code>, but causes the bound callback to fire only once before being removed.</p>
+</div>
       </div>
     </td>
     <td>
@@ -1130,7 +1163,8 @@ Here&apos;s an example using reset to bootstrap a collection during initial page
       <div>
         
         
-        <div data-ice="description">Tell an object to stop listening to events.</div>
+        <div data-ice="description"><p>Tell an object to stop listening to events.</p>
+</div>
       </div>
     </td>
     <td>
@@ -1155,7 +1189,8 @@ Here&apos;s an example using reset to bootstrap a collection during initial page
       <div>
         
         
-        <div data-ice="description">Trigger callbacks for the given event, or space-delimited list of events.</div>
+        <div data-ice="description"><p>Trigger callbacks for the given event, or space-delimited list of events.</p>
+</div>
       </div>
     </td>
     <td>
@@ -1180,7 +1215,8 @@ Here&apos;s an example using reset to bootstrap a collection during initial page
       <div>
         
         
-        <div data-ice="description">Delegates to `off`.</div>
+        <div data-ice="description"><p>Delegates to <code>off</code>.</p>
+</div>
       </div>
     </td>
     <td>
@@ -1218,8 +1254,7 @@ Here&apos;s an example using reset to bootstrap a collection during initial page
 may be included as an option. Passing false as the comparator option will prevent sorting. If you define an
 initialize function, it will be invoked when the collection is created. There are a couple of options that, if
 provided, are attached to the collection directly: model and comparator.</p>
-<p></p><p>
-Pass null for models to create an empty Collection with options.</p>
+<p>Pass null for models to create an empty Collection with options.</p>
 </div>
 
   <div data-ice="override"><h4>Override:</h4><span><a href="class/src/Events.js~Events.html#instance-constructor-constructor">Events#constructor</a></span></div>
@@ -1460,8 +1495,7 @@ vivified as instances of the model. Returns the added (or preexisting, if duplic
 splice the model into the collection at the specified index. If you&apos;re adding models to the collection that are
 already in the collection, they&apos;ll be ignored, unless you pass {merge: true}, in which case their attributes will
 be merged into the corresponding models, firing any appropriate &quot;change&quot; events.</p>
-<p></p><p>
-Note that adding the same model (a model with the same id) to a collection more than once is a no-op.</p>
+<p>Note that adding the same model (a model with the same id) to a collection more than once is a no-op.</p>
 </div>
 
   
@@ -1678,8 +1712,7 @@ hash of attributes, saving the model to the server, and adding the model to the 
 created. Returns the new model. If client-side validation failed, the model will be unsaved, with validation
 errors. In order for this to work, you should set the model property of the collection. The create method can
 accept either an attributes hash or an existing, unsaved model object.</p>
-<p></p><p>
-Creating a model will cause an immediate &quot;add&quot; event to be triggered on the collection, a &quot;request&quot; event as the
+<p>Creating a model will cause an immediate &quot;add&quot; event to be triggered on the collection, a &quot;request&quot; event as the
 new model is sent to the server, as well as a &quot;sync&quot; event, once the server has responded with the successful
 creation of the model. Pass {wait: true} if you&apos;d like to wait for the server before adding the new model to the
 collection.</p>
@@ -1779,15 +1812,12 @@ options) as arguments. When the model data returns from the server, it uses set 
 fetched models, unless you pass {reset: true}, in which case the collection will be (efficiently) reset.
 Delegates to Backbone.sync under the covers for custom persistence strategies and returns a jqXHR. The server
 handler for fetch requests should return a JSON array of models.</p>
-<p></p><p>
-The behavior of fetch can be customized by using the available set options. For example, to fetch a collection,
+<p>The behavior of fetch can be customized by using the available set options. For example, to fetch a collection,
 getting an &quot;add&quot; event for every new model, and a &quot;change&quot; event for every changed existing model, without
 removing anything: collection.fetch({remove: false})</p>
-<p></p><p>
-jQuery.ajax options can also be passed directly as fetch options, so to fetch a specific page of a paginated
+<p>jQuery.ajax options can also be passed directly as fetch options, so to fetch a specific page of a paginated
 collection: Documents.fetch({data: {page: 3}})</p>
-<p></p><p>
-Note that fetch should not be used to populate collections on page load &#x2014; all models needed at load time should
+<p>Note that fetch should not be used to populate collections on page load &#x2014; all models needed at load time should
 already be bootstrapped in to place. fetch is intended for lazily-loading models for interfaces that are not
 needed immediately: for example, documents with collections of notes that may be toggled open and closed.</p>
 </div>
@@ -2547,10 +2577,8 @@ that you&apos;d rather just update the collection in bulk. Use reset to replace 
 (or attribute hashes), triggering a single &quot;reset&quot; event at the end. Returns the newly-set models. For
 convenience, within a &quot;reset&quot; event, the list of any previous models is available as options.previousModels.
 Pass null for models to empty your Collection with options.</p>
-<p></p><p>
-Calling collection.reset() without passing any models as arguments will empty the entire collection.</p>
-<p></p><p>
-Here&apos;s an example using reset to bootstrap a collection during initial page load, in a Rails application:</p>
+<p>Calling collection.reset() without passing any models as arguments will empty the entire collection.</p>
+<p>Here&apos;s an example using reset to bootstrap a collection during initial page load, in a Rails application:</p>
 </div>
 
   
@@ -3323,7 +3351,7 @@ alert(musketeers.length);</code></pre>
 </div>
 
 <footer class="footer">
-  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(0.4.0)</span></a>
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(0.4.1)</span></a>
 </footer>
 
 <script src="script/search_index.js"></script>

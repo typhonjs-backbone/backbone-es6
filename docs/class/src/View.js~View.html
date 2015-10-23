@@ -9,8 +9,9 @@
   <script src="script/prettify/prettify.js"></script>
   
   
+  <script src="script/manual.js"></script>
 </head>
-<body class="layout-container">
+<body class="layout-container" data-ice="rootContainer">
 
 <header>
   <a href="./">Home</a>
@@ -159,8 +160,9 @@ Likewise with events define it by a getter method:
       <div>
         
         
-        <div data-ice="description">There are several special options that, if passed, will be attached directly to the view: model, collection, el,
-id, className, tagName, attributes and events.</div>
+        <div data-ice="description"><p>There are several special options that, if passed, will be attached directly to the view: model, collection, el,
+id, className, tagName, attributes and events.</p>
+</div>
       </div>
     </td>
     <td>
@@ -192,7 +194,8 @@ id, className, tagName, attributes and events.</div>
       <div>
         
         
-        <div data-ice="description">Cached jQuery context for element.</div>
+        <div data-ice="description"><p>Cached jQuery context for element.</p>
+</div>
       </div>
     </td>
     <td>
@@ -217,7 +220,8 @@ id, className, tagName, attributes and events.</div>
       <div>
         
         
-        <div data-ice="description">Client ID</div>
+        <div data-ice="description"><p>Client ID</p>
+</div>
       </div>
     </td>
     <td>
@@ -242,7 +246,8 @@ id, className, tagName, attributes and events.</div>
       <div>
         
         
-        <div data-ice="description">Cached element</div>
+        <div data-ice="description"><p>Cached element</p>
+</div>
       </div>
     </td>
     <td>
@@ -267,7 +272,8 @@ id, className, tagName, attributes and events.</div>
       <div>
         
         
-        <div data-ice="description">The default `tagName` of a View&apos;s element is `&quot;div&quot;`.</div>
+        <div data-ice="description"><p>The default <code>tagName</code> of a View&apos;s element is <code>&quot;div&quot;</code>.</p>
+</div>
       </div>
     </td>
     <td>
@@ -299,9 +305,10 @@ id, className, tagName, attributes and events.</div>
       <div>
         
         
-        <div data-ice="description">If jQuery is included on the page, each view has a $ function that runs queries scoped within the view&apos;s element.
+        <div data-ice="description"><p>If jQuery is included on the page, each view has a $ function that runs queries scoped within the view&apos;s element.
 If you use this scoped jQuery function, you don&apos;t have to use model ids as part of your query to pull out specific
-elements in a list, and can rely much more on HTML class attributes.</div>
+elements in a list, and can rely much more on HTML class attributes.</p>
+</div>
       </div>
     </td>
     <td>
@@ -326,8 +333,9 @@ elements in a list, and can rely much more on HTML class attributes.</div>
       <div>
         
         
-        <div data-ice="description">Add a single event listener to the view&apos;s element (or a child element using `selector`). This only works for
-delegate-able events: not `focus`, `blur`, and not `change`, `submit`, and `reset` in Internet Explorer.</div>
+        <div data-ice="description"><p>Add a single event listener to the view&apos;s element (or a child element using <code>selector</code>). This only works for
+delegate-able events: not <code>focus</code>, <code>blur</code>, and not <code>change</code>, <code>submit</code>, and <code>reset</code> in Internet Explorer.</p>
+</div>
       </div>
     </td>
     <td>
@@ -352,10 +360,11 @@ delegate-able events: not `focus`, `blur`, and not `change`, `submit`, and `rese
       <div>
         
         
-        <div data-ice="description">Uses jQuery&apos;s on function to provide declarative callbacks for DOM events within a view. If an events hash is not
+        <div data-ice="description"><p>Uses jQuery&apos;s on function to provide declarative callbacks for DOM events within a view. If an events hash is not
 passed directly, uses this.events as the source. Events are written in the format {&quot;event selector&quot;: &quot;callback&quot;}.
 The callback may be either the name of a method on the view, or a direct function body. Omitting the selector
-causes the event to be bound to the view&apos;s root element (this.el).</div>
+causes the event to be bound to the view&apos;s root element (this.el).</p>
+</div>
       </div>
     </td>
     <td>
@@ -380,7 +389,8 @@ causes the event to be bound to the view&apos;s root element (this.el).</div>
       <div>
         
         
-        <div data-ice="description">Initialize is an empty function by default.</div>
+        <div data-ice="description"><p>Initialize is an empty function by default.</p>
+</div>
       </div>
     </td>
     <td>
@@ -405,8 +415,9 @@ causes the event to be bound to the view&apos;s root element (this.el).</div>
       <div>
         
         
-        <div data-ice="description">Removes a view and its el from the DOM, and calls stopListening to remove any bound events that the view has
-listenTo&apos;d.</div>
+        <div data-ice="description"><p>Removes a view and its el from the DOM, and calls stopListening to remove any bound events that the view has
+listenTo&apos;d.</p>
+</div>
       </div>
     </td>
     <td>
@@ -431,7 +442,8 @@ listenTo&apos;d.</div>
       <div>
         
         
-        <div data-ice="description">The default implementation of render is a no-op.</div>
+        <div data-ice="description"><p>The default implementation of render is a no-op.</p>
+</div>
       </div>
     </td>
     <td>
@@ -456,8 +468,9 @@ listenTo&apos;d.</div>
       <div>
         
         
-        <div data-ice="description">If you&apos;d like to apply a Backbone view to a different DOM element, use setElement, which will also create the
-cached $el reference and move the view&apos;s delegated events from the old element to the new one.</div>
+        <div data-ice="description"><p>If you&apos;d like to apply a Backbone view to a different DOM element, use setElement, which will also create the
+cached $el reference and move the view&apos;s delegated events from the old element to the new one.</p>
+</div>
       </div>
     </td>
     <td>
@@ -482,7 +495,8 @@ cached $el reference and move the view&apos;s delegated events from the old elem
       <div>
         
         
-        <div data-ice="description">A finer-grained `undelegateEvents` for removing a single delegated event.</div>
+        <div data-ice="description"><p>A finer-grained <code>undelegateEvents</code> for removing a single delegated event.</p>
+</div>
       </div>
     </td>
     <td>
@@ -507,8 +521,9 @@ cached $el reference and move the view&apos;s delegated events from the old elem
       <div>
         
         
-        <div data-ice="description">Removes all of the view&apos;s delegated events. Useful if you want to disable or remove a view from the DOM
-temporarily.</div>
+        <div data-ice="description"><p>Removes all of the view&apos;s delegated events. Useful if you want to disable or remove a view from the DOM
+temporarily.</p>
+</div>
       </div>
     </td>
     <td>
@@ -539,7 +554,8 @@ temporarily.</div>
       <div>
         
         
-        <div data-ice="description">Produces a DOM element to be assigned to your view.</div>
+        <div data-ice="description"><p>Produces a DOM element to be assigned to your view.</p>
+</div>
       </div>
     </td>
     <td>
@@ -564,7 +580,8 @@ temporarily.</div>
       <div>
         
         
-        <div data-ice="description">Ensure that the View has a DOM element to render into.</div>
+        <div data-ice="description"><p>Ensure that the View has a DOM element to render into.</p>
+</div>
       </div>
     </td>
     <td>
@@ -589,8 +606,9 @@ temporarily.</div>
       <div>
         
         
-        <div data-ice="description">Remove this view&apos;s element from the document and all event listeners attached to it. Exposed for subclasses
-using an alternative DOM manipulation API.</div>
+        <div data-ice="description"><p>Remove this view&apos;s element from the document and all event listeners attached to it. Exposed for subclasses
+using an alternative DOM manipulation API.</p>
+</div>
       </div>
     </td>
     <td>
@@ -615,8 +633,9 @@ using an alternative DOM manipulation API.</div>
       <div>
         
         
-        <div data-ice="description">Set attributes from a hash on this view&apos;s element.  Exposed for subclasses using an alternative DOM
-manipulation API.</div>
+        <div data-ice="description"><p>Set attributes from a hash on this view&apos;s element.  Exposed for subclasses using an alternative DOM
+manipulation API.</p>
+</div>
       </div>
     </td>
     <td>
@@ -641,7 +660,8 @@ manipulation API.</div>
       <div>
         
         
-        <div data-ice="description">Creates the `this.el` and `this.$el` references for this view using the given `el`.</div>
+        <div data-ice="description"><p>Creates the <code>this.el</code> and <code>this.$el</code> references for this view using the given <code>el</code>.</p>
+</div>
       </div>
     </td>
     <td>
@@ -674,7 +694,8 @@ manipulation API.</div>
       <div>
         
         
-        <div data-ice="description">Delegates to `on`.</div>
+        <div data-ice="description"><p>Delegates to <code>on</code>.</p>
+</div>
       </div>
     </td>
     <td>
@@ -699,7 +720,8 @@ manipulation API.</div>
       <div>
         
         
-        <div data-ice="description">Tell an object to listen to a particular event on an other object.</div>
+        <div data-ice="description"><p>Tell an object to listen to a particular event on an other object.</p>
+</div>
       </div>
     </td>
     <td>
@@ -724,7 +746,8 @@ manipulation API.</div>
       <div>
         
         
-        <div data-ice="description">Just like `listenTo`, but causes the bound callback to fire only once before being removed.</div>
+        <div data-ice="description"><p>Just like <code>listenTo</code>, but causes the bound callback to fire only once before being removed.</p>
+</div>
       </div>
     </td>
     <td>
@@ -749,7 +772,8 @@ manipulation API.</div>
       <div>
         
         
-        <div data-ice="description">Remove a previously-bound callback function from an object.</div>
+        <div data-ice="description"><p>Remove a previously-bound callback function from an object.</p>
+</div>
       </div>
     </td>
     <td>
@@ -774,7 +798,8 @@ manipulation API.</div>
       <div>
         
         
-        <div data-ice="description">Bind a callback function to an object.</div>
+        <div data-ice="description"><p>Bind a callback function to an object.</p>
+</div>
       </div>
     </td>
     <td>
@@ -799,7 +824,8 @@ manipulation API.</div>
       <div>
         
         
-        <div data-ice="description">Just like `on`, but causes the bound callback to fire only once before being removed.</div>
+        <div data-ice="description"><p>Just like <code>on</code>, but causes the bound callback to fire only once before being removed.</p>
+</div>
       </div>
     </td>
     <td>
@@ -824,7 +850,8 @@ manipulation API.</div>
       <div>
         
         
-        <div data-ice="description">Tell an object to stop listening to events.</div>
+        <div data-ice="description"><p>Tell an object to stop listening to events.</p>
+</div>
       </div>
     </td>
     <td>
@@ -849,7 +876,8 @@ manipulation API.</div>
       <div>
         
         
-        <div data-ice="description">Trigger callbacks for the given event, or space-delimited list of events.</div>
+        <div data-ice="description"><p>Trigger callbacks for the given event, or space-delimited list of events.</p>
+</div>
       </div>
     </td>
     <td>
@@ -874,7 +902,8 @@ manipulation API.</div>
       <div>
         
         
-        <div data-ice="description">Delegates to `off`.</div>
+        <div data-ice="description"><p>Delegates to <code>off</code>.</p>
+</div>
       </div>
     </td>
     <td>
@@ -1329,20 +1358,16 @@ The callback may be either the name of a method on the view, or a direct functio
 causes the event to be bound to the view&apos;s root element (this.el). By default, delegateEvents is called within
 the View&apos;s constructor for you, so if you have a simple events hash, all of your DOM events will always already
 be connected, and you will never have to call this function yourself.</p>
-<p></p><p>
-The events property may also be defined as a function that returns an events hash, to make it easier to
+<p>The events property may also be defined as a function that returns an events hash, to make it easier to
 programmatically define your events, as well as inherit them from parent views.</p>
-<p></p><p>
-Using delegateEvents provides a number of advantages over manually using jQuery to bind events to child elements
+<p>Using delegateEvents provides a number of advantages over manually using jQuery to bind events to child elements
 during render. All attached callbacks are bound to the view before being handed off to jQuery, so when the
 callbacks are invoked, this continues to refer to the view object. When delegateEvents is run again, perhaps with
 a different events hash, all callbacks are removed and delegated afresh &#x2014; useful for views which need to behave
 differently when in different modes.</p>
-<p></p><p>
-A single-event version of delegateEvents is available as delegate. In fact, delegateEvents is simply a multi-event
+<p>A single-event version of delegateEvents is available as delegate. In fact, delegateEvents is simply a multi-event
 wrapper around delegate. A counterpart to undelegateEvents is available as undelegate.</p>
-<p></p><p>
-Callbacks will be bound to the view, with <code>this</code> set properly. Uses event delegation for efficiency.
+<p>Callbacks will be bound to the view, with <code>this</code> set properly. Uses event delegation for efficiency.
 Omitting the selector binds the event to <code>this.el</code>.</p>
 </div>
 
@@ -1572,14 +1597,12 @@ listenTo&apos;d.</p>
   <div data-ice="description"><p>The default implementation of render is a no-op. Override this function with your code that renders the view
 template from model data, and updates this.el with the new HTML. A good convention is to return this at the end
 of render to enable chained calls.</p>
-<p></p><p>
-Backbone is agnostic with respect to your preferred method of HTML templating. Your render function could even
+<p>Backbone is agnostic with respect to your preferred method of HTML templating. Your render function could even
 munge together an HTML string, or use document.createElement to generate a DOM tree. However, we suggest choosing
 a nice JavaScript templating library. Mustache.js, Haml-js, and Eco are all fine alternatives. Because
 Underscore.js is already on the page, _.template is available, and is an excellent choice if you prefer simple
 interpolated-JavaScript style templates.</p>
-<p></p><p>
-Whatever templating strategy you end up with, it&apos;s nice if you never have to put strings of HTML in your
+<p>Whatever templating strategy you end up with, it&apos;s nice if you never have to put strings of HTML in your
 JavaScript. At DocumentCloud, we use Jammit in order to package up JavaScript templates stored in /app/views as
 part of our main core.js asset package.</p>
 </div>
@@ -2116,7 +2139,7 @@ manipulation API and are only required to set the <code>this.el</code> property.
 </div>
 
 <footer class="footer">
-  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(0.4.0)</span></a>
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(0.4.1)</span></a>
 </footer>
 
 <script src="script/search_index.js"></script>

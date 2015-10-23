@@ -9,8 +9,9 @@
   <script src="script/prettify/prettify.js"></script>
   
   
+  <script src="script/manual.js"></script>
 </head>
-<body class="layout-container">
+<body class="layout-container" data-ice="rootContainer">
 
 <header>
   <a href="./">Home</a>
@@ -80,8 +81,7 @@
 <p>History serves as a global router (per frame) to handle hashchange events or pushState, match the appropriate route,
 and trigger callbacks. You shouldn&apos;t ever have to create one of these yourself since Backbone.history already
 contains one.</p>
-<p></p><p>
-pushState support exists on a purely opt-in basis in Backbone. Older browsers that don&apos;t support pushState will
+<p>pushState support exists on a purely opt-in basis in Backbone. Older browsers that don&apos;t support pushState will
 continue to use hash-based URL fragments, and if a hash URL is visited by a pushState-capable browser, it will be
 transparently upgraded to the true URL. Note that using real URLs requires your web server to be able to correctly
 render those pages, so back-end changes are required as well. For example, if you have a route of /documents/100,
@@ -89,8 +89,7 @@ your web server must be able to serve that page, if the browser visits that URL 
 crawlability, it&apos;s best to have the server generate the complete HTML for the page ... but if it&apos;s a web application,
 just rendering the same content you would have for the root URL, and filling in the rest with Backbone Views and
 JavaScript works fine.</p>
-<p></p><p>
-Handles cross-browser history management, based on either <a href="http://diveintohtml5.info/history.html">pushState</a> and
+<p>Handles cross-browser history management, based on either <a href="http://diveintohtml5.info/history.html">pushState</a> and
 real URLs, or <a href="https://developer.mozilla.org/en-US/docs/DOM/window.onhashchange">onhashchange</a> and URL fragments.
 If the browser supports neither (old IE, natch), falls back to polling.</p>
 </div>
@@ -159,7 +158,8 @@ If the browser supports neither (old IE, natch), falls back to polling.</p>
       <div>
         
         
-        <div data-ice="description">URL fragment</div>
+        <div data-ice="description"><p>URL fragment</p>
+</div>
       </div>
     </td>
     <td>
@@ -184,7 +184,8 @@ If the browser supports neither (old IE, natch), falls back to polling.</p>
       <div>
         
         
-        <div data-ice="description">Stores route / callback pairs for validation.</div>
+        <div data-ice="description"><p>Stores route / callback pairs for validation.</p>
+</div>
       </div>
     </td>
     <td>
@@ -209,7 +210,8 @@ If the browser supports neither (old IE, natch), falls back to polling.</p>
       <div>
         
         
-        <div data-ice="description">Browser history</div>
+        <div data-ice="description"><p>Browser history</p>
+</div>
       </div>
     </td>
     <td>
@@ -234,7 +236,8 @@ If the browser supports neither (old IE, natch), falls back to polling.</p>
       <div>
         
         
-        <div data-ice="description">Proxy iframe</div>
+        <div data-ice="description"><p>Proxy iframe</p>
+</div>
       </div>
     </td>
     <td>
@@ -259,7 +262,8 @@ If the browser supports neither (old IE, natch), falls back to polling.</p>
       <div>
         
         
-        <div data-ice="description">The default interval to poll for hash changes, if necessary, is twenty times a second.</div>
+        <div data-ice="description"><p>The default interval to poll for hash changes, if necessary, is twenty times a second.</p>
+</div>
       </div>
     </td>
     <td>
@@ -284,7 +288,8 @@ If the browser supports neither (old IE, natch), falls back to polling.</p>
       <div>
         
         
-        <div data-ice="description">Browser Location or URL string.</div>
+        <div data-ice="description"><p>Browser Location or URL string.</p>
+</div>
       </div>
     </td>
     <td>
@@ -309,7 +314,8 @@ If the browser supports neither (old IE, natch), falls back to polling.</p>
       <div>
         
         
-        <div data-ice="description">Figure out the initial configuration.</div>
+        <div data-ice="description"><p>Figure out the initial configuration.</p>
+</div>
       </div>
     </td>
     <td>
@@ -334,7 +340,8 @@ If the browser supports neither (old IE, natch), falls back to polling.</p>
       <div>
         
         
-        <div data-ice="description">URL root</div>
+        <div data-ice="description"><p>URL root</p>
+</div>
       </div>
     </td>
     <td>
@@ -359,7 +366,8 @@ If the browser supports neither (old IE, natch), falls back to polling.</p>
       <div>
         
         
-        <div data-ice="description">Has the history handling already been started?</div>
+        <div data-ice="description"><p>Has the history handling already been started?</p>
+</div>
       </div>
     </td>
     <td>
@@ -391,7 +399,8 @@ If the browser supports neither (old IE, natch), falls back to polling.</p>
       <div>
         
         
-        <div data-ice="description">Are we at the app root?</div>
+        <div data-ice="description"><p>Are we at the app root?</p>
+</div>
       </div>
     </td>
     <td>
@@ -416,8 +425,9 @@ If the browser supports neither (old IE, natch), falls back to polling.</p>
       <div>
         
         
-        <div data-ice="description">Checks the current URL to see if it has changed, and if it has, calls `loadUrl`, normalizing across the
-hidden iframe.</div>
+        <div data-ice="description"><p>Checks the current URL to see if it has changed, and if it has, calls <code>loadUrl</code>, normalizing across the
+hidden iframe.</p>
+</div>
       </div>
     </td>
     <td>
@@ -442,8 +452,9 @@ hidden iframe.</div>
       <div>
         
         
-        <div data-ice="description">Unicode characters in `location.pathname` are percent encoded so they&apos;re decoded for comparison. `%25` should
-not be decoded since it may be part of an encoded parameter.</div>
+        <div data-ice="description"><p>Unicode characters in <code>location.pathname</code> are percent encoded so they&apos;re decoded for comparison. <code>%25</code> should
+not be decoded since it may be part of an encoded parameter.</p>
+</div>
       </div>
     </td>
     <td>
@@ -468,7 +479,8 @@ not be decoded since it may be part of an encoded parameter.</div>
       <div>
         
         
-        <div data-ice="description">Get the cross-browser normalized URL fragment from the path or hash.</div>
+        <div data-ice="description"><p>Get the cross-browser normalized URL fragment from the path or hash.</p>
+</div>
       </div>
     </td>
     <td>
@@ -493,7 +505,8 @@ not be decoded since it may be part of an encoded parameter.</div>
       <div>
         
         
-        <div data-ice="description">Gets the true hash value.</div>
+        <div data-ice="description"><p>Gets the true hash value.</p>
+</div>
       </div>
     </td>
     <td>
@@ -518,7 +531,8 @@ not be decoded since it may be part of an encoded parameter.</div>
       <div>
         
         
-        <div data-ice="description">Get the pathname and search params, without the root.</div>
+        <div data-ice="description"><p>Get the pathname and search params, without the root.</p>
+</div>
       </div>
     </td>
     <td>
@@ -543,7 +557,8 @@ not be decoded since it may be part of an encoded parameter.</div>
       <div>
         
         
-        <div data-ice="description">In IE6, the hash fragment and search params are incorrect if the fragment contains `?`.</div>
+        <div data-ice="description"><p>In IE6, the hash fragment and search params are incorrect if the fragment contains <code>?</code>.</p>
+</div>
       </div>
     </td>
     <td>
@@ -568,7 +583,8 @@ not be decoded since it may be part of an encoded parameter.</div>
       <div>
         
         
-        <div data-ice="description">Attempt to load the current URL fragment.</div>
+        <div data-ice="description"><p>Attempt to load the current URL fragment.</p>
+</div>
       </div>
     </td>
     <td>
@@ -593,7 +609,8 @@ not be decoded since it may be part of an encoded parameter.</div>
       <div>
         
         
-        <div data-ice="description">Does the pathname match the root?</div>
+        <div data-ice="description"><p>Does the pathname match the root?</p>
+</div>
       </div>
     </td>
     <td>
@@ -618,7 +635,8 @@ not be decoded since it may be part of an encoded parameter.</div>
       <div>
         
         
-        <div data-ice="description">Save a fragment into the hash history, or replace the URL state if the &apos;replace&apos; option is passed.</div>
+        <div data-ice="description"><p>Save a fragment into the hash history, or replace the URL state if the &apos;replace&apos; option is passed.</p>
+</div>
       </div>
     </td>
     <td>
@@ -643,7 +661,8 @@ not be decoded since it may be part of an encoded parameter.</div>
       <div>
         
         
-        <div data-ice="description">Add a route to be tested when the fragment changes.</div>
+        <div data-ice="description"><p>Add a route to be tested when the fragment changes.</p>
+</div>
       </div>
     </td>
     <td>
@@ -668,8 +687,9 @@ not be decoded since it may be part of an encoded parameter.</div>
       <div>
         
         
-        <div data-ice="description">When all of your Routers have been created, and all of the routes are set up properly, call
-Backbone.history.start() to begin monitoring hashchange events, and dispatching routes.</div>
+        <div data-ice="description"><p>When all of your Routers have been created, and all of the routes are set up properly, call
+Backbone.history.start() to begin monitoring hashchange events, and dispatching routes.</p>
+</div>
       </div>
     </td>
     <td>
@@ -694,7 +714,8 @@ Backbone.history.start() to begin monitoring hashchange events, and dispatching 
       <div>
         
         
-        <div data-ice="description">Disable Backbone.history, perhaps temporarily.</div>
+        <div data-ice="description"><p>Disable Backbone.history, perhaps temporarily.</p>
+</div>
       </div>
     </td>
     <td>
@@ -727,7 +748,8 @@ Backbone.history.start() to begin monitoring hashchange events, and dispatching 
       <div>
         
         
-        <div data-ice="description">Delegates to `on`.</div>
+        <div data-ice="description"><p>Delegates to <code>on</code>.</p>
+</div>
       </div>
     </td>
     <td>
@@ -752,7 +774,8 @@ Backbone.history.start() to begin monitoring hashchange events, and dispatching 
       <div>
         
         
-        <div data-ice="description">Tell an object to listen to a particular event on an other object.</div>
+        <div data-ice="description"><p>Tell an object to listen to a particular event on an other object.</p>
+</div>
       </div>
     </td>
     <td>
@@ -777,7 +800,8 @@ Backbone.history.start() to begin monitoring hashchange events, and dispatching 
       <div>
         
         
-        <div data-ice="description">Just like `listenTo`, but causes the bound callback to fire only once before being removed.</div>
+        <div data-ice="description"><p>Just like <code>listenTo</code>, but causes the bound callback to fire only once before being removed.</p>
+</div>
       </div>
     </td>
     <td>
@@ -802,7 +826,8 @@ Backbone.history.start() to begin monitoring hashchange events, and dispatching 
       <div>
         
         
-        <div data-ice="description">Remove a previously-bound callback function from an object.</div>
+        <div data-ice="description"><p>Remove a previously-bound callback function from an object.</p>
+</div>
       </div>
     </td>
     <td>
@@ -827,7 +852,8 @@ Backbone.history.start() to begin monitoring hashchange events, and dispatching 
       <div>
         
         
-        <div data-ice="description">Bind a callback function to an object.</div>
+        <div data-ice="description"><p>Bind a callback function to an object.</p>
+</div>
       </div>
     </td>
     <td>
@@ -852,7 +878,8 @@ Backbone.history.start() to begin monitoring hashchange events, and dispatching 
       <div>
         
         
-        <div data-ice="description">Just like `on`, but causes the bound callback to fire only once before being removed.</div>
+        <div data-ice="description"><p>Just like <code>on</code>, but causes the bound callback to fire only once before being removed.</p>
+</div>
       </div>
     </td>
     <td>
@@ -877,7 +904,8 @@ Backbone.history.start() to begin monitoring hashchange events, and dispatching 
       <div>
         
         
-        <div data-ice="description">Tell an object to stop listening to events.</div>
+        <div data-ice="description"><p>Tell an object to stop listening to events.</p>
+</div>
       </div>
     </td>
     <td>
@@ -902,7 +930,8 @@ Backbone.history.start() to begin monitoring hashchange events, and dispatching 
       <div>
         
         
-        <div data-ice="description">Trigger callbacks for the given event, or space-delimited list of events.</div>
+        <div data-ice="description"><p>Trigger callbacks for the given event, or space-delimited list of events.</p>
+</div>
       </div>
     </td>
     <td>
@@ -927,7 +956,8 @@ Backbone.history.start() to begin monitoring hashchange events, and dispatching 
       <div>
         
         
-        <div data-ice="description">Delegates to `off`.</div>
+        <div data-ice="description"><p>Delegates to <code>off</code>.</p>
+</div>
       </div>
     </td>
     <td>
@@ -2055,23 +2085,18 @@ desirable), or <code>replace: true</code>, if you wish to modify the current URL
   <div data-ice="description"><p>When all of your Routers have been created, and all of the routes are set up properly, call
 Backbone.history.start() to begin monitoring hashchange events, and dispatching routes. Subsequent calls to
 Backbone.history.start() will throw an error, and Backbone.History.started is a boolean value indicating whether
-it has already been called.
-<br>
-To indicate that you&apos;d like to use HTML5 pushState support in your application, use
+it has already been called.</p>
+<p>To indicate that you&apos;d like to use HTML5 pushState support in your application, use
 Backbone.history.start({pushState: true}). If you&apos;d like to use pushState, but have browsers that don&apos;t support
-it natively use full page refreshes instead, you can add {hashChange: false} to the options.
-<br>
-If your application is not being served from the root url / of your domain, be sure to tell History where the
-root really is, as an option: Backbone.history.start({pushState: true, root: &quot;/public/search/&quot;})
-<br>
-When called, if a route succeeds with a match for the current URL, Backbone.history.start() returns true. If no
-defined route matches the current URL, it returns false.
-<br>
-If the server has already rendered the entire page, and you don&apos;t want the initial route to trigger when starting
-History, pass silent: true.
-<br>
-Because hash-based history in Internet Explorer relies on an <iframe>, be sure to call start() only after the DOM
-is ready.</iframe></p>
+it natively use full page refreshes instead, you can add {hashChange: false} to the options.</p>
+<p>If your application is not being served from the root url / of your domain, be sure to tell History where the
+root really is, as an option: Backbone.history.start({pushState: true, root: &quot;/public/search/&quot;})</p>
+<p>When called, if a route succeeds with a match for the current URL, Backbone.history.start() returns true. If no
+defined route matches the current URL, it returns false.</p>
+<p>If the server has already rendered the entire page, and you don&apos;t want the initial route to trigger when starting
+History, pass silent: true.</p>
+<p>Because hash-based history in Internet Explorer relies on an &lt;iframe&gt;, be sure to call start() only after the DOM
+is ready.</p>
 </div>
 
   
@@ -2179,7 +2204,7 @@ testing Routers.</p>
 </div>
 
 <footer class="footer">
-  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(0.4.0)</span></a>
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(0.4.1)</span></a>
 </footer>
 
 <script src="script/search_index.js"></script>

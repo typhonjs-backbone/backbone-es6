@@ -174,19 +174,19 @@ export default class View extends Events
     * causes the event to be bound to the view's root element (this.el). By default, delegateEvents is called within
     * the View's constructor for you, so if you have a simple events hash, all of your DOM events will always already
     * be connected, and you will never have to call this function yourself.
-    * <p>
+    *
     * The events property may also be defined as a function that returns an events hash, to make it easier to
     * programmatically define your events, as well as inherit them from parent views.
-    * <p>
+    *
     * Using delegateEvents provides a number of advantages over manually using jQuery to bind events to child elements
     * during render. All attached callbacks are bound to the view before being handed off to jQuery, so when the
     * callbacks are invoked, this continues to refer to the view object. When delegateEvents is run again, perhaps with
     * a different events hash, all callbacks are removed and delegated afresh — useful for views which need to behave
     * differently when in different modes.
-    * <p>
+    *
     * A single-event version of delegateEvents is available as delegate. In fact, delegateEvents is simply a multi-event
     * wrapper around delegate. A counterpart to undelegateEvents is available as undelegate.
-    * <p>
+    *
     * Callbacks will be bound to the view, with `this` set properly. Uses event delegation for efficiency.
     * Omitting the selector binds the event to `this.el`.
     *
@@ -335,13 +335,13 @@ export default class View extends Events
     * The default implementation of render is a no-op. Override this function with your code that renders the view
     * template from model data, and updates this.el with the new HTML. A good convention is to return this at the end
     * of render to enable chained calls.
-    * <p>
+    *
     * Backbone is agnostic with respect to your preferred method of HTML templating. Your render function could even
     * munge together an HTML string, or use document.createElement to generate a DOM tree. However, we suggest choosing
     * a nice JavaScript templating library. Mustache.js, Haml-js, and Eco are all fine alternatives. Because
     * Underscore.js is already on the page, _.template is available, and is an excellent choice if you prefer simple
     * interpolated-JavaScript style templates.
-    * <p>
+    *
     * Whatever templating strategy you end up with, it's nice if you never have to put strings of HTML in your
     * JavaScript. At DocumentCloud, we use Jammit in order to package up JavaScript templates stored in /app/views as
     * part of our main core.js asset package.

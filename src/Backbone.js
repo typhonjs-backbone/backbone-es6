@@ -5,21 +5,21 @@ import _             from 'underscore';
 import BackboneProxy from './BackboneProxy.js';
 
 /**
- * Backbone.js<br>
+ * Backbone.js
  *
- * (c) 2010-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors<br>
- * Backbone may be freely distributed under the MIT license.<br>
+ * (c) 2010-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
+ * Backbone may be freely distributed under the MIT license.
  *
- * For all details and documentation:<br>
- * http://backbonejs.org<br>
+ * For all details and documentation:
+ * http://backbonejs.org
  *
  * ---------
  *
- * Backbone-ES6<br>
- * https://github.com/typhonjs/backbone-es6<br>
- * (c) 2015 Michael Leahy<br>
- * Backbone-ES6 may be freely distributed under the MIT license.<br>
- * <br>
+ * Backbone-ES6
+ * https://github.com/typhonjs/backbone-es6
+ * (c) 2015 Michael Leahy
+ * Backbone-ES6 may be freely distributed under the MIT license.
+ *
  * This fork of Backbone converts it to ES6 and provides extension through constructor injection for easy modification.
  * The only major difference from Backbone is that Backbone itself is not a global Events instance anymore. Please
  * see @link{Events.js} for documentation on easily setting up an ES6 event module for global usage.

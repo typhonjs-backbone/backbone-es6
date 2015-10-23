@@ -80,28 +80,28 @@ const s_ROUTE_TO_REGEX = (route) =>
  * it's now possible to use standard URLs (/page). Backbone.Router provides methods for routing client-side pages, and
  * connecting them to actions and events. For browsers which don't yet support the History API, the Router handles
  * graceful fallback and transparent translation to the fragment version of the URL.
- * <p>
+ *
  * During page load, after your application has finished creating all of its routers, be sure to call
  * Backbone.history.start() or Backbone.history.start({pushState: true}) to route the initial URL.
- * <p>
- * routes - router.routes<br>
+ *
+ * routes - router.routes
  * The routes hash maps URLs with parameters to functions on your router (or just direct function definitions, if you
  * prefer), similar to the View's events hash. Routes can contain parameter parts, :param, which match a single URL
  * component between slashes; and splat parts *splat, which can match any number of URL components. Part of a route can
  * be made optional by surrounding it in parentheses (/:optional).
- * <p>
+ *
  * For example, a route of "search/:query/p:page" will match a fragment of #search/obama/p2, passing "obama" and "2" to
  * the action.
- * <p>
+ *
  * A route of "file/*path" will match #file/nested/folder/file.txt, passing "nested/folder/file.txt" to the action.
- * <p>
+ *
  * A route of "docs/:section(/:subsection)" will match #docs/faq and #docs/faq/installing, passing "faq" to the action
  * in the first case, and passing "faq" and "installing" to the action in the second.
- * <p>
+ *
  * Trailing slashes are treated as part of the URL, and (correctly) treated as a unique route when accessed. docs and
  * docs/ will fire different callbacks. If you can't avoid generating both types of URLs, you can define a "docs(/)"
  * matcher to capture both cases.
- * <p>
+ *
  * When the visitor presses the back button, or enters a URL, and a particular route is matched, the name of the action
  * will be fired as an event, so that other objects can listen to the router, and be notified. In the following example,
  * visiting #help/uploading will fire a route:help event from the router.
