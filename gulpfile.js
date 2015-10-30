@@ -204,20 +204,6 @@ gulp.task('jspm-install', function(cb)
 });
 
 /**
- * Runs "jspm update"
- */
-gulp.task('jspm-update', function(cb)
-{
-   var exec = require('child_process').exec;
-   exec('jspm update', function (err, stdout, stderr)
-   {
-      console.log(stdout);
-      console.log(stderr);
-      cb(err);
-   });
-});
-
-/**
  * Runs "npm install"
  */
 gulp.task('npm-install', function(cb)
