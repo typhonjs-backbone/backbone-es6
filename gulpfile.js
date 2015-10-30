@@ -291,25 +291,21 @@ function buildStatic(srcFilename, destDir, destFilepath, minify, mangle, format,
           +'; minify: ' +minify +'; destDir: ' +destDir +'; destFilepath: ' +destFilepath);
 
          var builderPromise;
+         var builderConfig =
+         {
+            minify: minify,
+            mangle: mangle,
+            format: format
+         };
 
          // When testing we only need to do an in memory build.
          if (argv.travis)
          {
-            builderPromise = builder.buildStatic(srcFilename,
-            {
-               minify: minify,
-               mangle: mangle,
-               format: format
-            });
+            builderPromise = builder.buildStatic(srcFilename, builderConfig);
          }
          else
          {
-            builderPromise = builder.buildStatic(srcFilename, destFilepath,
-            {
-               minify: minify,
-               mangle: mangle,
-               format: format
-            });
+            builderPromise = builder.buildStatic(srcFilename, destFilepath, builderConfig);
          }
 
          builderPromise.then(function ()
