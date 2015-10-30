@@ -140,8 +140,10 @@ gulp.task('git push', ['test'], function(cb)
       return p1 !== 'optional' ? p1 +':' : match;
    });
 
+   // Rewrite 'config.js'.
    fs.writeFileSync('./config.js', buffer);
 
+   // Execute git push.
    var exec = require('child_process').exec;
    exec('git push', function (err, stdout, stderr)
    {
