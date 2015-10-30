@@ -294,14 +294,14 @@ function buildStatic(srcFilename, destDir, destFilepath, minify, mangle, format,
             builderPromise = builder.buildStatic(srcFilename, destFilepath, builderConfig);
          }
 
-         builderPromise.then(function ()
+         builderPromise.then(function()
          {
             console.log('Bundle complete - filename: ' +destFilepath +' minify: ' +minify +'; mangle: ' +mangle
              +'; format: ' +format);
 
             resolve();
          })
-         .catch(function (err)
+         .catch(function(err)
          {
             console.log('Bundle error - filename: ' +destFilepath +' minify: ' +minify + '; mangle: ' +mangle
              +'; format: ' +format);
