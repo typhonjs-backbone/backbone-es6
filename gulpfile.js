@@ -15,13 +15,13 @@
 
 /* eslint-disable */
 
-var gulp =        require('gulp');
+var gulp =     require('gulp');
 
-var argv =        require('yargs').argv;
-var fs =          require('fs');
-var jspm =        require('jspm');
+var argv =     require('yargs').argv;
+var fs =       require('fs');
+var jspm =     require('jspm');
 
-var Promise =     require("bluebird");
+var Promise =  require("bluebird");
 
 // Set the package path to the local root where config.js is located.
 jspm.setPackagePath('.');
