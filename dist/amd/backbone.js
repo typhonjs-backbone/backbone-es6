@@ -444,7 +444,7 @@
   // etc UMD / module pattern
 })*/
 
-(['1'], ["6","5","6","6","6","6","6","6","6","6","6"], function($__System) {
+(['1'], ["5","6","6","6","6","6","6","6","6","6","6"], function($__System) {
 
 $__System.registerDynamic("2", [], true, function(req, exports, module) {
   ;
@@ -510,21 +510,21 @@ $__System.register('4', ['2', '3', '5', '6'], function (_export) {
     execute: function () {
 
       /**
-       * Backbone.js<br>
+       * Backbone.js
        *
-       * (c) 2010-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors<br>
-       * Backbone may be freely distributed under the MIT license.<br>
+       * (c) 2010-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
+       * Backbone may be freely distributed under the MIT license.
        *
-       * For all details and documentation:<br>
-       * http://backbonejs.org<br>
+       * For all details and documentation:
+       * http://backbonejs.org
        *
        * ---------
        *
-       * Backbone-ES6<br>
-       * https://github.com/typhonjs/backbone-es6<br>
-       * (c) 2015 Michael Leahy<br>
-       * Backbone-ES6 may be freely distributed under the MIT license.<br>
-       * <br>
+       * Backbone-ES6
+       * https://github.com/typhonjs/backbone-es6
+       * (c) 2015 Michael Leahy
+       * Backbone-ES6 may be freely distributed under the MIT license.
+       *
        * This fork of Backbone converts it to ES6 and provides extension through constructor injection for easy modification.
        * The only major difference from Backbone is that Backbone itself is not a global Events instance anymore. Please
        * see @link{Events.js} for documentation on easily setting up an ES6 event module for global usage.
@@ -696,7 +696,7 @@ $__System.registerDynamic("9", ["8"], true, function(req, exports, module) {
       __define = global.define;
   global.define = undefined;
   var cof = req('8');
-  module.exports = 0 in Object('z') ? Object : function(it) {
+  module.exports = Object('z').propertyIsEnumerable(0) ? Object : function(it) {
     return cof(it) == 'String' ? it.split('') : Object(it);
   };
   global.define = __define;
@@ -748,7 +748,7 @@ $__System.registerDynamic("d", [], true, function(req, exports, module) {
   var global = this,
       __define = global.define;
   global.define = undefined;
-  var core = module.exports = {version: '1.2.2'};
+  var core = module.exports = {version: '1.2.3'};
   if (typeof __e == 'number')
     __e = core;
   global.define = __define;
@@ -902,7 +902,6 @@ $__System.registerDynamic("14", ["13"], true, function(req, exports, module) {
       var object = _x,
           property = _x2,
           receiver = _x3;
-      desc = parent = getter = undefined;
       _again = false;
       if (object === null)
         object = Function.prototype;
@@ -916,6 +915,7 @@ $__System.registerDynamic("14", ["13"], true, function(req, exports, module) {
           _x2 = property;
           _x3 = receiver;
           _again = true;
+          desc = parent = undefined;
           continue _function;
         }
       } else if ("value" in desc) {
@@ -1465,35 +1465,34 @@ $__System.register('23', ['2', '6', '22'], function (_export) {
           *
           * An important consideration of Backbone-ES6 is that Events are no longer an object literal, but a full blown ES6
           * class. This is the biggest potential breaking change for Backbone-ES6 when compared to the original Backbone.
-          * <p>
+          *
           * Previously Events could be mixed in to any object. This is no longer possible with Backbone-ES6 when working from
           * source or the bundled versions. It should be noted that Events is also no longer mixed into Backbone itself, so
           * Backbone is not a Global events instance.
-          * <p>
-          * Catalog of Events:<br>
+          *
+          * Catalog of Events:
           * Here's the complete list of built-in Backbone events, with arguments. You're also free to trigger your own events on
-          * Models, Collections and Views as you see fit. The Backbone object itself mixes in Events, and can be used to emit any
-          * global events that your application needs.
-          * <p>
-          * "add" (model, collection, options) — when a model is added to a collection.<br>
-          * "remove" (model, collection, options) — when a model is removed from a collection.<br>
+          * Models, Collections and Views as you see fit.
+          *
+          * "add" (model, collection, options) — when a model is added to a collection.
+          * "remove" (model, collection, options) — when a model is removed from a collection.
           * "update" (collection, options) — single event triggered after any number of models have been added or removed from a
-          * collection.<br>
-          * "reset" (collection, options) — when the collection's entire contents have been replaced.<br>
-          * "sort" (collection, options) — when the collection has been re-sorted.<br>
-          * "change" (model, options) — when a model's attributes have changed.<br>
-          * "change:[attribute]" (model, value, options) — when a specific attribute has been updated.<br>
-          * "destroy" (model, collection, options) — when a model is destroyed.<br>
-          * "request" (model_or_collection, xhr, options) — when a model or collection has started a request to the server.<br>
+          * collection.
+          * "reset" (collection, options) — when the collection's entire contents have been replaced.
+          * "sort" (collection, options) — when the collection has been re-sorted.
+          * "change" (model, options) — when a model's attributes have changed.
+          * "change:[attribute]" (model, value, options) — when a specific attribute has been updated.
+          * "destroy" (model, collection, options) — when a model is destroyed.
+          * "request" (model_or_collection, xhr, options) — when a model or collection has started a request to the server.
           * "sync" (model_or_collection, resp, options) — when a model or collection has been successfully synced with the
-          * server.<br>
-          * "error" (model_or_collection, resp, options) — when a model's or collection's request to the server has failed.<br>
-          * "invalid" (model, error, options) — when a model's validation fails on the client.<br>
-          * "route:[name]" (params) — Fired by the router when a specific route is matched.<br>
-          * "route" (route, params) — Fired by the router when any route has been matched.<br>
-          * "route" (router, route, params) — Fired by history when any route has been matched.<br>
-          * "all" — this special event fires for any triggered event, passing the event name as the first argument.<br>
-          * <p>
+          * server.
+          * "error" (model_or_collection, resp, options) — when a model's or collection's request to the server has failed.
+          * "invalid" (model, error, options) — when a model's validation fails on the client.
+          * "route:[name]" (params) — Fired by the router when a specific route is matched.
+          * "route" (route, params) — Fired by the router when any route has been matched.
+          * "route" (router, route, params) — Fired by history when any route has been matched.
+          * "all" — this special event fires for any triggered event, passing the event name as the first argument.
+          *
           * Generally speaking, when calling a function that emits an event (model.set, collection.add, and so on...), if you'd
           * like to prevent the event from being triggered, you may pass {silent: true} as an option. Note that this is rarely,
           * perhaps even never, a good idea. Passing through a specific flag in the options for your event callback to look at,
@@ -2055,8 +2054,8 @@ $__System.registerDynamic("32", ["26", "e", "2a", "29", "2b", "2e", "2f", "31", 
     Iterators[TAG] = returnThis;
     if (DEFAULT) {
       methods = {
-        keys: IS_SET ? _default : createMethod(KEYS),
         values: DEFAULT == VALUES ? _default : createMethod(VALUES),
+        keys: IS_SET ? _default : createMethod(KEYS),
         entries: DEFAULT != VALUES ? _default : createMethod('entries')
       };
       if (FORCE)
@@ -2549,23 +2548,23 @@ $__System.register('40', ['2', '3', '6', '14', '22', '23', '1f', '3f'], function
           *
           * Models are the heart of any JavaScript application, containing the interactive data as well as a large part of the
           * logic surrounding it: conversions, validations, computed properties, and access control.
-          * <p>
+          *
           * Backbone-ES6 supports the older "extend" functionality of Backbone. You can still use "extend" to extend
           * Backbone.Model with your domain-specific methods, and Model provides a basic set of functionality for managing
           * changes.
-          * <p>
+          *
           * It is recommended though to use ES6 syntax for working with Backbone-ES6 foregoing the older "extend" mechanism.
-          * <p>
+          *
           * Create a new model with the specified attributes. A client id (`cid`) is automatically generated & assigned for you.
-          * <p>
+          *
           * If you pass a {collection: ...} as the options, the model gains a collection property that will be used to indicate
           * which collection the model belongs to, and is used to help compute the model's url. The model.collection property is
           * normally created automatically when you first add a model to a collection. Note that the reverse is not true, as
           * passing this option to the constructor will not automatically add the model to the collection. Useful, sometimes.
-          * <p>
+          *
           * If {parse: true} is passed as an option, the attributes will first be converted by parse before being set on the
           * model.
-          * <p>
+          *
           * Underscore methods available to Model:
           * @see http://underscorejs.org/#chain
           * @see http://underscorejs.org/#keys
@@ -2706,7 +2705,7 @@ $__System.register('40', ['2', '3', '6', '14', '22', '23', '1f', '3f'], function
              * @example
              * ES6 example: If you're looking to get fancy, you may want to override constructor, which allows you to replace
              * the actual constructor function for your model.
-             * <br>
+             *
              * class Library extends Backbone.Model {
              *    constructor() {
              *       super(...arguments);
@@ -3020,7 +3019,7 @@ $__System.register('40', ['2', '3', '6', '14', '22', '23', '1f', '3f'], function
                /**
                 * Has the model changed since its last set? If an attribute is passed, returns true if that specific attribute has
                 * changed.
-                * <p>
+                *
                 * Note that this method, and the following change-related ones, are only useful during the course of a "change"
                 * event.
                 *
@@ -3189,14 +3188,14 @@ $__System.register('40', ['2', '3', '6', '14', '22', '23', '1f', '3f'], function
                 * the model has a validate method, and validation fails, the model will not be saved. If the model isNew, the save
                 * will be a "create" (HTTP POST), if the model already exists on the server, the save will be an "update"
                 * (HTTP PUT).
-                * <p>
+                *
                 * If instead, you'd only like the changed attributes to be sent to the server, call model.save(attrs,
                 * {patch: true}). You'll get an HTTP PATCH request to the server with just the passed-in attributes.
-                * <p>
+                *
                 * Calling save with new attributes will cause a "change" event immediately, a "request" event as the Ajax request
                 * begins to go to the server, and a "sync" event after the server has acknowledged the successful change. Pass
                 * {wait: true} if you'd like to wait for the server before setting the new attributes on the model.
-                * <p>
+                *
                 * In the following example, notice how our overridden version of Backbone.sync receives a "create" request the
                 * first time the model is saved and an "update" request the second time.
                 *
@@ -3459,7 +3458,7 @@ $__System.register('40', ['2', '3', '6', '14', '22', '23', '1f', '3f'], function
                 * somewhere else, override this method with the correct logic. Generates URLs of the form: "[collection.url]/[id]"
                 * by default, but you may override by specifying an explicit urlRoot if the model's collection shouldn't be taken
                 * into account.
-                * <p>
+                *
                 * Delegates to Collection#url to generate the URL, so make sure that you have it defined, or a urlRoot property,
                 * if all models of this class share a common root URL. A model with an id of 101, stored in a Backbone.Collection
                 * with a url of "/documents/7/notes", would have this URL: "/documents/7/notes/101"
@@ -3783,13 +3782,13 @@ $__System.register('42', ['2', '3', '6', '14', '22', '23', '40', '41', '1f', '3f
           *
           * You can bind "change" events to be notified when any model in the collection has been modified, listen for "add"
           * and "remove" events, fetch the collection from the server, and use a full suite of Underscore.js methods.
-          * <p>
+          *
           * Any event that is triggered on a model in a collection will also be triggered on the collection directly, for
           * convenience. This allows you to listen for changes to specific attributes in any model in a collection, for
           * example: documents.on("change:selected", ...)
           *
           * ---------
-          * <p>
+          *
           * Underscore methods available to Collection (including aliases):
           *
           * @see http://underscorejs.org/#chain
@@ -3863,7 +3862,7 @@ $__System.register('42', ['2', '3', '6', '14', '22', '23', '40', '41', '1f', '3f
              * may be included as an option. Passing false as the comparator option will prevent sorting. If you define an
              * initialize function, it will be invoked when the collection is created. There are a couple of options that, if
              * provided, are attached to the collection directly: model and comparator.
-             * <p>
+             *
              * Pass null for models to create an empty Collection with options.
              *
              * @see http://backbonejs.org/#Collection-constructor
@@ -3934,7 +3933,7 @@ $__System.register('42', ['2', '3', '6', '14', '22', '23', '40', '41', '1f', '3f
              * splice the model into the collection at the specified index. If you're adding models to the collection that are
              * already in the collection, they'll be ignored, unless you pass {merge: true}, in which case their attributes will
              * be merged into the corresponding models, firing any appropriate "change" events.
-             * <p>
+             *
              * Note that adding the same model (a model with the same id) to a collection more than once is a no-op.
              *
              * @example
@@ -4002,7 +4001,7 @@ $__System.register('42', ['2', '3', '6', '14', '22', '23', '40', '41', '1f', '3f
                 * created. Returns the new model. If client-side validation failed, the model will be unsaved, with validation
                 * errors. In order for this to work, you should set the model property of the collection. The create method can
                 * accept either an attributes hash or an existing, unsaved model object.
-                * <p>
+                *
                 * Creating a model will cause an immediate "add" event to be triggered on the collection, a "request" event as the
                 * new model is sent to the server, as well as a "sync" event, once the server has responded with the successful
                 * creation of the model. Pass {wait: true} if you'd like to wait for the server before adding the new model to the
@@ -4089,14 +4088,14 @@ $__System.register('42', ['2', '3', '6', '14', '22', '23', '40', '41', '1f', '3f
                 * fetched models, unless you pass {reset: true}, in which case the collection will be (efficiently) reset.
                 * Delegates to Backbone.sync under the covers for custom persistence strategies and returns a jqXHR. The server
                 * handler for fetch requests should return a JSON array of models.
-                * <p>
+                *
                 * The behavior of fetch can be customized by using the available set options. For example, to fetch a collection,
                 * getting an "add" event for every new model, and a "change" event for every changed existing model, without
                 * removing anything: collection.fetch({remove: false})
-                * <p>
+                *
                 * jQuery.ajax options can also be passed directly as fetch options, so to fetch a specific page of a paginated
                 * collection: Documents.fetch({data: {page: 3}})
-                * <p>
+                *
                 * Note that fetch should not be used to populate collections on page load — all models needed at load time should
                 * already be bootstrapped in to place. fetch is intended for lazily-loading models for interfaces that are not
                 * needed immediately: for example, documents with collections of notes that may be toggled open and closed.
@@ -4375,9 +4374,9 @@ $__System.register('42', ['2', '3', '6', '14', '22', '23', '40', '41', '1f', '3f
                 * (or attribute hashes), triggering a single "reset" event at the end. Returns the newly-set models. For
                 * convenience, within a "reset" event, the list of any previous models is available as options.previousModels.
                 * Pass null for models to empty your Collection with options.
-                * <p>
+                *
                 * Calling collection.reset() without passing any models as arguments will empty the entire collection.
-                * <p>
+                *
                 * Here's an example using reset to bootstrap a collection during initial page load, in a Rails application:
                 * @example
                 * <script>
@@ -4844,7 +4843,7 @@ $__System.register('43', ['2', '6', '14', '22', '23', '1f'], function (_export) 
           * History serves as a global router (per frame) to handle hashchange events or pushState, match the appropriate route,
           * and trigger callbacks. You shouldn't ever have to create one of these yourself since Backbone.history already
           * contains one.
-          * <p>
+          *
           * pushState support exists on a purely opt-in basis in Backbone. Older browsers that don't support pushState will
           * continue to use hash-based URL fragments, and if a hash URL is visited by a pushState-capable browser, it will be
           * transparently upgraded to the true URL. Note that using real URLs requires your web server to be able to correctly
@@ -4853,7 +4852,7 @@ $__System.register('43', ['2', '6', '14', '22', '23', '1f'], function (_export) 
           * crawlability, it's best to have the server generate the complete HTML for the page ... but if it's a web application,
           * just rendering the same content you would have for the root URL, and filling in the rest with Backbone Views and
           * JavaScript works fine.
-          * <p>
+          *
           * Handles cross-browser history management, based on either [pushState](http://diveintohtml5.info/history.html) and
           * real URLs, or [onhashchange](https://developer.mozilla.org/en-US/docs/DOM/window.onhashchange) and URL fragments.
           * If the browser supports neither (old IE, natch), falls back to polling.
@@ -5131,20 +5130,20 @@ $__System.register('43', ['2', '6', '14', '22', '23', '1f'], function (_export) 
                 * Backbone.history.start() to begin monitoring hashchange events, and dispatching routes. Subsequent calls to
                 * Backbone.history.start() will throw an error, and Backbone.History.started is a boolean value indicating whether
                 * it has already been called.
-                * <br>
+                *
                 * To indicate that you'd like to use HTML5 pushState support in your application, use
                 * Backbone.history.start({pushState: true}). If you'd like to use pushState, but have browsers that don't support
                 * it natively use full page refreshes instead, you can add {hashChange: false} to the options.
-                * <br>
+                *
                 * If your application is not being served from the root url / of your domain, be sure to tell History where the
                 * root really is, as an option: Backbone.history.start({pushState: true, root: "/public/search/"})
-                * <br>
+                *
                 * When called, if a route succeeds with a match for the current URL, Backbone.history.start() returns true. If no
                 * defined route matches the current URL, it returns false.
-                * <br>
+                *
                 * If the server has already rendered the entire page, and you don't want the initial route to trigger when starting
                 * History, pass silent: true.
-                * <br>
+                *
                 * Because hash-based history in Internet Explorer relies on an <iframe>, be sure to call start() only after the DOM
                 * is ready.
                 *
@@ -5410,28 +5409,28 @@ $__System.register('44', ['2', '3', '6', '14', '22', '23', '1f', '3e'], function
           * it's now possible to use standard URLs (/page). Backbone.Router provides methods for routing client-side pages, and
           * connecting them to actions and events. For browsers which don't yet support the History API, the Router handles
           * graceful fallback and transparent translation to the fragment version of the URL.
-          * <p>
+          *
           * During page load, after your application has finished creating all of its routers, be sure to call
           * Backbone.history.start() or Backbone.history.start({pushState: true}) to route the initial URL.
-          * <p>
-          * routes - router.routes<br>
+          *
+          * routes - router.routes
           * The routes hash maps URLs with parameters to functions on your router (or just direct function definitions, if you
           * prefer), similar to the View's events hash. Routes can contain parameter parts, :param, which match a single URL
           * component between slashes; and splat parts *splat, which can match any number of URL components. Part of a route can
           * be made optional by surrounding it in parentheses (/:optional).
-          * <p>
+          *
           * For example, a route of "search/:query/p:page" will match a fragment of #search/obama/p2, passing "obama" and "2" to
           * the action.
-          * <p>
+          *
           * A route of "file/*path" will match #file/nested/folder/file.txt, passing "nested/folder/file.txt" to the action.
-          * <p>
+          *
           * A route of "docs/:section(/:subsection)" will match #docs/faq and #docs/faq/installing, passing "faq" to the action
           * in the first case, and passing "faq" and "installing" to the action in the second.
-          * <p>
+          *
           * Trailing slashes are treated as part of the URL, and (correctly) treated as a unique route when accessed. docs and
           * docs/ will fire different callbacks. If you can't avoid generating both types of URLs, you can define a "docs(/)"
           * matcher to capture both cases.
-          * <p>
+          *
           * When the visitor presses the back button, or enters a URL, and a particular route is matched, the name of the action
           * will be fired as an event, so that other objects can listen to the router, and be notified. In the following example,
           * visiting #help/uploading will fire a route:help event from the router.
@@ -5839,19 +5838,19 @@ $__System.register('45', ['2', '3', '6', '14', '22', '23', '1f'], function (_exp
            * causes the event to be bound to the view's root element (this.el). By default, delegateEvents is called within
            * the View's constructor for you, so if you have a simple events hash, all of your DOM events will always already
            * be connected, and you will never have to call this function yourself.
-           * <p>
+           *
            * The events property may also be defined as a function that returns an events hash, to make it easier to
            * programmatically define your events, as well as inherit them from parent views.
-           * <p>
+           *
            * Using delegateEvents provides a number of advantages over manually using jQuery to bind events to child elements
            * during render. All attached callbacks are bound to the view before being handed off to jQuery, so when the
            * callbacks are invoked, this continues to refer to the view object. When delegateEvents is run again, perhaps with
            * a different events hash, all callbacks are removed and delegated afresh — useful for views which need to behave
            * differently when in different modes.
-           * <p>
+           *
            * A single-event version of delegateEvents is available as delegate. In fact, delegateEvents is simply a multi-event
            * wrapper around delegate. A counterpart to undelegateEvents is available as undelegate.
-           * <p>
+           *
            * Callbacks will be bound to the view, with `this` set properly. Uses event delegation for efficiency.
            * Omitting the selector binds the event to `this.el`.
            *
@@ -6010,13 +6009,13 @@ $__System.register('45', ['2', '3', '6', '14', '22', '23', '1f'], function (_exp
            * The default implementation of render is a no-op. Override this function with your code that renders the view
            * template from model data, and updates this.el with the new HTML. A good convention is to return this at the end
            * of render to enable chained calls.
-           * <p>
+           *
            * Backbone is agnostic with respect to your preferred method of HTML templating. Your render function could even
            * munge together an HTML string, or use document.createElement to generate a DOM tree. However, we suggest choosing
            * a nice JavaScript templating library. Mustache.js, Haml-js, and Eco are all fine alternatives. Because
            * Underscore.js is already on the page, _.template is available, and is an excellent choice if you prefer simple
            * interpolated-JavaScript style templates.
-           * <p>
+           *
            * Whatever templating strategy you end up with, it's nice if you never have to put strings of HTML in your
            * JavaScript. At DocumentCloud, we use Jammit in order to package up JavaScript templates stored in /app/views as
            * part of our main core.js asset package.
@@ -6400,7 +6399,7 @@ $__System.register('1', ['4', '23', '40', '42', '43', '44', '45', '46', '47'], f
 })
 (function(factory) {
   if (typeof define == 'function' && define.amd)
-    define(["underscore","jquery","underscore","underscore","underscore","underscore","underscore","underscore","underscore","underscore","underscore"], factory);
+    define(["jquery","underscore","underscore","underscore","underscore","underscore","underscore","underscore","underscore","underscore","underscore"], factory);
   else
     factory();
 });

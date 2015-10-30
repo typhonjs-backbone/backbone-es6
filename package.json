@@ -22,11 +22,11 @@
     }
   },
   "devDependencies": {
-    "bluebird": "^2.10.2",
-    "jspm": "^0.16.13",
+    "bluebird": "^3.0.2",
     "gulp": "^3.9.0",
     "gulp-esdoc": "^0.1.0",
     "gulp-eslint": "^1.0.0",
+    "jspm": "^0.16.13",
     "yargs": "^3.27.0"
   }
 }
