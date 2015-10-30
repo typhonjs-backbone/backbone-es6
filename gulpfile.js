@@ -109,8 +109,8 @@ gulp.task('docs', function()
 });
 
 /**
- * Runs "git push", but only if lint and bundle complete successfully. Also removes all path and map statements that
- * may be populated in `config.js`.
+ * Runs "git push", but only if the test task (lint & bundle) complete successfully. Also removes all path and map
+ * statements that may be populated in `config.js`.
  *
  * Note: Make sure to pass in `--travis` as an argument to this task to run an in memory build / test.
  */
