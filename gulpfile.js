@@ -18,8 +18,6 @@
 var gulp =        require('gulp');
 
 var argv =        require('yargs').argv;
-var esdoc =       require('gulp-esdoc');
-var eslint =      require('gulp-eslint');
 var fs =          require('fs');
 var jspm =        require('jspm');
 
@@ -102,10 +100,13 @@ gulp.task('bundle', function()
  */
 gulp.task('docs', function()
 {
-   var esdocConfig = require('./esdoc.json');
+   var esdoc = require('gulp-esdoc');
+   var path = require('path');
 
-   return gulp.src('./src')
-    .pipe(esdoc(esdocConfig));
+   var esdocConfig = require('.' +path.sep +'esdoc.json');
+
+   // Launch ESDoc
+   return gulp.src(esdocConfig.source).pipe(esdoc(esdocConfig));
 });
 
 /**
@@ -169,6 +170,8 @@ gulp.task('git push', ['test'], function(cb)
  */
 gulp.task('lint', function()
 {
+   var eslint = require('gulp-eslint');
+
    return gulp.src('./src/**/*.js')
     .pipe(eslint({ useEslintrc: true }))
     .pipe(eslint.formatEach('compact', process.stderr))
