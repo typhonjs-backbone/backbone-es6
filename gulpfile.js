@@ -109,6 +109,49 @@ gulp.task('docs', function()
 });
 
 /**
+ * Runs "git push", but only if lint and bundle complete successfully. Also removes all path and map statements that
+ * may be populated in `config.js`.
+ *
+ * Note: Make sure to pass in `--travis` as an argument to this task to run an in memory build / test.
+ */
+gulp.task('git push', ['test'], function(cb)
+{
+   var vm = require('vm');
+
+   var buffer = fs.readFileSync('./config.js', 'utf8');
+
+   // Remove the leading and trailing Javascript SystemJS config method invocation so we are left with a JSON file.
+   buffer = buffer.replace('System.config(', '');
+   buffer = buffer.replace(');', '');
+
+   // Load buffer as object.
+   var json = vm.runInThisContext('object = ' +buffer);
+
+   // Remove map and paths.
+   json.map = {};
+   json.paths = {};
+
+   // Rewrite the search_index.js file
+   buffer = 'System.config(' + JSON.stringify(json, null, 2) +');';
+
+   // Remove quotes around primary keys ignoring babelOptions / "optional".
+   buffer = buffer.replace(/"([a-zA-Z]+)":/g, function(match, p1)
+   {
+      return p1 !== 'optional' ? p1 +':' : match;
+   });
+
+   fs.writeFileSync('./config.js', buffer);
+
+   var exec = require('child_process').exec;
+   exec('git push', function (err, stdout, stderr)
+   {
+      console.log(stdout);
+      console.log(stderr);
+      cb(err);
+   });
+});
+
+/**
  * Runs eslint
  */
 gulp.task('lint', function()
@@ -234,13 +277,29 @@ function buildStatic(srcFilename, destDir, destFilepath, minify, mangle, format,
          console.log('Bundle queued - srcFilename: ' +srcFilename +'; format: ' +format  +'; mangle: ' +mangle
           +'; minify: ' +minify +'; destDir: ' +destDir +'; destFilepath: ' +destFilepath);
 
-         builder.buildStatic(srcFilename, destFilepath,
+         var builderPromise;
+
+         // When testing we only need to do an in memory build.
+         if (argv.travis)
          {
-            minify: minify,
-            mangle: mangle,
-            format: format
-         })
-         .then(function ()
+            builderPromise = builder.buildStatic(srcFilename,
+            {
+               minify: minify,
+               mangle: mangle,
+               format: format
+            });
+         }
+         else
+         {
+            builderPromise = builder.buildStatic(srcFilename, destFilepath,
+            {
+               minify: minify,
+               mangle: mangle,
+               format: format
+            });
+         }
+
+         builderPromise.then(function ()
          {
             console.log('Bundle complete - filename: ' +destFilepath +' minify: ' +minify +'; mangle: ' +mangle
              +'; format: ' +format);
