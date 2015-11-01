@@ -288,7 +288,7 @@
       entry.esModule = {};
       
       // don't trigger getters/setters in environments that support them
-      if (typeof exports == 'object' || typeof exports == 'function') {
+      if ((typeof exports == 'object' || typeof exports == 'function') && exports !== global) {
         if (getOwnPropertyDescriptor) {
           var d;
           for (var p in exports)
@@ -444,1766 +444,1636 @@
   // etc UMD / module pattern
 })*/
 
-(['1'], ["5","6","6","6","6","6","6","6","6","6","6"], function($__System) {
+(['1'], ["47","3","3","3","3","3","3","3","3","3","3"], function($__System) {
 
-$__System.registerDynamic("2", [], true, function(req, exports, module) {
-  ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
-  "use strict";
-  exports["default"] = function(instance, Constructor) {
-    if (!(instance instanceof Constructor)) {
-      throw new TypeError("Cannot call a class as a function");
-    }
-  };
-  exports.__esModule = true;
-  global.define = __define;
-  return module.exports;
-});
+$__System.register('2', ['3', '4', '5'], function (_export) {
 
-$__System.register('3', [], function (_export) {
-  /**
-   * BackboneProxy -- Provides a proxy for the actual created Backbone instance. This is initialized in the constructor
-   * for Backbone (backbone-es6/src/Backbone.js). Anywhere a reference is needed for the composed Backbone instance
-   * import BackboneProxy and access it by "BackboneProxy.backbone".
-   *
-   * @example
-   * import BackboneProxy from 'backbone-es6/src/BackboneProxy.js';
-   *
-   * BackboneProxy.backbone.sync(...)
-   */
+   /**
+    * Map from CRUD to HTTP for our default `Backbone.sync` implementation.
+    * @type {{create: string, update: string, patch: string, delete: string, read: string}}
+    */
+   'use strict';
 
-  'use strict';
+   var _, BackboneProxy, Utils, s_METHOD_MAP;
 
-  /**
-   * Defines a proxy Object to hold a reference of the Backbone object instantiated.
-   *
-   * @type {{backbone: null}}
-   */
-  var BackboneProxy;
-  return {
-    setters: [],
-    execute: function () {
-      BackboneProxy = {
-        backbone: null
+   _export('default', sync);
+
+   /**
+    * Backbone.sync - Persists models to the server. (http://backbonejs.org/#Sync)
+    * -------------
+    *
+    * Override this function to change the manner in which Backbone persists models to the server. You will be passed the
+    * type of request, and the model in question. By default, makes a RESTful Ajax request to the model's `url()`. Some
+    * possible customizations could be:
+    *
+    * Use `setTimeout` to batch rapid-fire updates into a single request.
+    * Send up the models as XML instead of JSON.
+    * Persist models via WebSockets instead of Ajax.
+    *
+    * Turn on `Backbone.emulateHTTP` in order to send `PUT` and `DELETE` requests as `POST`, with a `_method` parameter
+    * containing the true HTTP method, as well as all requests with the body as `application/x-www-form-urlencoded`
+    * instead of `application/json` with the model in a param named `model`. Useful when interfacing with server-side
+    * languages like **PHP** that make it difficult to read the body of `PUT` requests.
+    *
+    * @param {string}            method   - A string that defines the synchronization action to perform.
+    * @param {Model|Collection}  model    - The model or collection instance to synchronize.
+    * @param {object}            options  - Optional parameters
+    * @returns {XMLHttpRequest}  An XMLHttpRequest
+    */
+
+   function sync(method, model) {
+      var options = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
+
+      var type = s_METHOD_MAP[method];
+
+      // Default options, unless specified.
+      _.defaults(options, {
+         emulateHTTP: BackboneProxy.backbone.emulateHTTP,
+         emulateJSON: BackboneProxy.backbone.emulateJSON
+      });
+
+      // Default JSON-request options.
+      var params = { type: type, dataType: 'json' };
+
+      // Ensure that we have a URL.
+      if (!options.url) {
+         params.url = _.result(model, 'url') || Utils.urlError();
+      }
+
+      // Ensure that we have the appropriate request data.
+      if (options.data === null && model && (method === 'create' || method === 'update' || method === 'patch')) {
+         params.contentType = 'application/json';
+         params.data = JSON.stringify(options.attrs || model.toJSON(options));
+      }
+
+      // For older servers, emulate JSON by encoding the request into an HTML-form.
+      if (options.emulateJSON) {
+         params.contentType = 'application/x-www-form-urlencoded';
+         params.data = params.data ? { model: params.data } : {};
+      }
+
+      // For older servers, emulate HTTP by mimicking the HTTP method with `_method`
+      // And an `X-HTTP-Method-Override` header.
+      if (options.emulateHTTP && (type === 'PUT' || type === 'DELETE' || type === 'PATCH')) {
+         (function () {
+            params.type = 'POST';
+
+            if (options.emulateJSON) {
+               params.data._method = type;
+            }
+
+            var beforeSend = options.beforeSend;
+
+            options.beforeSend = function (xhr) {
+               xhr.setRequestHeader('X-HTTP-Method-Override', type);
+               if (beforeSend) {
+                  return beforeSend.apply(this, arguments);
+               }
+            };
+         })();
+      }
+
+      // Don't process data on a non-GET request.
+      if (params.type !== 'GET' && !options.emulateJSON) {
+         params.processData = false;
+      }
+
+      // Pass along `textStatus` and `errorThrown` from jQuery.
+      var error = options.error;
+
+      options.error = function (xhr, textStatus, errorThrown) {
+         options.textStatus = textStatus;
+         options.errorThrown = errorThrown;
+         if (error) {
+            error.call(options.context, xhr, textStatus, errorThrown);
+         }
       };
 
-      _export('default', BackboneProxy);
-    }
-  };
+      // Make the request, allowing the user to override any Ajax options.
+      var xhr = options.xhr = BackboneProxy.backbone.ajax(_.extend(params, options));
+
+      model.trigger('request', model, xhr, options);
+
+      return xhr;
+   }
+
+   return {
+      setters: [function (_2) {
+         _ = _2['default'];
+      }, function (_3) {
+         BackboneProxy = _3['default'];
+      }, function (_4) {
+         Utils = _4['default'];
+      }],
+      execute: function () {
+         s_METHOD_MAP = {
+            'create': 'POST',
+            'update': 'PUT',
+            'patch': 'PATCH',
+            'delete': 'DELETE',
+            'read': 'GET'
+         };
+      }
+   };
 });
 
-$__System.register('4', ['2', '3', '5', '6'], function (_export) {
-  var _classCallCheck, BackboneProxy, $, _, Backbone;
+$__System.register('6', ['3'], function (_export) {
+
+   /**
+    * Provides older "extend" functionality for Backbone. While it is still accessible it is recommended
+    * to adopt the new Backbone-ES6 patterns and ES6 sub-classing via "extends".
+    *
+    * Helper function to correctly set up the prototype chain for subclasses. Similar to `goog.inherits`, but uses a hash
+    * of prototype properties and class properties to be extended.
+    *
+    * @see http://backbonejs.org/#Collection-extend
+    * @see http://backbonejs.org/#Model-extend
+    * @see http://backbonejs.org/#Router-extend
+    * @see http://backbonejs.org/#View-extend
+    *
+    * @param {object}   protoProps  - instance properties
+    * @param {object}   staticProps - class properties
+    * @returns {*}      Subclass of parent class.
+    */
+   'use strict';
+
+   var _;
+
+   _export('default', extend);
+
+   function extend(protoProps, staticProps) {
+      var parent = this;
+      var child = undefined;
+
+      // The constructor function for the new subclass is either defined by you (the "constructor" property in your
+      // `extend` definition), or defaulted by us to simply call the parent constructor.
+      if (protoProps && _.has(protoProps, 'constructor')) {
+         child = protoProps.constructor;
+      } else {
+         child = function () {
+            return parent.apply(this, arguments);
+         };
+      }
+
+      // Add static properties to the constructor function, if supplied.
+      _.extend(child, parent, staticProps);
+
+      // Set the prototype chain to inherit from `parent`, without calling `parent` constructor function.
+      var Surrogate = function Surrogate() {
+         this.constructor = child;
+      };
+
+      Surrogate.prototype = parent.prototype;
+      child.prototype = new Surrogate();
+
+      // Add prototype properties (instance properties) to the subclass, if supplied.
+      if (protoProps) {
+         _.extend(child.prototype, protoProps);
+      }
+
+      // Set a convenience property in case the parent's prototype is needed later.
+      child.__super__ = parent.prototype;
+
+      return child;
+   }
+
+   return {
+      setters: [function (_2) {
+         _ = _2['default'];
+      }],
+      execute: function () {}
+   };
+});
+
+$__System.register('7', ['3', '4', '8', '9', 'a', 'b', 'c'], function (_export) {
+  var _, BackboneProxy, Events, _get, _inherits, _createClass, _classCallCheck, s_DELEGATE_EVENT_SPLITTER, s_VIEW_OPTIONS, View;
 
   return {
-    setters: [function (_2) {
-      _classCallCheck = _2['default'];
-    }, function (_5) {
-      BackboneProxy = _5['default'];
-    }, function (_3) {
-      $ = _3['default'];
+    setters: [function (_3) {
+      _ = _3['default'];
     }, function (_4) {
-      _ = _4['default'];
+      BackboneProxy = _4['default'];
+    }, function (_5) {
+      Events = _5['default'];
+    }, function (_2) {
+      _get = _2['default'];
+    }, function (_a) {
+      _inherits = _a['default'];
+    }, function (_b) {
+      _createClass = _b['default'];
+    }, function (_c) {
+      _classCallCheck = _c['default'];
     }],
     execute: function () {
 
+      // Private / internal methods ---------------------------------------------------------------------------------------
+
       /**
-       * Backbone.js
-       *
-       * (c) 2010-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
-       * Backbone may be freely distributed under the MIT license.
-       *
-       * For all details and documentation:
-       * http://backbonejs.org
-       *
-       * ---------
-       *
-       * Backbone-ES6
-       * https://github.com/typhonjs/backbone-es6
-       * (c) 2015 Michael Leahy
-       * Backbone-ES6 may be freely distributed under the MIT license.
-       *
-       * This fork of Backbone converts it to ES6 and provides extension through constructor injection for easy modification.
-       * The only major difference from Backbone is that Backbone itself is not a global Events instance anymore. Please
-       * see @link{Events.js} for documentation on easily setting up an ES6 event module for global usage.
-       *
-       * @see http://backbonejs.org
-       * @see https://github.com/typhonjs/backbone-es6
-       * @author Michael Leahy
-       * @version 1.2.3
-       * @copyright Michael Leahy 2015
+       * Cached regex to split keys for `delegate`.
+       * @type {RegExp}
        */
       'use strict';
 
-      Backbone =
+      s_DELEGATE_EVENT_SPLITTER = /^(\S+)\s*(.*)$/;
+
       /**
-       * Initializes Backbone by constructor injection. You may provide variations on any component below by passing
-       * in a different version. The "runtime" initializing Backbone is responsible for further modification like
-       * supporting the older "extend" support. See backbone-es6/src/ModuleRuntime.js and backbone-es6/src/extend.js
-       * for an example on composing Backbone for usage.
-       *
-       * @param {Collection}  Collection  - A class defining Backbone.Collection.
-       * @param {Events}      Events      - A class defining Backbone.Events.
-       * @param {History}     History     - A class defining Backbone.History.
-       * @param {Model}       Model       - A class defining Backbone.Model.
-       * @param {Router}      Router      - A class defining Backbone.Router.
-       * @param {View}        View        - A class defining Backbone.View.
-       * @param {function}    sync        - A function defining synchronization for Collection & Model.
-       * @param {object}      options     - Options to mixin to Backbone.
-       * @constructor
+       * List of view options to be set as properties.
+       * @type {string[]}
        */
-      function Backbone(Collection, Events, History, Model, Router, View, sync) {
-        var _this = this,
-            _arguments = arguments;
+      s_VIEW_OPTIONS = ['model', 'collection', 'el', 'id', 'attributes', 'className', 'tagName', 'events'];
 
-        var options = arguments.length <= 7 || arguments[7] === undefined ? {} : arguments[7];
+      /**
+       * Backbone.View - Represents a logical chunk of UI in the DOM. (http://backbonejs.org/#View)
+       * -------------
+       *
+       * Backbone Views are almost more convention than they are actual code. A View is simply a JavaScript object that
+       * represents a logical chunk of UI in the DOM. This might be a single item, an entire list, a sidebar or panel, or
+       * even the surrounding frame which wraps your whole app. Defining a chunk of UI as a **View** allows you to define
+       * your DOM events declaratively, without having to worry about render order ... and makes it easy for the view to
+       * react to specific changes in the state of your models.
+       *
+       * Creating a Backbone.View creates its initial element outside of the DOM, if an existing element is not provided...
+       *
+       * Example if working with Backbone as ES6 source:
+       * @example
+       *
+       * import Backbone from 'backbone';
+       *
+       * export default class MyView extends Backbone.View
+       * {
+       *    constructor(options)
+       *    {
+       *       super(options);
+       *       ...
+       *    }
+       *
+       *    initialize()
+       *    {
+       *       ...
+       *    }
+       *    ...
+       * }
+       *
+       * @example
+       *
+       * To use a custom $el / element define it by a getter method:
+       *
+       *    get el() { return 'my-element'; }
+       *
+       * Likewise with events define it by a getter method:
+       *
+       *    get events()
+       *    {
+       *       return {
+       *         'submit form.login-form': 'logIn',
+       *         'click .sign-up': 'signUp',
+       *         'click .forgot-password': 'forgotPassword'
+       *       }
+       *    }
+       */
 
-        _classCallCheck(this, Backbone);
+      View = (function (_Events) {
+        _inherits(View, _Events);
+
+        _createClass(View, [{
+          key: 'tagName',
+
+          /**
+           * The default `tagName` of a View's element is `"div"`.
+           *
+           * @returns {string}
+           */
+          get: function get() {
+            return 'div';
+          }
+
+          /**
+           * There are several special options that, if passed, will be attached directly to the view: model, collection, el,
+           * id, className, tagName, attributes and events. If the view defines an initialize function, it will be called when
+           * the view is first created. If you'd like to create a view that references an element already in the DOM, pass in
+           * the element as an option: new View({el: existingElement})
+           *
+           * @see http://backbonejs.org/#View-constructor
+           *
+           * @param {object} options - Default options which are mixed into this class as properties via `_.pick` against
+           *                           s_VIEW_OPTIONS. Options also is passed onto the `initialize()` function.
+           */
+        }]);
+
+        function View(options) {
+          _classCallCheck(this, View);
+
+          _get(Object.getPrototypeOf(View.prototype), 'constructor', this).call(this);
+
+          /**
+           * Client ID
+           * @type {number}
+           */
+          this.cid = _.uniqueId('view');
+
+          _.extend(this, _.pick(options, s_VIEW_OPTIONS));
+
+          this._ensureElement();
+          this.initialize.apply(this, arguments);
+        }
 
         /**
-         * Establish the root object, `window` (`self`) in the browser, or `global` on the server.
-         * We use `self` instead of `window` for `WebWorker` support.
+         * If jQuery is included on the page, each view has a $ function that runs queries scoped within the view's element.
+         * If you use this scoped jQuery function, you don't have to use model ids as part of your query to pull out specific
+         * elements in a list, and can rely much more on HTML class attributes. It's equivalent to running:
+         * view.$el.find(selector)
          *
-         * @type {object|global}
-         */
-        var root = typeof self === 'object' && self.self === self && self || typeof global === 'object' && global.global === global && global;
-
-        /**
-         * jQuery or equivalent
-         * @type {*}
-         */
-        this.$ = $ || root.jQuery || root.Zepto || root.ender || root.$;
-
-        if (typeof this.$ === 'undefined') {
-          throw new Error("Backbone - ctor - could not locate global '$' (jQuery or equivalent).");
-        }
-
-        /**
-         * Initial setup. Mixin options and set the BackboneProxy instance to this.
-         */
-        if (_.isObject(options)) {
-          _.extend(this, options);
-        }
-
-        BackboneProxy.backbone = this;
-
-        /**
-         * A public reference of the Collection class.
-         * @class
-         */
-        this.Collection = Collection;
-
-        /**
-         * A public reference of the Events class.
-         * @class
-         */
-        this.Events = Events;
-
-        /**
-         * A public reference of the History class.
-         * @class
-         */
-        this.History = History;
-
-        /**
-         * A public reference of the Model class.
-         * @class
-         */
-        this.Model = Model;
-
-        /**
-         * A public reference of the Router class.
-         * @class
-         */
-        this.Router = Router;
-
-        /**
-         * A public reference of the View class.
-         * @class
-         */
-        this.View = View;
-
-        /**
-         * A public instance of History.
-         * @instance
-         */
-        this.history = new History();
-
-        /**
-         * A public instance of the sync function.
-         * @instance
-         */
-        this.sync = sync;
-
-        /**
-         * Set the default implementation of `Backbone.ajax` to proxy through to `$`.
-         * Override this if you'd like to use a different library.
+         * @see https://api.jquery.com/find/
          *
-         * @returns {XMLHttpRequest}   XMLHttpRequest
+         * @example
+         * class Chapter extends Backbone.View {
+         *    serialize() {
+         *       return {
+         *          title: this.$(".title").text(),
+         *          start: this.$(".start-page").text(),
+         *          end:   this.$(".end-page").text()
+         *       };
+         *    }
+         * }
+         *
+         * @see http://backbonejs.org/#View-dollar
+         * @see https://api.jquery.com/find/
+         *
+         * @param {string}   selector - A string containing a selector expression to match elements against.
+         * @returns {Element|$}
          */
-        this.ajax = function () {
-          var _$;
 
-          return (_$ = _this.$).ajax.apply(_$, _arguments);
-        };
-      };
+        _createClass(View, [{
+          key: '$',
+          value: function $(selector) {
+            return this.$el.find(selector);
+          }
 
-      _export('default', Backbone);
+          /**
+           * Produces a DOM element to be assigned to your view. Exposed for subclasses using an alternative DOM
+           * manipulation API.
+           *
+           * @protected
+           * @param {string}   tagName  - Name of the tag element to create.
+           * @returns {Element}
+           *
+           * @see https://developer.mozilla.org/en-US/docs/Web/API/Document/createElement
+           */
+        }, {
+          key: '_createElement',
+          value: function _createElement(tagName) {
+            return document.createElement(tagName);
+          }
+
+          /**
+           * Add a single event listener to the view's element (or a child element using `selector`). This only works for
+           * delegate-able events: not `focus`, `blur`, and not `change`, `submit`, and `reset` in Internet Explorer.
+           *
+           * @see http://backbonejs.org/#View-delegateEvents
+           * @see http://api.jquery.com/on/
+           *
+           * @param {string}   eventName   - One or more space-separated event types and optional namespaces.
+           * @param {string}   selector    - A selector string to filter the descendants of the selected elements that trigger
+           *                                 the event.
+           * @param {function} listener    - A function to execute when the event is triggered.
+           * @returns {View}
+           */
+        }, {
+          key: 'delegate',
+          value: function delegate(eventName, selector, listener) {
+            this.$el.on(eventName + '.delegateEvents' + this.cid, selector, listener);
+            return this;
+          }
+
+          /**
+           * Uses jQuery's on function to provide declarative callbacks for DOM events within a view. If an events hash is not
+           * passed directly, uses this.events as the source. Events are written in the format {"event selector": "callback"}.
+           * The callback may be either the name of a method on the view, or a direct function body. Omitting the selector
+           * causes the event to be bound to the view's root element (this.el). By default, delegateEvents is called within
+           * the View's constructor for you, so if you have a simple events hash, all of your DOM events will always already
+           * be connected, and you will never have to call this function yourself.
+           *
+           * The events property may also be defined as a function that returns an events hash, to make it easier to
+           * programmatically define your events, as well as inherit them from parent views.
+           *
+           * Using delegateEvents provides a number of advantages over manually using jQuery to bind events to child elements
+           * during render. All attached callbacks are bound to the view before being handed off to jQuery, so when the
+           * callbacks are invoked, this continues to refer to the view object. When delegateEvents is run again, perhaps with
+           * a different events hash, all callbacks are removed and delegated afresh — useful for views which need to behave
+           * differently when in different modes.
+           *
+           * A single-event version of delegateEvents is available as delegate. In fact, delegateEvents is simply a multi-event
+           * wrapper around delegate. A counterpart to undelegateEvents is available as undelegate.
+           *
+           * Callbacks will be bound to the view, with `this` set properly. Uses event delegation for efficiency.
+           * Omitting the selector binds the event to `this.el`.
+           *
+           * @example
+           * Older `extend` example:
+           * var DocumentView = Backbone.View.extend({
+           *    events: {
+           *       "dblclick"                : "open",
+           *       "click .icon.doc"         : "select",
+           *       "contextmenu .icon.doc"   : "showMenu",
+           *       "click .show_notes"       : "toggleNotes",
+           *       "click .title .lock"      : "editAccessLevel",
+           *       "mouseover .title .date"  : "showTooltip"
+           *    },
+           *
+           *    render: function() {
+           *       this.$el.html(this.template(this.model.attributes));
+           *       return this;
+           *    },
+           *
+           *    open: function() {
+           *       window.open(this.model.get("viewer_url"));
+           *    },
+           *
+           *    select: function() {
+           *       this.model.set({selected: true});
+           *    },
+           *
+           *   ...
+           * });
+           *
+           * @example
+           * Converting the above `extend` example to ES6:
+           * class DocumentView extends Backbone.View {
+           *    get events() {
+           *       return {
+           *          "dblclick"                : "open",
+           *          "click .icon.doc"         : "select",
+           *          "contextmenu .icon.doc"   : "showMenu",
+           *          "click .show_notes"       : "toggleNotes",
+           *          "click .title .lock"      : "editAccessLevel",
+           *          "mouseover .title .date"  : "showTooltip"
+           *       };
+           *    }
+           *
+           *    render() {
+           *       this.$el.html(this.template(this.model.attributes));
+           *       return this;
+           *    }
+           *
+           *    open() {
+           *       window.open(this.model.get("viewer_url"));
+           *    }
+           *
+           *    select() {
+           *       this.model.set({selected: true});
+           *    }
+           *    ...
+           * }
+           *
+           * @see http://backbonejs.org/#View-delegateEvents
+           * @see http://api.jquery.com/on/
+           *
+           * @param {object}   events   - hash of event descriptions to bind.
+           * @returns {View}
+           */
+        }, {
+          key: 'delegateEvents',
+          value: function delegateEvents(events) {
+            events = events || _.result(this, 'events');
+            if (!events) {
+              return this;
+            }
+            this.undelegateEvents();
+            for (var key in events) {
+              var method = events[key];
+              if (!_.isFunction(method)) {
+                method = this[method];
+              }
+              if (!method) {
+                continue;
+              }
+              var match = key.match(s_DELEGATE_EVENT_SPLITTER);
+              this.delegate(match[1], match[2], _.bind(method, this));
+            }
+            return this;
+          }
+
+          /**
+           * Ensure that the View has a DOM element to render into. If `this.el` is a string, pass it through `$()`, take
+           * the first matching element, and re-assign it to `el`. Otherwise, create an element from the `id`, `className`
+           * and `tagName` properties.
+           *
+           * @protected
+           */
+        }, {
+          key: '_ensureElement',
+          value: function _ensureElement() {
+            if (!this.el) {
+              var attrs = _.extend({}, _.result(this, 'attributes'));
+              if (this.id) {
+                attrs.id = _.result(this, 'id');
+              }
+              if (this.className) {
+                attrs['class'] = _.result(this, 'className');
+              }
+              this.setElement(this._createElement(_.result(this, 'tagName')));
+              this._setAttributes(attrs);
+            } else {
+              this.setElement(_.result(this, 'el'));
+            }
+          }
+
+          /**
+           * Initialize is an empty function by default. Override it with your own initialization logic.
+           *
+           * @see http://backbonejs.org/#View-constructor
+           * @abstract
+           */
+        }, {
+          key: 'initialize',
+          value: function initialize() {}
+
+          /**
+           * Removes a view and its el from the DOM, and calls stopListening to remove any bound events that the view has
+           * listenTo'd.
+           *
+           * @see http://backbonejs.org/#View-remove
+           * @see {@link _removeElement}
+           * @see {@link stopListening}
+           *
+           * @returns {View}
+           */
+        }, {
+          key: 'remove',
+          value: function remove() {
+            this._removeElement();
+            this.stopListening();
+            return this;
+          }
+
+          /**
+           * Remove this view's element from the document and all event listeners attached to it. Exposed for subclasses
+           * using an alternative DOM manipulation API.
+           *
+           * @protected
+           * @see https://api.jquery.com/remove/
+           */
+        }, {
+          key: '_removeElement',
+          value: function _removeElement() {
+            this.$el.remove();
+          }
+
+          /**
+           * The default implementation of render is a no-op. Override this function with your code that renders the view
+           * template from model data, and updates this.el with the new HTML. A good convention is to return this at the end
+           * of render to enable chained calls.
+           *
+           * Backbone is agnostic with respect to your preferred method of HTML templating. Your render function could even
+           * munge together an HTML string, or use document.createElement to generate a DOM tree. However, we suggest choosing
+           * a nice JavaScript templating library. Mustache.js, Haml-js, and Eco are all fine alternatives. Because
+           * Underscore.js is already on the page, _.template is available, and is an excellent choice if you prefer simple
+           * interpolated-JavaScript style templates.
+           *
+           * Whatever templating strategy you end up with, it's nice if you never have to put strings of HTML in your
+           * JavaScript. At DocumentCloud, we use Jammit in order to package up JavaScript templates stored in /app/views as
+           * part of our main core.js asset package.
+           *
+           * @example
+           * class Bookmark extends Backbone.View {
+           *    get template() { return _.template(...); }
+           *
+           *    render() {
+           *       this.$el.html(this.template(this.model.attributes));
+           *       return this;
+           *    }
+           * }
+           *
+           * @see http://backbonejs.org/#View-render
+           *
+           * @abstract
+           * @returns {View}
+           */
+        }, {
+          key: 'render',
+          value: function render() {
+            return this;
+          }
+
+          /**
+           * Set attributes from a hash on this view's element.  Exposed for subclasses using an alternative DOM
+           * manipulation API.
+           *
+           * @protected
+           * @param {object}   attributes - An object defining attributes to associate with `this.$el`.
+           */
+        }, {
+          key: '_setAttributes',
+          value: function _setAttributes(attributes) {
+            this.$el.attr(attributes);
+          }
+
+          /**
+           * Creates the `this.el` and `this.$el` references for this view using the given `el`. `el` can be a CSS selector
+           * or an HTML string, a jQuery context or an element. Subclasses can override this to utilize an alternative DOM
+           * manipulation API and are only required to set the `this.el` property.
+           *
+           * @protected
+           * @param {string|object}  el - A CSS selector or an HTML string, a jQuery context or an element.
+           */
+        }, {
+          key: '_setElement',
+          value: function _setElement(el) {
+            /**
+             * Cached jQuery context for element.
+             * @type {object}
+             */
+            this.$el = el instanceof BackboneProxy.backbone.$ ? el : BackboneProxy.backbone.$(el);
+
+            /**
+             * Cached element
+             * @type {Element}
+             */
+            this.el = this.$el[0];
+          }
+
+          /**
+           * If you'd like to apply a Backbone view to a different DOM element, use setElement, which will also create the
+           * cached $el reference and move the view's delegated events from the old element to the new one.
+           *
+           * @see http://backbonejs.org/#View-setElement
+           * @see {@link undelegateEvents}
+           * @see {@link _setElement}
+           * @see {@link delegateEvents}
+           *
+           * @param {string|object}  element  - A CSS selector or an HTML string, a jQuery context or an element.
+           * @returns {View}
+           */
+        }, {
+          key: 'setElement',
+          value: function setElement(element) {
+            this.undelegateEvents();
+            this._setElement(element);
+            this.delegateEvents();
+            return this;
+          }
+
+          /**
+           * A finer-grained `undelegateEvents` for removing a single delegated event. `selector` and `listener` are
+           * both optional.
+           *
+           * @see http://backbonejs.org/#View-undelegateEvents
+           * @see http://api.jquery.com/off/
+           *
+           * @param {string}   eventName   - One or more space-separated event types and optional namespaces.
+           * @param {string}   selector    - A selector which should match the one originally passed to `.delegate()`.
+           * @param {function} listener    - A handler function previously attached for the event(s).
+           * @returns {View}
+           */
+        }, {
+          key: 'undelegate',
+          value: function undelegate(eventName, selector, listener) {
+            this.$el.off(eventName + '.delegateEvents' + this.cid, selector, listener);
+            return this;
+          }
+
+          /**
+           * Removes all of the view's delegated events. Useful if you want to disable or remove a view from the DOM
+           * temporarily.
+           *
+           * @see http://backbonejs.org/#View-undelegateEvents
+           * @see http://api.jquery.com/off/
+           *
+           * @returns {View}
+           */
+        }, {
+          key: 'undelegateEvents',
+          value: function undelegateEvents() {
+            if (this.$el) {
+              this.$el.off('.delegateEvents' + this.cid);
+            }
+            return this;
+          }
+        }]);
+
+        return View;
+      })(Events);
+
+      _export('default', View);
     }
   };
 });
 
-$__System.registerDynamic("7", [], true, function(req, exports, module) {
-  ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
-  var $Object = Object;
-  module.exports = {
-    create: $Object.create,
-    getProto: $Object.getPrototypeOf,
-    isEnum: {}.propertyIsEnumerable,
-    getDesc: $Object.getOwnPropertyDescriptor,
-    setDesc: $Object.defineProperty,
-    setDescs: $Object.defineProperties,
-    getKeys: $Object.keys,
-    getNames: $Object.getOwnPropertyNames,
-    getSymbols: $Object.getOwnPropertySymbols,
-    each: [].forEach
-  };
-  global.define = __define;
-  return module.exports;
-});
-
-$__System.registerDynamic("8", [], true, function(req, exports, module) {
-  ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
-  var toString = {}.toString;
-  module.exports = function(it) {
-    return toString.call(it).slice(8, -1);
-  };
-  global.define = __define;
-  return module.exports;
-});
-
-$__System.registerDynamic("9", ["8"], true, function(req, exports, module) {
-  ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
-  var cof = req('8');
-  module.exports = Object('z').propertyIsEnumerable(0) ? Object : function(it) {
-    return cof(it) == 'String' ? it.split('') : Object(it);
-  };
-  global.define = __define;
-  return module.exports;
-});
-
-$__System.registerDynamic("a", [], true, function(req, exports, module) {
-  ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
-  module.exports = function(it) {
-    if (it == undefined)
-      throw TypeError("Can't call method on  " + it);
-    return it;
-  };
-  global.define = __define;
-  return module.exports;
-});
-
-$__System.registerDynamic("b", ["9", "a"], true, function(req, exports, module) {
-  ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
-  var IObject = req('9'),
-      defined = req('a');
-  module.exports = function(it) {
-    return IObject(defined(it));
-  };
-  global.define = __define;
-  return module.exports;
-});
-
-$__System.registerDynamic("c", [], true, function(req, exports, module) {
-  ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
-  var global = module.exports = typeof window != 'undefined' && window.Math == Math ? window : typeof self != 'undefined' && self.Math == Math ? self : Function('return this')();
-  if (typeof __g == 'number')
-    __g = global;
-  global.define = __define;
-  return module.exports;
-});
-
-$__System.registerDynamic("d", [], true, function(req, exports, module) {
-  ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
-  var core = module.exports = {version: '1.2.3'};
-  if (typeof __e == 'number')
-    __e = core;
-  global.define = __define;
-  return module.exports;
-});
-
-$__System.registerDynamic("e", ["c", "d"], true, function(req, exports, module) {
-  ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
-  var global = req('c'),
-      core = req('d'),
-      PROTOTYPE = 'prototype';
-  var ctx = function(fn, that) {
-    return function() {
-      return fn.apply(that, arguments);
-    };
-  };
-  var $def = function(type, name, source) {
-    var key,
-        own,
-        out,
-        exp,
-        isGlobal = type & $def.G,
-        isProto = type & $def.P,
-        target = isGlobal ? global : type & $def.S ? global[name] : (global[name] || {})[PROTOTYPE],
-        exports = isGlobal ? core : core[name] || (core[name] = {});
-    if (isGlobal)
-      source = name;
-    for (key in source) {
-      own = !(type & $def.F) && target && key in target;
-      if (own && key in exports)
-        continue;
-      out = own ? target[key] : source[key];
-      if (isGlobal && typeof target[key] != 'function')
-        exp = source[key];
-      else if (type & $def.B && own)
-        exp = ctx(out, global);
-      else if (type & $def.W && target[key] == out)
-        !function(C) {
-          exp = function(param) {
-            return this instanceof C ? new C(param) : C(param);
-          };
-          exp[PROTOTYPE] = C[PROTOTYPE];
-        }(out);
-      else
-        exp = isProto && typeof out == 'function' ? ctx(Function.call, out) : out;
-      exports[key] = exp;
-      if (isProto)
-        (exports[PROTOTYPE] || (exports[PROTOTYPE] = {}))[key] = out;
-    }
-  };
-  $def.F = 1;
-  $def.G = 2;
-  $def.S = 4;
-  $def.P = 8;
-  $def.B = 16;
-  $def.W = 32;
-  module.exports = $def;
-  global.define = __define;
-  return module.exports;
-});
-
-$__System.registerDynamic("f", [], true, function(req, exports, module) {
-  ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
-  module.exports = function(exec) {
-    try {
-      return !!exec();
-    } catch (e) {
-      return true;
-    }
-  };
-  global.define = __define;
-  return module.exports;
-});
-
-$__System.registerDynamic("10", ["e", "d", "f"], true, function(req, exports, module) {
-  ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
-  module.exports = function(KEY, exec) {
-    var $def = req('e'),
-        fn = (req('d').Object || {})[KEY] || Object[KEY],
-        exp = {};
-    exp[KEY] = exec(fn);
-    $def($def.S + $def.F * req('f')(function() {
-      fn(1);
-    }), 'Object', exp);
-  };
-  global.define = __define;
-  return module.exports;
-});
-
-$__System.registerDynamic("11", ["b", "10"], true, function(req, exports, module) {
-  ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
-  var toIObject = req('b');
-  req('10')('getOwnPropertyDescriptor', function($getOwnPropertyDescriptor) {
-    return function getOwnPropertyDescriptor(it, key) {
-      return $getOwnPropertyDescriptor(toIObject(it), key);
-    };
-  });
-  global.define = __define;
-  return module.exports;
-});
-
-$__System.registerDynamic("12", ["7", "11"], true, function(req, exports, module) {
-  ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
-  var $ = req('7');
-  req('11');
-  module.exports = function getOwnPropertyDescriptor(it, key) {
-    return $.getDesc(it, key);
-  };
-  global.define = __define;
-  return module.exports;
-});
-
-$__System.registerDynamic("13", ["12"], true, function(req, exports, module) {
-  ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
-  module.exports = {
-    "default": req('12'),
-    __esModule: true
-  };
-  global.define = __define;
-  return module.exports;
-});
-
-$__System.registerDynamic("14", ["13"], true, function(req, exports, module) {
-  ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
-  "use strict";
-  var _Object$getOwnPropertyDescriptor = req('13')["default"];
-  exports["default"] = function get(_x, _x2, _x3) {
-    var _again = true;
-    _function: while (_again) {
-      var object = _x,
-          property = _x2,
-          receiver = _x3;
-      _again = false;
-      if (object === null)
-        object = Function.prototype;
-      var desc = _Object$getOwnPropertyDescriptor(object, property);
-      if (desc === undefined) {
-        var parent = Object.getPrototypeOf(object);
-        if (parent === null) {
-          return undefined;
-        } else {
-          _x = parent;
-          _x2 = property;
-          _x3 = receiver;
-          _again = true;
-          desc = parent = undefined;
-          continue _function;
-        }
-      } else if ("value" in desc) {
-        return desc.value;
-      } else {
-        var getter = desc.get;
-        if (getter === undefined) {
-          return undefined;
-        }
-        return getter.call(receiver);
-      }
-    }
-  };
-  exports.__esModule = true;
-  global.define = __define;
-  return module.exports;
-});
-
-$__System.registerDynamic("15", ["7"], true, function(req, exports, module) {
-  ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
-  var $ = req('7');
-  module.exports = function create(P, D) {
-    return $.create(P, D);
-  };
-  global.define = __define;
-  return module.exports;
-});
-
-$__System.registerDynamic("16", ["15"], true, function(req, exports, module) {
-  ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
-  module.exports = {
-    "default": req('15'),
-    __esModule: true
-  };
-  global.define = __define;
-  return module.exports;
-});
-
-$__System.registerDynamic("17", [], true, function(req, exports, module) {
-  ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
-  module.exports = function(it) {
-    return typeof it === 'object' ? it !== null : typeof it === 'function';
-  };
-  global.define = __define;
-  return module.exports;
-});
-
-$__System.registerDynamic("18", ["17"], true, function(req, exports, module) {
-  ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
-  var isObject = req('17');
-  module.exports = function(it) {
-    if (!isObject(it))
-      throw TypeError(it + ' is not an object!');
-    return it;
-  };
-  global.define = __define;
-  return module.exports;
-});
-
-$__System.registerDynamic("19", [], true, function(req, exports, module) {
-  ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
-  module.exports = function(it) {
-    if (typeof it != 'function')
-      throw TypeError(it + ' is not a function!');
-    return it;
-  };
-  global.define = __define;
-  return module.exports;
-});
-
-$__System.registerDynamic("1a", ["19"], true, function(req, exports, module) {
-  ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
-  var aFunction = req('19');
-  module.exports = function(fn, that, length) {
-    aFunction(fn);
-    if (that === undefined)
-      return fn;
-    switch (length) {
-      case 1:
-        return function(a) {
-          return fn.call(that, a);
-        };
-      case 2:
-        return function(a, b) {
-          return fn.call(that, a, b);
-        };
-      case 3:
-        return function(a, b, c) {
-          return fn.call(that, a, b, c);
-        };
-    }
-    return function() {
-      return fn.apply(that, arguments);
-    };
-  };
-  global.define = __define;
-  return module.exports;
-});
-
-$__System.registerDynamic("1b", ["7", "17", "18", "1a"], true, function(req, exports, module) {
-  ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
-  var getDesc = req('7').getDesc,
-      isObject = req('17'),
-      anObject = req('18');
-  var check = function(O, proto) {
-    anObject(O);
-    if (!isObject(proto) && proto !== null)
-      throw TypeError(proto + ": can't set as prototype!");
-  };
-  module.exports = {
-    set: Object.setPrototypeOf || ('__proto__' in {} ? function(test, buggy, set) {
-      try {
-        set = req('1a')(Function.call, getDesc(Object.prototype, '__proto__').set, 2);
-        set(test, []);
-        buggy = !(test instanceof Array);
-      } catch (e) {
-        buggy = true;
-      }
-      return function setPrototypeOf(O, proto) {
-        check(O, proto);
-        if (buggy)
-          O.__proto__ = proto;
-        else
-          set(O, proto);
-        return O;
-      };
-    }({}, false) : undefined),
-    check: check
-  };
-  global.define = __define;
-  return module.exports;
-});
-
-$__System.registerDynamic("1c", ["e", "1b"], true, function(req, exports, module) {
-  ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
-  var $def = req('e');
-  $def($def.S, 'Object', {setPrototypeOf: req('1b').set});
-  global.define = __define;
-  return module.exports;
-});
-
-$__System.registerDynamic("1d", ["1c", "d"], true, function(req, exports, module) {
-  ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
-  req('1c');
-  module.exports = req('d').Object.setPrototypeOf;
-  global.define = __define;
-  return module.exports;
-});
-
-$__System.registerDynamic("1e", ["1d"], true, function(req, exports, module) {
-  ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
-  module.exports = {
-    "default": req('1d'),
-    __esModule: true
-  };
-  global.define = __define;
-  return module.exports;
-});
-
-$__System.registerDynamic("1f", ["16", "1e"], true, function(req, exports, module) {
-  ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
-  "use strict";
-  var _Object$create = req('16')["default"];
-  var _Object$setPrototypeOf = req('1e')["default"];
-  exports["default"] = function(subClass, superClass) {
-    if (typeof superClass !== "function" && superClass !== null) {
-      throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
-    }
-    subClass.prototype = _Object$create(superClass && superClass.prototype, {constructor: {
-        value: subClass,
-        enumerable: false,
-        writable: true,
-        configurable: true
-      }});
-    if (superClass)
-      _Object$setPrototypeOf ? _Object$setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
-  };
-  exports.__esModule = true;
-  global.define = __define;
-  return module.exports;
-});
-
-$__System.registerDynamic("20", ["7"], true, function(req, exports, module) {
-  ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
-  var $ = req('7');
-  module.exports = function defineProperty(it, key, desc) {
-    return $.setDesc(it, key, desc);
-  };
-  global.define = __define;
-  return module.exports;
-});
-
-$__System.registerDynamic("21", ["20"], true, function(req, exports, module) {
-  ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
-  module.exports = {
-    "default": req('20'),
-    __esModule: true
-  };
-  global.define = __define;
-  return module.exports;
-});
-
-$__System.registerDynamic("22", ["21"], true, function(req, exports, module) {
-  ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
-  "use strict";
-  var _Object$defineProperty = req('21')["default"];
-  exports["default"] = (function() {
-    function defineProperties(target, props) {
-      for (var i = 0; i < props.length; i++) {
-        var descriptor = props[i];
-        descriptor.enumerable = descriptor.enumerable || false;
-        descriptor.configurable = true;
-        if ("value" in descriptor)
-          descriptor.writable = true;
-        _Object$defineProperty(target, descriptor.key, descriptor);
-      }
-    }
-    return function(Constructor, protoProps, staticProps) {
-      if (protoProps)
-        defineProperties(Constructor.prototype, protoProps);
-      if (staticProps)
-        defineProperties(Constructor, staticProps);
-      return Constructor;
-    };
-  })();
-  exports.__esModule = true;
-  global.define = __define;
-  return module.exports;
-});
-
-$__System.register('23', ['2', '6', '22'], function (_export) {
-   var _classCallCheck, _, _createClass, s_EVENT_SPLITTER, s_EVENTS_API, s_INTERNAL_ON, s_OFF_API, s_ON_API, s_ONCE_MAP, s_TRIGGER_API, s_TRIGGER_EVENTS, Events;
+$__System.register('d', ['3', '4', '8', '9', 'a', 'b', 'c', 'e'], function (_export) {
+   var _, BackboneProxy, Events, _get, _inherits, _createClass, _classCallCheck, _toConsumableArray, s_ESCAPE_REGEX, s_NAMED_PARAM, s_OPTIONAL_PARAM, s_SPLAT_PARAM, s_BIND_ROUTES, s_EXTRACT_PARAMETERS, s_ROUTE_TO_REGEX, Router;
 
    return {
       setters: [function (_3) {
-         _classCallCheck = _3['default'];
+         _ = _3['default'];
       }, function (_4) {
-         _ = _4['default'];
+         BackboneProxy = _4['default'];
+      }, function (_5) {
+         Events = _5['default'];
       }, function (_2) {
-         _createClass = _2['default'];
+         _get = _2['default'];
+      }, function (_a) {
+         _inherits = _a['default'];
+      }, function (_b) {
+         _createClass = _b['default'];
+      }, function (_c) {
+         _classCallCheck = _c['default'];
+      }, function (_e) {
+         _toConsumableArray = _e['default'];
       }],
       execute: function () {
 
          // Private / internal methods ---------------------------------------------------------------------------------------
 
          /**
-          * Regular expression used to split event strings.
+          * Cached regular expressions for matching named param parts and splatted parts of route strings.
           * @type {RegExp}
           */
          'use strict';
 
-         s_EVENT_SPLITTER = /\s+/;
+         s_ESCAPE_REGEX = /[\-{}\[\]+?.,\\\^$|#\s]/g;
+         s_NAMED_PARAM = /(\(\?)?:\w+/g;
+         s_OPTIONAL_PARAM = /\((.*?)\)/g;
+         s_SPLAT_PARAM = /\*\w+/g;
 
          /**
-          * Iterates over the standard `event, callback` (as well as the fancy multiple space-separated events `"change blur",
-          * callback` and jQuery-style event maps `{event: callback}`).
+          * Bind all defined routes to `Backbone.history`. We have to reverse the order of the routes here to support behavior
+          * where the most general routes can be defined at the bottom of the route map.
           *
-          * @param {function} iteratee    - Event operation to invoke.
-          * @param {Object.<{callback: function, context: object, ctx: object, listening:{}}>} events - Events object
-          * @param {string|object} name   - A single event name, compound event names, or a hash of event names.
-          * @param {function} callback    - Event callback function
-          * @param {object}   opts        - Optional parameters
-          * @returns {*}
+          * @param {Router}   router   - Instance of `Backbone.Router`.
           */
 
-         s_EVENTS_API = function s_EVENTS_API(iteratee, events, name, callback, opts) {
-            var i = 0,
-                names = undefined;
-            if (name && typeof name === 'object') {
-               // Handle event maps.
-               if (callback !== void 0 && 'context' in opts && opts.context === void 0) {
-                  opts.context = callback;
-               }
-               for (names = _.keys(name); i < names.length; i++) {
-                  events = s_EVENTS_API(iteratee, events, names[i], name[names[i]], opts);
-               }
-            } else if (name && s_EVENT_SPLITTER.test(name)) {
-               // Handle space separated event names by delegating them individually.
-               for (names = name.split(s_EVENT_SPLITTER); i < names.length; i++) {
-                  events = iteratee(events, names[i], callback, opts);
-               }
-            } else {
-               // Finally, standard events.
-               events = iteratee(events, name, callback, opts);
-            }
-            return events;
-         };
-
-         /**
-          * Guard the `listening` argument from the public API.
-          * 
-          * @param {Events}   obj      - The Events instance
-          * @param {string}   name     - Event name
-          * @param {function} callback - Event callback
-          * @param {object}   context  - Event context
-          * @param {Object.<{obj: object, objId: string, id: string, listeningTo: object, count: number}>} listening -
-          *                              Listening object
-          * @returns {*}
-          */
-
-         s_INTERNAL_ON = function s_INTERNAL_ON(obj, name, callback, context, listening) {
-            obj._events = s_EVENTS_API(s_ON_API, obj._events || {}, name, callback, { context: context, ctx: obj, listening: listening });
-
-            if (listening) {
-               var listeners = obj._listeners || (obj._listeners = {});
-               listeners[listening.id] = listening;
-            }
-
-            return obj;
-         };
-
-         /**
-          * The reducing API that removes a callback from the `events` object.
-          *
-          * @param {Object.<{callback: function, context: object, ctx: object, listening:{}}>} events - Events object
-          * @param {string}   name     - Event name
-          * @param {function} callback - Event callback
-          * @param {object}   options  - Optional parameters
-          * @returns {*}
-          */
-
-         s_OFF_API = function s_OFF_API(events, name, callback, options) {
-            if (!events) {
+         s_BIND_ROUTES = function s_BIND_ROUTES(router) {
+            if (!router.routes) {
                return;
             }
 
-            var i = 0,
-                listening = undefined;
-            var context = options.context,
-                listeners = options.listeners;
+            router.routes = _.result(router, 'routes');
 
-            // Delete all events listeners and "drop" events.
-            if (!name && !callback && !context) {
-               var ids = _.keys(listeners);
-               for (; i < ids.length; i++) {
-                  listening = listeners[ids[i]];
-                  delete listeners[listening.id];
-                  delete listening.listeningTo[listening.objId];
-               }
-               return;
-            }
-
-            var names = name ? [name] : _.keys(events);
-            for (; i < names.length; i++) {
-               name = names[i];
-               var handlers = events[name];
-
-               // Bail out if there are no events stored.
-               if (!handlers) {
-                  break;
-               }
-
-               // Replace events if there are any remaining.  Otherwise, clean up.
-               var remaining = [];
-               for (var j = 0; j < handlers.length; j++) {
-                  var handler = handlers[j];
-                  if (callback && callback !== handler.callback && callback !== handler.callback._callback || context && context !== handler.context) {
-                     remaining.push(handler);
-                  } else {
-                     listening = handler.listening;
-                     if (listening && --listening.count === 0) {
-                        delete listeners[listening.id];
-                        delete listening.listeningTo[listening.objId];
-                     }
-                  }
-               }
-
-               // Update tail event if the list has any events.  Otherwise, clean up.
-               if (remaining.length) {
-                  events[name] = remaining;
-               } else {
-                  delete events[name];
-               }
-            }
-            if (_.size(events)) {
-               return events;
-            }
+            _.each(_.keys(router.routes), function (route) {
+               router.route(route, router.routes[route]);
+            });
          };
 
          /**
-          * The reducing API that adds a callback to the `events` object.
+          * Given a route, and a URL fragment that it matches, return the array of extracted decoded parameters. Empty or
+          * unmatched parameters will be treated as `null` to normalize cross-browser behavior.
           *
-          * @param {Object.<{callback: function, context: object, ctx: object, listening:{}}>} events - Events object
-          * @param {string}   name     - Event name
-          * @param {function} callback - Event callback
-          * @param {object}   options  - Optional parameters
+          * @param {string}   route - A route string or regex.
+          * @param {string}   fragment - URL fragment.
           * @returns {*}
           */
 
-         s_ON_API = function s_ON_API(events, name, callback, options) {
-            if (callback) {
-               var handlers = events[name] || (events[name] = []);
-               var context = options.context,
-                   ctx = options.ctx,
-                   listening = options.listening;
+         s_EXTRACT_PARAMETERS = function s_EXTRACT_PARAMETERS(route, fragment) {
+            var params = route.exec(fragment).slice(1);
 
-               if (listening) {
-                  listening.count++;
+            return _.map(params, function (param, i) {
+               // Don't decode the search params.
+               if (i === params.length - 1) {
+                  return param || null;
                }
-
-               handlers.push({ callback: callback, context: context, ctx: context || ctx, listening: listening });
-            }
-            return events;
+               return param ? decodeURIComponent(param) : null;
+            });
          };
 
          /**
-          * Reduces the event callbacks into a map of `{event: onceWrapper}`. `offer` unbinds the `onceWrapper` after
-          * it has been called.
+          * Convert a route string into a regular expression, suitable for matching against the current location hash.
           *
-          * @param {Object.<{callback: function, context: object, ctx: object, listening:{}}>} map - Events object
-          * @param {string}   name     - Event name
-          * @param {function} callback - Event callback
-          * @param {function} offer    - Function to invoke after event has been triggered once; `off()`
-          * @returns {*}
+          * @param {string}   route - A route string or regex.
+          * @returns {RegExp}
           */
 
-         s_ONCE_MAP = function s_ONCE_MAP(map, name, callback, offer) {
-            if (callback) {
-               (function () {
-                  var once = map[name] = _.once(function () {
-                     offer(name, once);
-                     callback.apply(this, arguments);
-                  });
-                  once._callback = callback;
-               })();
-            }
-            return map;
+         s_ROUTE_TO_REGEX = function s_ROUTE_TO_REGEX(route) {
+            route = route.replace(s_ESCAPE_REGEX, '\\$&').replace(s_OPTIONAL_PARAM, '(?:$1)?').replace(s_NAMED_PARAM, function (match, optional) {
+               return optional ? match : '([^/?]+)';
+            }).replace(s_SPLAT_PARAM, '([^?]*?)');
+            return new RegExp('^' + route + '(?:\\?([\\s\\S]*))?$');
          };
 
          /**
-          * Handles triggering the appropriate event callbacks.
-          * 
-          * @param {Object.<{callback: function, context: object, ctx: object, listening:{}}>} objEvents - Events object
-          * @param {string}   name  - Event name
-          * @param {function} cb    - Event callback
-          * @param {Array<*>} args  - Event arguments
-          * @returns {*}
-          */
-
-         s_TRIGGER_API = function s_TRIGGER_API(objEvents, name, cb, args) {
-            if (objEvents) {
-               var events = objEvents[name];
-               var allEvents = objEvents.all;
-               if (events && allEvents) {
-                  allEvents = allEvents.slice();
-               }
-               if (events) {
-                  s_TRIGGER_EVENTS(events, args);
-               }
-               if (allEvents) {
-                  s_TRIGGER_EVENTS(allEvents, [name].concat(args));
-               }
-            }
-            return objEvents;
-         };
-
-         /**
-          * A difficult-to-believe, but optimized internal dispatch function for triggering events. Tries to keep the usual
-          * cases speedy (most internal Backbone events have 3 arguments).
-          *
-          * @param {Object.<{callback: function, context: object, ctx: object, listening:{}}>}  events - events array
-          * @param {Array<*>} args - event argument array
-          */
-
-         s_TRIGGER_EVENTS = function s_TRIGGER_EVENTS(events, args) {
-            var ev = undefined,
-                i = -1;
-            var a1 = args[0],
-                a2 = args[1],
-                a3 = args[2],
-                l = events.length;
-
-            switch (args.length) {
-               case 0:
-                  while (++i < l) {
-                     (ev = events[i]).callback.call(ev.ctx);
-                  }
-                  return;
-               case 1:
-                  while (++i < l) {
-                     (ev = events[i]).callback.call(ev.ctx, a1);
-                  }
-                  return;
-               case 2:
-                  while (++i < l) {
-                     (ev = events[i]).callback.call(ev.ctx, a1, a2);
-                  }
-                  return;
-               case 3:
-                  while (++i < l) {
-                     (ev = events[i]).callback.call(ev.ctx, a1, a2, a3);
-                  }
-                  return;
-               default:
-                  while (++i < l) {
-                     (ev = events[i]).callback.apply(ev.ctx, args);
-                  }
-                  return;
-            }
-         };
-
-         /**
-          * Backbone.Events - Provides the ability to bind and trigger custom named events. (http://backbonejs.org/#Events)
+          * Backbone.Router - Provides methods for routing client-side pages, and connecting them to actions and events.
+          * (http://backbonejs.org/#Router)
           * ---------------
+          * Web applications often provide linkable, bookmarkable, shareable URLs for important locations in the app. Until
+          * recently, hash fragments (#page) were used to provide these permalinks, but with the arrival of the History API,
+          * it's now possible to use standard URLs (/page). Backbone.Router provides methods for routing client-side pages, and
+          * connecting them to actions and events. For browsers which don't yet support the History API, the Router handles
+          * graceful fallback and transparent translation to the fragment version of the URL.
           *
-          * An important consideration of Backbone-ES6 is that Events are no longer an object literal, but a full blown ES6
-          * class. This is the biggest potential breaking change for Backbone-ES6 when compared to the original Backbone.
+          * During page load, after your application has finished creating all of its routers, be sure to call
+          * Backbone.history.start() or Backbone.history.start({pushState: true}) to route the initial URL.
           *
-          * Previously Events could be mixed in to any object. This is no longer possible with Backbone-ES6 when working from
-          * source or the bundled versions. It should be noted that Events is also no longer mixed into Backbone itself, so
-          * Backbone is not a Global events instance.
+          * routes - router.routes
+          * The routes hash maps URLs with parameters to functions on your router (or just direct function definitions, if you
+          * prefer), similar to the View's events hash. Routes can contain parameter parts, :param, which match a single URL
+          * component between slashes; and splat parts *splat, which can match any number of URL components. Part of a route can
+          * be made optional by surrounding it in parentheses (/:optional).
           *
-          * Catalog of Events:
-          * Here's the complete list of built-in Backbone events, with arguments. You're also free to trigger your own events on
-          * Models, Collections and Views as you see fit.
+          * For example, a route of "search/:query/p:page" will match a fragment of #search/obama/p2, passing "obama" and "2" to
+          * the action.
           *
-          * "add" (model, collection, options) — when a model is added to a collection.
-          * "remove" (model, collection, options) — when a model is removed from a collection.
-          * "update" (collection, options) — single event triggered after any number of models have been added or removed from a
-          * collection.
-          * "reset" (collection, options) — when the collection's entire contents have been replaced.
-          * "sort" (collection, options) — when the collection has been re-sorted.
-          * "change" (model, options) — when a model's attributes have changed.
-          * "change:[attribute]" (model, value, options) — when a specific attribute has been updated.
-          * "destroy" (model, collection, options) — when a model is destroyed.
-          * "request" (model_or_collection, xhr, options) — when a model or collection has started a request to the server.
-          * "sync" (model_or_collection, resp, options) — when a model or collection has been successfully synced with the
-          * server.
-          * "error" (model_or_collection, resp, options) — when a model's or collection's request to the server has failed.
-          * "invalid" (model, error, options) — when a model's validation fails on the client.
-          * "route:[name]" (params) — Fired by the router when a specific route is matched.
-          * "route" (route, params) — Fired by the router when any route has been matched.
-          * "route" (router, route, params) — Fired by history when any route has been matched.
-          * "all" — this special event fires for any triggered event, passing the event name as the first argument.
+          * A route of "file/*path" will match #file/nested/folder/file.txt, passing "nested/folder/file.txt" to the action.
           *
-          * Generally speaking, when calling a function that emits an event (model.set, collection.add, and so on...), if you'd
-          * like to prevent the event from being triggered, you may pass {silent: true} as an option. Note that this is rarely,
-          * perhaps even never, a good idea. Passing through a specific flag in the options for your event callback to look at,
-          * and choose to ignore, will usually work out better.
+          * A route of "docs/:section(/:subsection)" will match #docs/faq and #docs/faq/installing, passing "faq" to the action
+          * in the first case, and passing "faq" and "installing" to the action in the second.
+          *
+          * Trailing slashes are treated as part of the URL, and (correctly) treated as a unique route when accessed. docs and
+          * docs/ will fire different callbacks. If you can't avoid generating both types of URLs, you can define a "docs(/)"
+          * matcher to capture both cases.
+          *
+          * When the visitor presses the back button, or enters a URL, and a particular route is matched, the name of the action
+          * will be fired as an event, so that other objects can listen to the router, and be notified. In the following example,
+          * visiting #help/uploading will fire a route:help event from the router.
           *
           * @example
-          * This no longer works:
+          * routes: {
+          *    "help/:page":         "help",
+          *    "download/*path":     "download",
+          *    "folder/:name":       "openFolder",
+          *    "folder/:name-:mode": "openFolder"
+          * }
           *
-          * let object = {};
-          * _.extend(object, Backbone.Events);
-          * object.on('expand', function(){ alert('expanded'); });
-          * object.trigger('expand');
-          *
-          * One must now use ES6 extends syntax for Backbone.Events when inheriting events functionality:
-          * import Backbone from 'backbone';
-          *
-          * class MyClass extends Backbone.Events {}
+          * router.on("route:help", function(page) {
+          *    ...
+          * });
           *
           * @example
-          * A nice ES6 pattern for creating a named events instance is the following:
+          * Old extend - Backbone.Router.extend(properties, [classProperties])
+          * Get started by creating a custom router class. Define actions that are triggered when certain URL fragments are
+          * matched, and provide a routes hash that pairs routes to actions. Note that you'll want to avoid using a leading
+          * slash in your route definitions:
           *
-          * import Backbone from 'backbone';
+          * var Workspace = Backbone.Router.extend({
+          *    routes: {
+          *       "help":                 "help",    // #help
+          *       "search/:query":        "search",  // #search/kiwis
+          *       "search/:query/p:page": "search"   // #search/kiwis/p7
+          *    },
           *
-          * export default new Backbone.Events();
+          *    help: function() {
+          *       ...
+          *    },
           *
-          * This module / Events instance can then be imported by full path or if consuming in a modular runtime by creating
-          * a mapped path to it.
+          *    search: function(query, page) {
+          *       ...
+          *    }
+          * });
+          *
+          * @example
+          * Converting the above example to ES6 using a getter method for `routes`:
+          * class Workspace extends Backbone.Router {
+          *    get routes() {
+          *       return {
+          *          "help":                 "help",    // #help
+          *          "search/:query":        "search",  // #search/kiwis
+          *          "search/:query/p:page": "search"   // #search/kiwis/p7
+          *       };
+          *    }
+          *
+          *    help() {
+          *       ...
+          *    },
+          *
+          *    search(query, page) {
+          *       ...
+          *    }
+          * }
+          *
+          * @example
+          * Basic default "no route router":
+          * new Backbone.Router({ routes: { '*actions': 'defaultRoute' } });
           */
 
-         Events = (function () {
-            /** */
-
-            function Events() {
-               _classCallCheck(this, Events);
-            }
+         Router = (function (_Events) {
+            _inherits(Router, _Events);
 
             /**
-             * Delegates to `on`.
+             * When creating a new router, you may pass its routes hash directly as an option, if you choose. All options will
+             * also be passed to your initialize function, if defined.
              *
-             * @returns {*}
+             * @see http://backbonejs.org/#Router-constructor
+             *
+             * @param {object}   options  - Optional parameters which may contain a "routes" object literal.
              */
 
-            _createClass(Events, [{
-               key: 'bind',
-               value: function bind() {
-                  return this.on.apply(this, arguments);
+            function Router() {
+               var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+
+               _classCallCheck(this, Router);
+
+               _get(Object.getPrototypeOf(Router.prototype), 'constructor', this).call(this);
+
+               // Must detect if there are any getters defined in order to skip setting this value.
+               var hasRoutesGetter = !_.isUndefined(this.routes);
+
+               if (!hasRoutesGetter && options.routes) {
+                  /**
+                   * Stores the routes hash.
+                   * @type {object}
+                   */
+                  this.routes = options.routes;
+               }
+
+               s_BIND_ROUTES(this);
+
+               this.initialize.apply(this, arguments);
+            }
+
+            /* eslint-disable no-unused-vars */
+            /**
+             * Execute a route handler with the provided parameters.  This is an excellent place to do pre-route setup or
+             * post-route cleanup.
+             *
+             * @see http://backbonejs.org/#Router-execute
+             *
+             * @param {function} callback - Callback function to execute.
+             * @param {*[]}      args     - Arguments to apply to callback.
+             * @param {string}   name     - Named route.
+             */
+
+            _createClass(Router, [{
+               key: 'execute',
+               value: function execute(callback, args, name) {
+                  /* eslint-enable no-unused-vars */
+                  if (callback) {
+                     callback.apply(this, args);
+                  }
                }
 
                /**
-                * Tell an object to listen to a particular event on an other object. The advantage of using this form, instead of
-                * other.on(event, callback, object), is that listenTo allows the object to keep track of the events, and they can
-                * be removed all at once later on. The callback will always be called with object as context.
+                * Initialize is an empty function by default. Override it with your own initialization logic.
                 *
-                * @example
-                * view.listenTo(model, 'change', view.render);
-                *
-                * @see http://backbonejs.org/#Events-listenTo
-                *
-                * @param {object}   obj      - Event context
-                * @param {string}   name     - Event name(s)
-                * @param {function} callback - Event callback function
-                * @returns {Events}
+                * @see http://backbonejs.org/#Router-constructor
+                * @abstract
                 */
             }, {
-               key: 'listenTo',
-               value: function listenTo(obj, name, callback) {
-                  if (!obj) {
-                     return this;
-                  }
-                  var id = obj._listenId || (obj._listenId = _.uniqueId('l'));
-                  var listeningTo = this._listeningTo || (this._listeningTo = {});
-                  var listening = listeningTo[id];
+               key: 'initialize',
+               value: function initialize() {}
 
-                  // This object is not listening to any other events on `obj` yet.
-                  // Setup the necessary references to track the listening callbacks.
-                  if (!listening) {
-                     var thisId = this._listenId || (this._listenId = _.uniqueId('l'));
-                     listening = listeningTo[id] = { obj: obj, objId: id, id: thisId, listeningTo: listeningTo, count: 0 };
-                  }
-
-                  // Bind callbacks on obj, and keep track of them on listening.
-                  s_INTERNAL_ON(obj, name, callback, this, listening);
+               /**
+                * Simple proxy to `Backbone.history` to save a fragment into the history.
+                *
+                * @see http://backbonejs.org/#Router-navigate
+                * @see History
+                *
+                * @param {string}   fragment - String representing an URL fragment.
+                * @param {object}   options - Optional hash containing parameters for navigate.
+                * @returns {Router}
+                */
+            }, {
+               key: 'navigate',
+               value: function navigate(fragment, options) {
+                  BackboneProxy.backbone.history.navigate(fragment, options);
                   return this;
                }
 
                /**
-                * Just like `listenTo`, but causes the bound callback to fire only once before being removed.
-                *
-                * @see http://backbonejs.org/#Events-listenToOnce
-                *
-                * @param {object}   obj      - Event context
-                * @param {string}   name     - Event name(s)
-                * @param {function} callback - Event callback function
-                * @returns {Events}
-                */
-            }, {
-               key: 'listenToOnce',
-               value: function listenToOnce(obj, name, callback) {
-                  // Map the event into a `{event: once}` object.
-                  var events = s_EVENTS_API(s_ONCE_MAP, {}, name, callback, _.bind(this.stopListening, this, obj));
-                  return this.listenTo(obj, events, void 0);
-               }
-
-               /**
-                * Remove a previously-bound callback function from an object. If no context is specified, all of the versions of
-                * the callback with different contexts will be removed. If no callback is specified, all callbacks for the event
-                * will be removed. If no event is specified, callbacks for all events will be removed.
-                *
-                * Note that calling model.off(), for example, will indeed remove all events on the model — including events that
-                * Backbone uses for internal bookkeeping.
+                * Manually bind a single named route to a callback. For example:
                 *
                 * @example
-                * // Removes just the `onChange` callback.
-                * object.off("change", onChange);
-                *
-                * // Removes all "change" callbacks.
-                * object.off("change");
-                *
-                * // Removes the `onChange` callback for all events.
-                * object.off(null, onChange);
-                *
-                * // Removes all callbacks for `context` for all events.
-                * object.off(null, null, context);
-                *
-                * // Removes all callbacks on `object`.
-                * object.off();
-                *
-                * @see http://backbonejs.org/#Events-off
-                *
-                * @param {string}   name     - Event name(s)
-                * @param {function} callback - Event callback function
-                * @param {object}   context  - Event context
-                * @returns {Events}
-                */
-            }, {
-               key: 'off',
-               value: function off(name, callback, context) {
-                  if (!this._events) {
-                     return this;
-                  }
-                  this._events = s_EVENTS_API(s_OFF_API, this._events, name, callback, { context: context, listeners: this._listeners });
-                  return this;
-               }
-
-               /**
-                * Bind a callback function to an object. The callback will be invoked whenever the event is fired. If you have a
-                * large number of different events on a page, the convention is to use colons to namespace them: "poll:start", or
-                * "change:selection".
-                *
-                * To supply a context value for this when the callback is invoked, pass the optional last argument:
-                * model.on('change', this.render, this) or model.on({change: this.render}, this).
-                *
-                * @example
-                * The event string may also be a space-delimited list of several events...
-                * book.on("change:title change:author", ...);
-                *
-                * @example
-                * Callbacks bound to the special "all" event will be triggered when any event occurs, and are passed the name of
-                * the event as the first argument. For example, to proxy all events from one object to another:
-                * proxy.on("all", function(eventName) {
-                *    object.trigger(eventName);
+                * this.route('search/:query/p:num', 'search', function(query, num)
+                * {
+                *    ...
                 * });
                 *
-                * @example
-                * All Backbone event methods also support an event map syntax, as an alternative to positional arguments:
-                * book.on({
-                *    "change:author": authorPane.update,
-                *    "change:title change:subtitle": titleView.update,
-                *    "destroy": bookView.remove
-                * });
+                * @see http://backbonejs.org/#Router-route
                 *
-                * @see http://backbonejs.org/#Events-on
-                *
-                * @param {string}   name     - Event name(s)
-                * @param {function} callback - Event callback function
-                * @param {object}   context  - Event context
-                * @returns {*}
+                * @param {string|RegExp}  route    -  A route string or regex.
+                * @param {string}         name     -  A name for the route.
+                * @param {function}       callback -  A function to invoke when the route is matched.
+                * @returns {Router}
                 */
             }, {
-               key: 'on',
-               value: function on(name, callback, context) {
-                  return s_INTERNAL_ON(this, name, callback, context, void 0);
-               }
+               key: 'route',
+               value: function route(_route, name, callback) {
+                  var _this = this;
 
-               /**
-                * Just like `on`, but causes the bound callback to fire only once before being removed. Handy for saying "the next
-                * time that X happens, do this". When multiple events are passed in using the space separated syntax, the event
-                * will fire once for every event you passed in, not once for a combination of all events
-                *
-                * @see http://backbonejs.org/#Events-once
-                *
-                * @param {string}   name     - Event name(s)
-                * @param {function} callback - Event callback function
-                * @param {object}   context  - Event context
-                * @returns {*}
-                */
-            }, {
-               key: 'once',
-               value: function once(name, callback, context) {
-                  // Map the event into a `{event: once}` object.
-                  var events = s_EVENTS_API(s_ONCE_MAP, {}, name, callback, _.bind(this.off, this));
-                  return this.on(events, void 0, context);
-               }
-
-               /**
-                * Tell an object to stop listening to events. Either call stopListening with no arguments to have the object remove
-                * all of its registered callbacks ... or be more precise by telling it to remove just the events it's listening to
-                * on a specific object, or a specific event, or just a specific callback.
-                *
-                * @example
-                * view.stopListening();
-                *
-                * view.stopListening(model);
-                *
-                * @see http://backbonejs.org/#Events-stopListening
-                *
-                * @param {object}   obj      - Event context
-                * @param {string}   name     - Event name(s)
-                * @param {function} callback - Event callback function
-                * @returns {Events}
-                */
-            }, {
-               key: 'stopListening',
-               value: function stopListening(obj, name, callback) {
-                  var listeningTo = this._listeningTo;
-                  if (!listeningTo) {
-                     return this;
+                  if (!_.isRegExp(_route)) {
+                     _route = s_ROUTE_TO_REGEX(_route);
+                  }
+                  if (_.isFunction(name)) {
+                     callback = name;
+                     name = '';
+                  }
+                  if (!callback) {
+                     callback = this[name];
                   }
 
-                  var ids = obj ? [obj._listenId] : _.keys(listeningTo);
+                  BackboneProxy.backbone.history.route(_route, function (fragment) {
+                     var args = s_EXTRACT_PARAMETERS(_route, fragment);
 
-                  for (var i = 0; i < ids.length; i++) {
-                     var listening = listeningTo[ids[i]];
-
-                     // If listening doesn't exist, this object is not currently listening to obj. Break out early.
-                     if (!listening) {
-                        break;
+                     if (_this.execute(callback, args, name) !== false) {
+                        _this.trigger.apply(_this, _toConsumableArray(['route:' + name].concat(args)));
+                        _this.trigger('route', name, args);
+                        BackboneProxy.backbone.history.trigger('route', _this, name, args);
                      }
-
-                     listening.obj.off(name, callback, this);
-                  }
-                  if (_.isEmpty(listeningTo)) {
-                     this._listeningTo = void 0;
-                  }
+                  });
 
                   return this;
-               }
-
-               /**
-                * Trigger callbacks for the given event, or space-delimited list of events. Subsequent arguments to trigger will be
-                * passed along to the event callbacks.
-                *
-                * @see http://backbonejs.org/#Events-trigger
-                *
-                * @param {string}   name  - Event name(s)
-                * @returns {Events}
-                */
-            }, {
-               key: 'trigger',
-               value: function trigger(name) {
-                  if (!this._events) {
-                     return this;
-                  }
-
-                  var length = Math.max(0, arguments.length - 1);
-                  var args = new Array(length);
-
-                  for (var i = 0; i < length; i++) {
-                     args[i] = arguments[i + 1];
-                  }
-
-                  s_EVENTS_API(s_TRIGGER_API, this._events, name, void 0, args);
-
-                  return this;
-               }
-
-               /**
-                * Delegates to `off`.
-                *
-                * @returns {*}
-                */
-            }, {
-               key: 'unbind',
-               value: function unbind() {
-                  return this.off.apply(this, arguments);
                }
             }]);
 
-            return Events;
-         })();
+            return Router;
+         })(Events);
 
-         _export('default', Events);
+         _export('default', Router);
       }
    };
 });
 
-$__System.registerDynamic("24", [], true, function(req, exports, module) {
-  ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
-  var ceil = Math.ceil,
-      floor = Math.floor;
-  module.exports = function(it) {
-    return isNaN(it = +it) ? 0 : (it > 0 ? floor : ceil)(it);
-  };
-  global.define = __define;
-  return module.exports;
-});
+$__System.register('f', ['3', '8', '9', 'a', 'b', 'c'], function (_export) {
+   var _, Events, _get, _inherits, _createClass, _classCallCheck, s_ROUTE_STRIPPER, s_ROOT_STRIPPER, s_PATH_STRIPPER, s_UPDATE_HASH, History;
 
-$__System.registerDynamic("25", ["24", "a"], true, function(req, exports, module) {
-  ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
-  var toInteger = req('24'),
-      defined = req('a');
-  module.exports = function(TO_STRING) {
-    return function(that, pos) {
-      var s = String(defined(that)),
-          i = toInteger(pos),
-          l = s.length,
-          a,
-          b;
-      if (i < 0 || i >= l)
-        return TO_STRING ? '' : undefined;
-      a = s.charCodeAt(i);
-      return a < 0xd800 || a > 0xdbff || i + 1 === l || (b = s.charCodeAt(i + 1)) < 0xdc00 || b > 0xdfff ? TO_STRING ? s.charAt(i) : a : TO_STRING ? s.slice(i, i + 2) : (a - 0xd800 << 10) + (b - 0xdc00) + 0x10000;
-    };
-  };
-  global.define = __define;
-  return module.exports;
-});
+   return {
+      setters: [function (_3) {
+         _ = _3['default'];
+      }, function (_4) {
+         Events = _4['default'];
+      }, function (_2) {
+         _get = _2['default'];
+      }, function (_a) {
+         _inherits = _a['default'];
+      }, function (_b) {
+         _createClass = _b['default'];
+      }, function (_c) {
+         _classCallCheck = _c['default'];
+      }],
+      execute: function () {
 
-$__System.registerDynamic("26", [], true, function(req, exports, module) {
-  ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
-  module.exports = true;
-  global.define = __define;
-  return module.exports;
-});
+         // Private / internal methods ---------------------------------------------------------------------------------------
 
-$__System.registerDynamic("27", [], true, function(req, exports, module) {
-  ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
-  module.exports = function(bitmap, value) {
-    return {
-      enumerable: !(bitmap & 1),
-      configurable: !(bitmap & 2),
-      writable: !(bitmap & 4),
-      value: value
-    };
-  };
-  global.define = __define;
-  return module.exports;
-});
+         /**
+          * Cached regex for stripping a leading hash/slash and trailing space.
+          */
+         'use strict';
 
-$__System.registerDynamic("28", ["f"], true, function(req, exports, module) {
-  ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
-  module.exports = !req('f')(function() {
-    return Object.defineProperty({}, 'a', {get: function() {
-        return 7;
-      }}).a != 7;
-  });
-  global.define = __define;
-  return module.exports;
-});
+         s_ROUTE_STRIPPER = /^[#\/]|\s+$/g;
 
-$__System.registerDynamic("29", ["7", "27", "28"], true, function(req, exports, module) {
-  ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
-  var $ = req('7'),
-      createDesc = req('27');
-  module.exports = req('28') ? function(object, key, value) {
-    return $.setDesc(object, key, createDesc(1, value));
-  } : function(object, key, value) {
-    object[key] = value;
-    return object;
-  };
-  global.define = __define;
-  return module.exports;
-});
+         /**
+          * Cached regex for stripping leading and trailing slashes.
+          */
+         s_ROOT_STRIPPER = /^\/+|\/+$/g;
 
-$__System.registerDynamic("2a", ["29"], true, function(req, exports, module) {
-  ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
-  module.exports = req('29');
-  global.define = __define;
-  return module.exports;
-});
+         /**
+          * Cached regex for stripping urls of hash.
+          */
+         s_PATH_STRIPPER = /#.*$/;
 
-$__System.registerDynamic("2b", [], true, function(req, exports, module) {
-  ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
-  var hasOwnProperty = {}.hasOwnProperty;
-  module.exports = function(it, key) {
-    return hasOwnProperty.call(it, key);
-  };
-  global.define = __define;
-  return module.exports;
-});
+         /**
+          * Update the hash location, either replacing the current entry, or adding a new one to the browser history.
+          *
+          * @param {object}   location - URL / current location
+          * @param {string}   fragment - URL fragment
+          * @param {boolean}  replace  - conditional replace
+          */
 
-$__System.registerDynamic("2c", ["c"], true, function(req, exports, module) {
-  ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
-  var global = req('c'),
-      SHARED = '__core-js_shared__',
-      store = global[SHARED] || (global[SHARED] = {});
-  module.exports = function(key) {
-    return store[key] || (store[key] = {});
-  };
-  global.define = __define;
-  return module.exports;
-});
+         s_UPDATE_HASH = function s_UPDATE_HASH(location, fragment, replace) {
+            if (replace) {
+               var href = location.href.replace(/(javascript:|#).*$/, '');
+               location.replace(href + '#' + fragment);
+            } else {
+               // Some browsers require that `hash` contains a leading #.
+               location.hash = '#' + fragment;
+            }
+         };
 
-$__System.registerDynamic("2d", [], true, function(req, exports, module) {
-  ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
-  var id = 0,
-      px = Math.random();
-  module.exports = function(key) {
-    return 'Symbol('.concat(key === undefined ? '' : key, ')_', (++id + px).toString(36));
-  };
-  global.define = __define;
-  return module.exports;
-});
+         /**
+          * Backbone.History - History serves as a global router. (http://backbonejs.org/#History)
+          * ----------------
+          *
+          * History serves as a global router (per frame) to handle hashchange events or pushState, match the appropriate route,
+          * and trigger callbacks. You shouldn't ever have to create one of these yourself since Backbone.history already
+          * contains one.
+          *
+          * pushState support exists on a purely opt-in basis in Backbone. Older browsers that don't support pushState will
+          * continue to use hash-based URL fragments, and if a hash URL is visited by a pushState-capable browser, it will be
+          * transparently upgraded to the true URL. Note that using real URLs requires your web server to be able to correctly
+          * render those pages, so back-end changes are required as well. For example, if you have a route of /documents/100,
+          * your web server must be able to serve that page, if the browser visits that URL directly. For full search-engine
+          * crawlability, it's best to have the server generate the complete HTML for the page ... but if it's a web application,
+          * just rendering the same content you would have for the root URL, and filling in the rest with Backbone Views and
+          * JavaScript works fine.
+          *
+          * Handles cross-browser history management, based on either [pushState](http://diveintohtml5.info/history.html) and
+          * real URLs, or [onhashchange](https://developer.mozilla.org/en-US/docs/DOM/window.onhashchange) and URL fragments.
+          * If the browser supports neither (old IE, natch), falls back to polling.
+          */
 
-$__System.registerDynamic("2e", ["2c", "c", "2d"], true, function(req, exports, module) {
-  ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
-  var store = req('2c')('wks'),
-      Symbol = req('c').Symbol;
-  module.exports = function(name) {
-    return store[name] || (store[name] = Symbol && Symbol[name] || (Symbol || req('2d'))('Symbol.' + name));
-  };
-  global.define = __define;
-  return module.exports;
-});
+         History = (function (_Events) {
+            _inherits(History, _Events);
 
-$__System.registerDynamic("2f", [], true, function(req, exports, module) {
-  ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
-  module.exports = {};
-  global.define = __define;
-  return module.exports;
-});
+            /** */
 
-$__System.registerDynamic("30", ["7", "2b", "2e"], true, function(req, exports, module) {
-  ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
-  var def = req('7').setDesc,
-      has = req('2b'),
-      TAG = req('2e')('toStringTag');
-  module.exports = function(it, tag, stat) {
-    if (it && !has(it = stat ? it : it.prototype, TAG))
-      def(it, TAG, {
-        configurable: true,
-        value: tag
-      });
-  };
-  global.define = __define;
-  return module.exports;
-});
+            function History() {
+               _classCallCheck(this, History);
 
-$__System.registerDynamic("31", ["7", "29", "2e", "27", "30"], true, function(req, exports, module) {
-  ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
-  'use strict';
-  var $ = req('7'),
-      IteratorPrototype = {};
-  req('29')(IteratorPrototype, req('2e')('iterator'), function() {
-    return this;
-  });
-  module.exports = function(Constructor, NAME, next) {
-    Constructor.prototype = $.create(IteratorPrototype, {next: req('27')(1, next)});
-    req('30')(Constructor, NAME + ' Iterator');
-  };
-  global.define = __define;
-  return module.exports;
-});
+               _get(Object.getPrototypeOf(History.prototype), 'constructor', this).call(this);
 
-$__System.registerDynamic("32", ["26", "e", "2a", "29", "2b", "2e", "2f", "31", "7", "30"], true, function(req, exports, module) {
-  ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
-  'use strict';
-  var LIBRARY = req('26'),
-      $def = req('e'),
-      $redef = req('2a'),
-      hide = req('29'),
-      has = req('2b'),
-      SYMBOL_ITERATOR = req('2e')('iterator'),
-      Iterators = req('2f'),
-      BUGGY = !([].keys && 'next' in [].keys()),
-      FF_ITERATOR = '@@iterator',
-      KEYS = 'keys',
-      VALUES = 'values';
-  var returnThis = function() {
-    return this;
-  };
-  module.exports = function(Base, NAME, Constructor, next, DEFAULT, IS_SET, FORCE) {
-    req('31')(Constructor, NAME, next);
-    var createMethod = function(kind) {
-      switch (kind) {
-        case KEYS:
-          return function keys() {
-            return new Constructor(this, kind);
-          };
-        case VALUES:
-          return function values() {
-            return new Constructor(this, kind);
-          };
+               /**
+                * Stores route / callback pairs for validation.
+                * @type {Array<Object<string, function>>}
+                */
+               this.handlers = [];
+               this.checkUrl = _.bind(this.checkUrl, this);
+
+               // Ensure that `History` can be used outside of the browser.
+               if (typeof window !== 'undefined') {
+                  /**
+                   * Browser Location or URL string.
+                   * @type {Location|String}
+                   */
+                  this.location = window.location;
+
+                  /**
+                   * Browser history
+                   * @type {History}
+                   */
+                  this.history = window.history;
+               }
+
+               /**
+                * Has the history handling already been started?
+                * @type {boolean}
+                */
+               this.started = false;
+
+               /**
+                * The default interval to poll for hash changes, if necessary, is twenty times a second.
+                * @type {number}
+                */
+               this.interval = 50;
+            }
+
+            /**
+             * Are we at the app root?
+             *
+             * @returns {boolean}
+             */
+
+            _createClass(History, [{
+               key: 'atRoot',
+               value: function atRoot() {
+                  var path = this.location.pathname.replace(/[^\/]$/, '$&/');
+                  return path === this.root && !this.getSearch();
+               }
+
+               /**
+                * Checks the current URL to see if it has changed, and if it has, calls `loadUrl`, normalizing across the
+                * hidden iframe.
+                *
+                * @returns {boolean}
+                */
+            }, {
+               key: 'checkUrl',
+               value: function checkUrl() {
+                  var current = this.getFragment();
+
+                  // If the user pressed the back button, the iframe's hash will have changed and we should use that for comparison.
+                  if (current === this.fragment && this.iframe) {
+                     current = this.getHash(this.iframe.contentWindow);
+                  }
+
+                  if (current === this.fragment) {
+                     return false;
+                  }
+                  if (this.iframe) {
+                     this.navigate(current);
+                  }
+                  this.loadUrl();
+               }
+
+               /**
+                * Unicode characters in `location.pathname` are percent encoded so they're decoded for comparison. `%25` should
+                * not be decoded since it may be part of an encoded parameter.
+                *
+                * @param {string}   fragment - URL fragment
+                * @return {string}
+                */
+            }, {
+               key: 'decodeFragment',
+               value: function decodeFragment(fragment) {
+                  return decodeURI(fragment.replace(/%25/g, '%2525'));
+               }
+
+               /**
+                * Get the cross-browser normalized URL fragment from the path or hash.
+                *
+                * @param {string} fragment   -- URL fragment
+                * @returns {*|void|string|XML}
+                */
+            }, {
+               key: 'getFragment',
+               value: function getFragment(fragment) {
+                  if (_.isUndefined(fragment) || fragment === null) {
+                     if (this._usePushState || !this._wantsHashChange) {
+                        fragment = this.getPath();
+                     } else {
+                        fragment = this.getHash();
+                     }
+                  }
+                  return fragment.replace(s_ROUTE_STRIPPER, '');
+               }
+
+               /**
+                * Gets the true hash value. Cannot use location.hash directly due to bug in Firefox where location.hash will
+                * always be decoded.
+                *
+                * @param {object}   window   - Browser `window`
+                * @returns {*}
+                */
+            }, {
+               key: 'getHash',
+               value: function getHash(window) {
+                  var match = (window || this).location.href.match(/#(.*)$/);
+                  return match ? match[1] : '';
+               }
+
+               /**
+                * Get the pathname and search params, without the root.
+                *
+                * @returns {*}
+                */
+            }, {
+               key: 'getPath',
+               value: function getPath() {
+                  var path = this.decodeFragment(this.location.pathname + this.getSearch()).slice(this.root.length - 1);
+                  return path.charAt(0) === '/' ? path.slice(1) : path;
+               }
+
+               /**
+                * In IE6, the hash fragment and search params are incorrect if the fragment contains `?`.
+                *
+                * @returns {string}
+                */
+            }, {
+               key: 'getSearch',
+               value: function getSearch() {
+                  var match = this.location.href.replace(/#.*/, '').match(/\?.+/);
+                  return match ? match[0] : '';
+               }
+
+               /**
+                * Attempt to load the current URL fragment. If a route succeeds with a match, returns `true`. If no defined routes
+                * matches the fragment, returns `false`.
+                *
+                * @param {string}   fragment - URL fragment
+                * @returns {boolean}
+                */
+            }, {
+               key: 'loadUrl',
+               value: function loadUrl(fragment) {
+                  // If the root doesn't match, no routes can match either.
+                  if (!this.matchRoot()) {
+                     return false;
+                  }
+                  fragment = this.fragment = this.getFragment(fragment);
+                  return _.some(this.handlers, function (handler) {
+                     if (handler.route.test(fragment)) {
+                        handler.callback(fragment);
+                        return true;
+                     }
+                  });
+               }
+
+               /**
+                * Does the pathname match the root?
+                *
+                * @returns {boolean}
+                */
+            }, {
+               key: 'matchRoot',
+               value: function matchRoot() {
+                  var path = this.decodeFragment(this.location.pathname);
+                  var root = path.slice(0, this.root.length - 1) + '/';
+                  return root === this.root;
+               }
+
+               /**
+                * Save a fragment into the hash history, or replace the URL state if the 'replace' option is passed. You are
+                * responsible for properly URL-encoding the fragment in advance.
+                *
+                * The options object can contain `trigger: true` if you wish to have the route callback be fired (not usually
+                * desirable), or `replace: true`, if you wish to modify the current URL without adding an entry to the history.
+                *
+                * @param {string}   fragment - String representing an URL fragment.
+                * @param {object}   options - Optional hash containing parameters for navigate.
+                * @returns {*}
+                */
+            }, {
+               key: 'navigate',
+               value: function navigate(fragment, options) {
+                  if (!History.started) {
+                     return false;
+                  }
+                  if (!options || options === true) {
+                     options = { trigger: !!options };
+                  }
+
+                  // Normalize the fragment.
+                  fragment = this.getFragment(fragment || '');
+
+                  // Don't include a trailing slash on the root.
+                  var root = this.root;
+
+                  if (fragment === '' || fragment.charAt(0) === '?') {
+                     root = root.slice(0, -1) || '/';
+                  }
+
+                  var url = root + fragment;
+
+                  // Strip the hash and decode for matching.
+                  fragment = this.decodeFragment(fragment.replace(s_PATH_STRIPPER, ''));
+
+                  if (this.fragment === fragment) {
+                     return;
+                  }
+
+                  /**
+                   * URL fragment
+                   * @type {*|void|string|XML}
+                   */
+                  this.fragment = fragment;
+
+                  // If pushState is available, we use it to set the fragment as a real URL.
+                  if (this._usePushState) {
+                     this.history[options.replace ? 'replaceState' : 'pushState']({}, document.title, url);
+
+                     // If hash changes haven't been explicitly disabled, update the hash fragment to store history.
+                  } else if (this._wantsHashChange) {
+                        s_UPDATE_HASH(this.location, fragment, options.replace);
+
+                        if (this.iframe && fragment !== this.getHash(this.iframe.contentWindow)) {
+                           var iWindow = this.iframe.contentWindow;
+
+                           // Opening and closing the iframe tricks IE7 and earlier to push a history
+                           // entry on hash-tag change.  When replace is true, we don't want this.
+                           if (!options.replace) {
+                              iWindow.document.open();
+                              iWindow.document.close();
+                           }
+
+                           s_UPDATE_HASH(iWindow.location, fragment, options.replace);
+                        }
+
+                        // If you've told us that you explicitly don't want fallback hashchange-
+                        // based history, then `navigate` becomes a page refresh.
+                     } else {
+                           return this.location.assign(url);
+                        }
+
+                  if (options.trigger) {
+                     return this.loadUrl(fragment);
+                  }
+               }
+
+               /**
+                * When all of your Routers have been created, and all of the routes are set up properly, call
+                * Backbone.history.start() to begin monitoring hashchange events, and dispatching routes. Subsequent calls to
+                * Backbone.history.start() will throw an error, and Backbone.History.started is a boolean value indicating whether
+                * it has already been called.
+                *
+                * To indicate that you'd like to use HTML5 pushState support in your application, use
+                * Backbone.history.start({pushState: true}). If you'd like to use pushState, but have browsers that don't support
+                * it natively use full page refreshes instead, you can add {hashChange: false} to the options.
+                *
+                * If your application is not being served from the root url / of your domain, be sure to tell History where the
+                * root really is, as an option: Backbone.history.start({pushState: true, root: "/public/search/"})
+                *
+                * When called, if a route succeeds with a match for the current URL, Backbone.history.start() returns true. If no
+                * defined route matches the current URL, it returns false.
+                *
+                * If the server has already rendered the entire page, and you don't want the initial route to trigger when starting
+                * History, pass silent: true.
+                *
+                * Because hash-based history in Internet Explorer relies on an <iframe>, be sure to call start() only after the DOM
+                * is ready.
+                *
+                * @example
+                * import WorkspaceRouter from 'WorkspaceRouter.js';
+                * import HelpPaneRouter  from 'HelpPaneRouter.js';
+                *
+                * new WorkspaceRouter();
+                * new HelpPaneRouter();
+                * Backbone.history.start({pushState: true});
+                *
+                * @param {object}   options  - Optional parameters
+                * @returns {*}
+                */
+            }, {
+               key: 'start',
+               value: function start(options) {
+                  if (History.started) {
+                     throw new Error('Backbone.history has already been started');
+                  }
+
+                  History.started = true;
+
+                  /**
+                   * Figure out the initial configuration. Do we need an iframe?
+                   * @type {Object}
+                   */
+                  this.options = _.extend({ root: '/' }, this.options, options);
+
+                  /**
+                   * URL root
+                   * @type {string}
+                   */
+                  this.root = this.options.root;
+
+                  this._wantsHashChange = this.options.hashChange !== false;
+                  this._hasHashChange = 'onhashchange' in window && (document.documentMode === void 0 || document.documentMode > 7);
+                  this._useHashChange = this._wantsHashChange && this._hasHashChange;
+
+                  // Is pushState desired ... is it available?
+                  this._wantsPushState = !!this.options.pushState;
+                  this._hasPushState = !!(this.history && this.history.pushState);
+                  this._usePushState = this._wantsPushState && this._hasPushState;
+
+                  this.fragment = this.getFragment();
+
+                  // Normalize root to always include a leading and trailing slash.
+                  this.root = ('/' + this.root + '/').replace(s_ROOT_STRIPPER, '/');
+
+                  // Transition from hashChange to pushState or vice versa if both are requested.
+                  if (this._wantsHashChange && this._wantsPushState) {
+
+                     // If we've started off with a route from a `pushState`-enabled
+                     // browser, but we're currently in a browser that doesn't support it...
+                     if (!this._hasPushState && !this.atRoot()) {
+                        var root = this.root.slice(0, -1) || '/';
+                        this.location.replace(root + '#' + this.getPath());
+
+                        // Return immediately as browser will do redirect to new url
+                        return true;
+
+                        // Or if we've started out with a hash-based route, but we're currently
+                        // in a browser where it could be `pushState`-based instead...
+                     } else if (this._hasPushState && this.atRoot()) {
+                           this.navigate(this.getHash(), { replace: true });
+                        }
+                  }
+
+                  // Proxy an iframe to handle location events if the browser doesn't support the `hashchange` event, HTML5
+                  // history, or the user wants `hashChange` but not `pushState`.
+                  if (!this._hasHashChange && this._wantsHashChange && !this._usePushState) {
+                     /**
+                      * Proxy iframe
+                      * @type {Element}
+                      */
+                     this.iframe = document.createElement('iframe');
+                     this.iframe.src = 'javascript:0';
+                     this.iframe.style.display = 'none';
+                     this.iframe.tabIndex = -1;
+
+                     var body = document.body;
+
+                     // Using `appendChild` will throw on IE < 9 if the document is not ready.
+                     var iWindow = body.insertBefore(this.iframe, body.firstChild).contentWindow;
+                     iWindow.document.open();
+                     iWindow.document.close();
+                     iWindow.location.hash = '#' + this.fragment;
+                  }
+
+                  // Add a cross-platform `addEventListener` shim for older browsers.
+                  var addEventListener = window.addEventListener || function (eventName, listener) {
+                     /* eslint-disable no-undef */
+                     return attachEvent('on' + eventName, listener);
+                     /* eslint-enable no-undef */
+                  };
+
+                  // Depending on whether we're using pushState or hashes, and whether
+                  // 'onhashchange' is supported, determine how we check the URL state.
+                  if (this._usePushState) {
+                     addEventListener('popstate', this.checkUrl, false);
+                  } else if (this._useHashChange && !this.iframe) {
+                     addEventListener('hashchange', this.checkUrl, false);
+                  } else if (this._wantsHashChange) {
+                     this._checkUrlInterval = setInterval(this.checkUrl, this.interval);
+                  }
+
+                  if (!this.options.silent) {
+                     return this.loadUrl();
+                  }
+               }
+
+               /**
+                * Disable Backbone.history, perhaps temporarily. Not useful in a real app, but possibly useful for unit
+                * testing Routers.
+                */
+            }, {
+               key: 'stop',
+               value: function stop() {
+                  // Add a cross-platform `removeEventListener` shim for older browsers.
+                  var removeEventListener = window.removeEventListener || function (eventName, listener) {
+                     /* eslint-disable no-undef */
+                     return detachEvent('on' + eventName, listener);
+                     /* eslint-enable no-undef */
+                  };
+
+                  // Remove window listeners.
+                  if (this._usePushState) {
+                     removeEventListener('popstate', this.checkUrl, false);
+                  } else if (this._useHashChange && !this.iframe) {
+                     removeEventListener('hashchange', this.checkUrl, false);
+                  }
+
+                  // Clean up the iframe if necessary.
+                  if (this.iframe) {
+                     document.body.removeChild(this.iframe);
+                     this.iframe = null;
+                  }
+
+                  // Some environments will throw when clearing an undefined interval.
+                  if (this._checkUrlInterval) {
+                     clearInterval(this._checkUrlInterval);
+                  }
+                  History.started = false;
+               }
+
+               /**
+                * Add a route to be tested when the fragment changes. Routes added later may override previous routes.
+                *
+                * @param {string}   route    -  Route to add for checking.
+                * @param {function} callback -  Callback function to invoke on match.
+                */
+            }, {
+               key: 'route',
+               value: function route(_route, callback) {
+                  this.handlers.unshift({ route: _route, callback: callback });
+               }
+            }]);
+
+            return History;
+         })(Events);
+
+         _export('default', History);
       }
-      return function entries() {
-        return new Constructor(this, kind);
-      };
-    };
-    var TAG = NAME + ' Iterator',
-        proto = Base.prototype,
-        _native = proto[SYMBOL_ITERATOR] || proto[FF_ITERATOR] || DEFAULT && proto[DEFAULT],
-        _default = _native || createMethod(DEFAULT),
-        methods,
-        key;
-    if (_native) {
-      var IteratorPrototype = req('7').getProto(_default.call(new Base));
-      req('30')(IteratorPrototype, TAG, true);
-      if (!LIBRARY && has(proto, FF_ITERATOR))
-        hide(IteratorPrototype, SYMBOL_ITERATOR, returnThis);
-    }
-    if (!LIBRARY || FORCE)
-      hide(proto, SYMBOL_ITERATOR, _default);
-    Iterators[NAME] = _default;
-    Iterators[TAG] = returnThis;
-    if (DEFAULT) {
-      methods = {
-        values: DEFAULT == VALUES ? _default : createMethod(VALUES),
-        keys: IS_SET ? _default : createMethod(KEYS),
-        entries: DEFAULT != VALUES ? _default : createMethod('entries')
-      };
-      if (FORCE)
-        for (key in methods) {
-          if (!(key in proto))
-            $redef(proto, key, methods[key]);
-        }
-      else
-        $def($def.P + $def.F * BUGGY, NAME, methods);
-    }
-  };
-  global.define = __define;
-  return module.exports;
+   };
 });
 
-$__System.registerDynamic("33", ["25", "32"], true, function(req, exports, module) {
+$__System.register('10', ['b', 'c'], function (_export) {
+   var _createClass, _classCallCheck, s_DEBUG_LOG, s_DEBUG_TRACE, Debug;
+
+   return {
+      setters: [function (_b) {
+         _createClass = _b['default'];
+      }, function (_c) {
+         _classCallCheck = _c['default'];
+      }],
+      execute: function () {
+         'use strict';
+
+         s_DEBUG_LOG = false;
+         s_DEBUG_TRACE = false;
+
+         /* eslint-disable no-console */
+
+         /**
+          * Debug.js - Provides basic logging functionality that can be turned on via setting s_DEBUG_LOG = true;
+          *
+          * This is temporary until stability is fully tested.
+          */
+
+         Debug = (function () {
+            function Debug() {
+               _classCallCheck(this, Debug);
+            }
+
+            _createClass(Debug, null, [{
+               key: 'log',
+
+               /**
+                * Posts a log message to console.
+                *
+                * @param {string}   message  - A message to log
+                * @param {boolean}  trace    - A boolean indicating whether to also log `console.trace()`
+                */
+               value: function log(message) {
+                  var trace = arguments.length <= 1 || arguments[1] === undefined ? s_DEBUG_TRACE : arguments[1];
+
+                  if (s_DEBUG_LOG) {
+                     console.log(message);
+                  }
+
+                  if (s_DEBUG_LOG && trace) {
+                     console.trace();
+                  }
+               }
+            }]);
+
+            return Debug;
+         })();
+
+         _export('default', Debug);
+      }
+   };
+});
+
+$__System.registerDynamic("11", ["12"], true, function(req, exports, module) {
   ;
   var global = this,
       __define = global.define;
   global.define = undefined;
-  'use strict';
-  var $at = req('25')(true);
-  req('32')(String, 'String', function(iterated) {
-    this._t = String(iterated);
-    this._i = 0;
-  }, function() {
-    var O = this._t,
-        index = this._i,
-        point;
-    if (index >= O.length)
-      return {
-        value: undefined,
-        done: true
-      };
-    point = $at(O, index);
-    this._i += point.length;
-    return {
-      value: point,
-      done: false
-    };
-  });
-  global.define = __define;
-  return module.exports;
-});
-
-$__System.registerDynamic("34", ["a"], true, function(req, exports, module) {
-  ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
-  var defined = req('a');
-  module.exports = function(it) {
-    return Object(defined(it));
-  };
-  global.define = __define;
-  return module.exports;
-});
-
-$__System.registerDynamic("35", ["18"], true, function(req, exports, module) {
-  ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
-  var anObject = req('18');
-  module.exports = function(iterator, fn, value, entries) {
-    try {
-      return entries ? fn(anObject(value)[0], value[1]) : fn(value);
-    } catch (e) {
-      var ret = iterator['return'];
-      if (ret !== undefined)
-        anObject(ret.call(iterator));
-      throw e;
-    }
-  };
-  global.define = __define;
-  return module.exports;
-});
-
-$__System.registerDynamic("36", ["2f", "2e"], true, function(req, exports, module) {
-  ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
-  var Iterators = req('2f'),
-      ITERATOR = req('2e')('iterator');
-  module.exports = function(it) {
-    return (Iterators.Array || Array.prototype[ITERATOR]) === it;
-  };
-  global.define = __define;
-  return module.exports;
-});
-
-$__System.registerDynamic("37", ["24"], true, function(req, exports, module) {
-  ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
-  var toInteger = req('24'),
-      min = Math.min;
-  module.exports = function(it) {
-    return it > 0 ? min(toInteger(it), 0x1fffffffffffff) : 0;
-  };
-  global.define = __define;
-  return module.exports;
-});
-
-$__System.registerDynamic("38", ["8", "2e"], true, function(req, exports, module) {
-  ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
-  var cof = req('8'),
-      TAG = req('2e')('toStringTag'),
-      ARG = cof(function() {
-        return arguments;
-      }()) == 'Arguments';
-  module.exports = function(it) {
-    var O,
-        T,
-        B;
-    return it === undefined ? 'Undefined' : it === null ? 'Null' : typeof(T = (O = Object(it))[TAG]) == 'string' ? T : ARG ? cof(O) : (B = cof(O)) == 'Object' && typeof O.callee == 'function' ? 'Arguments' : B;
-  };
-  global.define = __define;
-  return module.exports;
-});
-
-$__System.registerDynamic("39", ["38", "2e", "2f", "d"], true, function(req, exports, module) {
-  ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
-  var classof = req('38'),
-      ITERATOR = req('2e')('iterator'),
-      Iterators = req('2f');
-  module.exports = req('d').getIteratorMethod = function(it) {
-    if (it != undefined)
-      return it[ITERATOR] || it['@@iterator'] || Iterators[classof(it)];
-  };
-  global.define = __define;
-  return module.exports;
-});
-
-$__System.registerDynamic("3a", ["2e"], true, function(req, exports, module) {
-  ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
-  var SYMBOL_ITERATOR = req('2e')('iterator'),
+  var SYMBOL_ITERATOR = req('12')('iterator'),
       SAFE_CLOSING = false;
   try {
     var riter = [7][SYMBOL_ITERATOR]();
@@ -2235,20 +2105,117 @@ $__System.registerDynamic("3a", ["2e"], true, function(req, exports, module) {
   return module.exports;
 });
 
-$__System.registerDynamic("3b", ["1a", "e", "34", "35", "36", "37", "39", "3a"], true, function(req, exports, module) {
+$__System.registerDynamic("13", ["14", "12"], true, function(req, exports, module) {
+  ;
+  var global = this,
+      __define = global.define;
+  global.define = undefined;
+  var cof = req('14'),
+      TAG = req('12')('toStringTag'),
+      ARG = cof(function() {
+        return arguments;
+      }()) == 'Arguments';
+  module.exports = function(it) {
+    var O,
+        T,
+        B;
+    return it === undefined ? 'Undefined' : it === null ? 'Null' : typeof(T = (O = Object(it))[TAG]) == 'string' ? T : ARG ? cof(O) : (B = cof(O)) == 'Object' && typeof O.callee == 'function' ? 'Arguments' : B;
+  };
+  global.define = __define;
+  return module.exports;
+});
+
+$__System.registerDynamic("15", ["13", "12", "16", "17"], true, function(req, exports, module) {
+  ;
+  var global = this,
+      __define = global.define;
+  global.define = undefined;
+  var classof = req('13'),
+      ITERATOR = req('12')('iterator'),
+      Iterators = req('16');
+  module.exports = req('17').getIteratorMethod = function(it) {
+    if (it != undefined)
+      return it[ITERATOR] || it['@@iterator'] || Iterators[classof(it)];
+  };
+  global.define = __define;
+  return module.exports;
+});
+
+$__System.registerDynamic("18", ["19"], true, function(req, exports, module) {
+  ;
+  var global = this,
+      __define = global.define;
+  global.define = undefined;
+  var toInteger = req('19'),
+      min = Math.min;
+  module.exports = function(it) {
+    return it > 0 ? min(toInteger(it), 0x1fffffffffffff) : 0;
+  };
+  global.define = __define;
+  return module.exports;
+});
+
+$__System.registerDynamic("1a", ["16", "12"], true, function(req, exports, module) {
+  ;
+  var global = this,
+      __define = global.define;
+  global.define = undefined;
+  var Iterators = req('16'),
+      ITERATOR = req('12')('iterator');
+  module.exports = function(it) {
+    return (Iterators.Array || Array.prototype[ITERATOR]) === it;
+  };
+  global.define = __define;
+  return module.exports;
+});
+
+$__System.registerDynamic("1b", ["1c"], true, function(req, exports, module) {
+  ;
+  var global = this,
+      __define = global.define;
+  global.define = undefined;
+  var anObject = req('1c');
+  module.exports = function(iterator, fn, value, entries) {
+    try {
+      return entries ? fn(anObject(value)[0], value[1]) : fn(value);
+    } catch (e) {
+      var ret = iterator['return'];
+      if (ret !== undefined)
+        anObject(ret.call(iterator));
+      throw e;
+    }
+  };
+  global.define = __define;
+  return module.exports;
+});
+
+$__System.registerDynamic("1d", ["1e"], true, function(req, exports, module) {
+  ;
+  var global = this,
+      __define = global.define;
+  global.define = undefined;
+  var defined = req('1e');
+  module.exports = function(it) {
+    return Object(defined(it));
+  };
+  global.define = __define;
+  return module.exports;
+});
+
+$__System.registerDynamic("1f", ["20", "21", "1d", "1b", "1a", "18", "15", "11"], true, function(req, exports, module) {
   ;
   var global = this,
       __define = global.define;
   global.define = undefined;
   'use strict';
-  var ctx = req('1a'),
-      $def = req('e'),
-      toObject = req('34'),
-      call = req('35'),
-      isArrayIter = req('36'),
-      toLength = req('37'),
-      getIterFn = req('39');
-  $def($def.S + $def.F * !req('3a')(function(iter) {
+  var ctx = req('20'),
+      $def = req('21'),
+      toObject = req('1d'),
+      call = req('1b'),
+      isArrayIter = req('1a'),
+      toLength = req('18'),
+      getIterFn = req('15');
+  $def($def.S + $def.F * !req('11')(function(iter) {
     Array.from(iter);
   }), 'Array', {from: function from(arrayLike) {
       var O = toObject(arrayLike),
@@ -2282,38 +2249,360 @@ $__System.registerDynamic("3b", ["1a", "e", "34", "35", "36", "37", "39", "3a"],
   return module.exports;
 });
 
-$__System.registerDynamic("3c", ["33", "3b", "d"], true, function(req, exports, module) {
+$__System.registerDynamic("22", ["23", "24", "12"], true, function(req, exports, module) {
   ;
   var global = this,
       __define = global.define;
   global.define = undefined;
-  req('33');
-  req('3b');
-  module.exports = req('d').Array.from;
+  var def = req('23').setDesc,
+      has = req('24'),
+      TAG = req('12')('toStringTag');
+  module.exports = function(it, tag, stat) {
+    if (it && !has(it = stat ? it : it.prototype, TAG))
+      def(it, TAG, {
+        configurable: true,
+        value: tag
+      });
+  };
   global.define = __define;
   return module.exports;
 });
 
-$__System.registerDynamic("3d", ["3c"], true, function(req, exports, module) {
+$__System.registerDynamic("25", ["23", "26", "22", "27", "12"], true, function(req, exports, module) {
+  ;
+  var global = this,
+      __define = global.define;
+  global.define = undefined;
+  'use strict';
+  var $ = req('23'),
+      descriptor = req('26'),
+      setTag = req('22'),
+      IteratorPrototype = {};
+  req('27')(IteratorPrototype, req('12')('iterator'), function() {
+    return this;
+  });
+  module.exports = function(Constructor, NAME, next) {
+    Constructor.prototype = $.create(IteratorPrototype, {next: descriptor(1, next)});
+    setTag(Constructor, NAME + ' Iterator');
+  };
+  global.define = __define;
+  return module.exports;
+});
+
+$__System.registerDynamic("16", [], true, function(req, exports, module) {
+  ;
+  var global = this,
+      __define = global.define;
+  global.define = undefined;
+  module.exports = {};
+  global.define = __define;
+  return module.exports;
+});
+
+$__System.registerDynamic("28", [], true, function(req, exports, module) {
+  ;
+  var global = this,
+      __define = global.define;
+  global.define = undefined;
+  var id = 0,
+      px = Math.random();
+  module.exports = function(key) {
+    return 'Symbol('.concat(key === undefined ? '' : key, ')_', (++id + px).toString(36));
+  };
+  global.define = __define;
+  return module.exports;
+});
+
+$__System.registerDynamic("29", ["2a"], true, function(req, exports, module) {
+  ;
+  var global = this,
+      __define = global.define;
+  global.define = undefined;
+  var global = req('2a'),
+      SHARED = '__core-js_shared__',
+      store = global[SHARED] || (global[SHARED] = {});
+  module.exports = function(key) {
+    return store[key] || (store[key] = {});
+  };
+  global.define = __define;
+  return module.exports;
+});
+
+$__System.registerDynamic("12", ["29", "28", "2a"], true, function(req, exports, module) {
+  ;
+  var global = this,
+      __define = global.define;
+  global.define = undefined;
+  var store = req('29')('wks'),
+      uid = req('28'),
+      Symbol = req('2a').Symbol;
+  module.exports = function(name) {
+    return store[name] || (store[name] = Symbol && Symbol[name] || (Symbol || uid)('Symbol.' + name));
+  };
+  global.define = __define;
+  return module.exports;
+});
+
+$__System.registerDynamic("24", [], true, function(req, exports, module) {
+  ;
+  var global = this,
+      __define = global.define;
+  global.define = undefined;
+  var hasOwnProperty = {}.hasOwnProperty;
+  module.exports = function(it, key) {
+    return hasOwnProperty.call(it, key);
+  };
+  global.define = __define;
+  return module.exports;
+});
+
+$__System.registerDynamic("2b", ["2c"], true, function(req, exports, module) {
+  ;
+  var global = this,
+      __define = global.define;
+  global.define = undefined;
+  module.exports = !req('2c')(function() {
+    return Object.defineProperty({}, 'a', {get: function() {
+        return 7;
+      }}).a != 7;
+  });
+  global.define = __define;
+  return module.exports;
+});
+
+$__System.registerDynamic("26", [], true, function(req, exports, module) {
+  ;
+  var global = this,
+      __define = global.define;
+  global.define = undefined;
+  module.exports = function(bitmap, value) {
+    return {
+      enumerable: !(bitmap & 1),
+      configurable: !(bitmap & 2),
+      writable: !(bitmap & 4),
+      value: value
+    };
+  };
+  global.define = __define;
+  return module.exports;
+});
+
+$__System.registerDynamic("27", ["23", "26", "2b"], true, function(req, exports, module) {
+  ;
+  var global = this,
+      __define = global.define;
+  global.define = undefined;
+  var $ = req('23'),
+      createDesc = req('26');
+  module.exports = req('2b') ? function(object, key, value) {
+    return $.setDesc(object, key, createDesc(1, value));
+  } : function(object, key, value) {
+    object[key] = value;
+    return object;
+  };
+  global.define = __define;
+  return module.exports;
+});
+
+$__System.registerDynamic("2d", ["27"], true, function(req, exports, module) {
+  ;
+  var global = this,
+      __define = global.define;
+  global.define = undefined;
+  module.exports = req('27');
+  global.define = __define;
+  return module.exports;
+});
+
+$__System.registerDynamic("2e", [], true, function(req, exports, module) {
+  ;
+  var global = this,
+      __define = global.define;
+  global.define = undefined;
+  module.exports = true;
+  global.define = __define;
+  return module.exports;
+});
+
+$__System.registerDynamic("2f", ["2e", "21", "2d", "27", "24", "12", "16", "25", "22", "23"], true, function(req, exports, module) {
+  ;
+  var global = this,
+      __define = global.define;
+  global.define = undefined;
+  'use strict';
+  var LIBRARY = req('2e'),
+      $def = req('21'),
+      $redef = req('2d'),
+      hide = req('27'),
+      has = req('24'),
+      SYMBOL_ITERATOR = req('12')('iterator'),
+      Iterators = req('16'),
+      $iterCreate = req('25'),
+      setTag = req('22'),
+      getProto = req('23').getProto,
+      BUGGY = !([].keys && 'next' in [].keys()),
+      FF_ITERATOR = '@@iterator',
+      KEYS = 'keys',
+      VALUES = 'values';
+  var returnThis = function() {
+    return this;
+  };
+  module.exports = function(Base, NAME, Constructor, next, DEFAULT, IS_SET, FORCE) {
+    $iterCreate(Constructor, NAME, next);
+    var getMethod = function(kind) {
+      if (!BUGGY && kind in proto)
+        return proto[kind];
+      switch (kind) {
+        case KEYS:
+          return function keys() {
+            return new Constructor(this, kind);
+          };
+        case VALUES:
+          return function values() {
+            return new Constructor(this, kind);
+          };
+      }
+      return function entries() {
+        return new Constructor(this, kind);
+      };
+    };
+    var TAG = NAME + ' Iterator',
+        proto = Base.prototype,
+        _native = proto[SYMBOL_ITERATOR] || proto[FF_ITERATOR] || DEFAULT && proto[DEFAULT],
+        _default = _native || getMethod(DEFAULT),
+        methods,
+        key;
+    if (_native) {
+      var IteratorPrototype = getProto(_default.call(new Base));
+      setTag(IteratorPrototype, TAG, true);
+      if (!LIBRARY && has(proto, FF_ITERATOR))
+        hide(IteratorPrototype, SYMBOL_ITERATOR, returnThis);
+    }
+    if ((!LIBRARY || FORCE) && (BUGGY || !(SYMBOL_ITERATOR in proto))) {
+      hide(proto, SYMBOL_ITERATOR, _default);
+    }
+    Iterators[NAME] = _default;
+    Iterators[TAG] = returnThis;
+    if (DEFAULT) {
+      methods = {
+        values: DEFAULT == VALUES ? _default : getMethod(VALUES),
+        keys: IS_SET ? _default : getMethod(KEYS),
+        entries: DEFAULT != VALUES ? _default : getMethod('entries')
+      };
+      if (FORCE)
+        for (key in methods) {
+          if (!(key in proto))
+            $redef(proto, key, methods[key]);
+        }
+      else
+        $def($def.P + $def.F * BUGGY, NAME, methods);
+    }
+    return methods;
+  };
+  global.define = __define;
+  return module.exports;
+});
+
+$__System.registerDynamic("19", [], true, function(req, exports, module) {
+  ;
+  var global = this,
+      __define = global.define;
+  global.define = undefined;
+  var ceil = Math.ceil,
+      floor = Math.floor;
+  module.exports = function(it) {
+    return isNaN(it = +it) ? 0 : (it > 0 ? floor : ceil)(it);
+  };
+  global.define = __define;
+  return module.exports;
+});
+
+$__System.registerDynamic("30", ["19", "1e"], true, function(req, exports, module) {
+  ;
+  var global = this,
+      __define = global.define;
+  global.define = undefined;
+  var toInteger = req('19'),
+      defined = req('1e');
+  module.exports = function(TO_STRING) {
+    return function(that, pos) {
+      var s = String(defined(that)),
+          i = toInteger(pos),
+          l = s.length,
+          a,
+          b;
+      if (i < 0 || i >= l)
+        return TO_STRING ? '' : undefined;
+      a = s.charCodeAt(i);
+      return a < 0xd800 || a > 0xdbff || i + 1 === l || (b = s.charCodeAt(i + 1)) < 0xdc00 || b > 0xdfff ? TO_STRING ? s.charAt(i) : a : TO_STRING ? s.slice(i, i + 2) : (a - 0xd800 << 10) + (b - 0xdc00) + 0x10000;
+    };
+  };
+  global.define = __define;
+  return module.exports;
+});
+
+$__System.registerDynamic("31", ["30", "2f"], true, function(req, exports, module) {
+  ;
+  var global = this,
+      __define = global.define;
+  global.define = undefined;
+  'use strict';
+  var $at = req('30')(true);
+  req('2f')(String, 'String', function(iterated) {
+    this._t = String(iterated);
+    this._i = 0;
+  }, function() {
+    var O = this._t,
+        index = this._i,
+        point;
+    if (index >= O.length)
+      return {
+        value: undefined,
+        done: true
+      };
+    point = $at(O, index);
+    this._i += point.length;
+    return {
+      value: point,
+      done: false
+    };
+  });
+  global.define = __define;
+  return module.exports;
+});
+
+$__System.registerDynamic("32", ["31", "1f", "17"], true, function(req, exports, module) {
+  ;
+  var global = this,
+      __define = global.define;
+  global.define = undefined;
+  req('31');
+  req('1f');
+  module.exports = req('17').Array.from;
+  global.define = __define;
+  return module.exports;
+});
+
+$__System.registerDynamic("33", ["32"], true, function(req, exports, module) {
   ;
   var global = this,
       __define = global.define;
   global.define = undefined;
   module.exports = {
-    "default": req('3c'),
+    "default": req('32'),
     __esModule: true
   };
   global.define = __define;
   return module.exports;
 });
 
-$__System.registerDynamic("3e", ["3d"], true, function(req, exports, module) {
+$__System.registerDynamic("e", ["33"], true, function(req, exports, module) {
   ;
   var global = this,
       __define = global.define;
   global.define = undefined;
   "use strict";
-  var _Array$from = req('3d')["default"];
+  var _Array$from = req('33')["default"];
   exports["default"] = function(arr) {
     if (Array.isArray(arr)) {
       for (var i = 0,
@@ -2329,18 +2618,18 @@ $__System.registerDynamic("3e", ["3d"], true, function(req, exports, module) {
   return module.exports;
 });
 
-$__System.register('3f', ['2', '3', '6', '22', '3e'], function (_export) {
-   var _classCallCheck, BackboneProxy, _, _createClass, _toConsumableArray, s_ADD_METHOD, s_CB, s_MODEL_MATCHER, Utils;
+$__System.register('5', ['3', '4', 'b', 'c', 'e'], function (_export) {
+   var _, BackboneProxy, _createClass, _classCallCheck, _toConsumableArray, s_ADD_METHOD, s_CB, s_MODEL_MATCHER, Utils;
 
    return {
-      setters: [function (_3) {
-         _classCallCheck = _3['default'];
-      }, function (_5) {
-         BackboneProxy = _5['default'];
-      }, function (_4) {
-         _ = _4['default'];
-      }, function (_2) {
-         _createClass = _2['default'];
+      setters: [function (_2) {
+         _ = _2['default'];
+      }, function (_3) {
+         BackboneProxy = _3['default'];
+      }, function (_b) {
+         _createClass = _b['default'];
+      }, function (_c) {
+         _classCallCheck = _c['default'];
       }, function (_e) {
          _toConsumableArray = _e['default'];
       }],
@@ -2519,26 +2808,26 @@ $__System.register('3f', ['2', '3', '6', '22', '3e'], function (_export) {
    };
 });
 
-$__System.register('40', ['2', '3', '6', '14', '22', '23', '1f', '3f'], function (_export) {
-   var _classCallCheck, BackboneProxy, _, _get, _createClass, Events, _inherits, Utils, Model, modelMethods;
+$__System.register('34', ['3', '4', '5', '8', '9', 'a', 'b', 'c'], function (_export) {
+   var _, BackboneProxy, Utils, Events, _get, _inherits, _createClass, _classCallCheck, Model, modelMethods;
 
    return {
-      setters: [function (_4) {
-         _classCallCheck = _4['default'];
+      setters: [function (_3) {
+         _ = _3['default'];
+      }, function (_4) {
+         BackboneProxy = _4['default'];
       }, function (_6) {
-         BackboneProxy = _6['default'];
+         Utils = _6['default'];
       }, function (_5) {
-         _ = _5['default'];
+         Events = _5['default'];
       }, function (_2) {
          _get = _2['default'];
-      }, function (_3) {
-         _createClass = _3['default'];
-      }, function (_7) {
-         Events = _7['default'];
-      }, function (_f) {
-         _inherits = _f['default'];
-      }, function (_f2) {
-         Utils = _f2['default'];
+      }, function (_a) {
+         _inherits = _a['default'];
+      }, function (_b) {
+         _createClass = _b['default'];
+      }, function (_c) {
+         _classCallCheck = _c['default'];
       }],
       execute: function () {
 
@@ -3527,88 +3816,1167 @@ $__System.register('40', ['2', '3', '6', '14', '22', '23', '1f', '3f'], function
    };
 });
 
-$__System.register('41', ['2', '22'], function (_export) {
-   var _classCallCheck, _createClass, s_DEBUG_LOG, s_DEBUG_TRACE, Debug;
+$__System.register('8', ['3', 'b', 'c'], function (_export) {
+   var _, _createClass, _classCallCheck, s_EVENT_SPLITTER, s_EVENTS_API, s_INTERNAL_ON, s_OFF_API, s_ON_API, s_ONCE_MAP, s_TRIGGER_API, s_TRIGGER_EVENTS, Events;
 
    return {
       setters: [function (_2) {
-         _classCallCheck = _2['default'];
-      }, function (_) {
-         _createClass = _['default'];
+         _ = _2['default'];
+      }, function (_b) {
+         _createClass = _b['default'];
+      }, function (_c) {
+         _classCallCheck = _c['default'];
       }],
       execute: function () {
-         'use strict';
 
-         s_DEBUG_LOG = false;
-         s_DEBUG_TRACE = false;
-
-         /* eslint-disable no-console */
+         // Private / internal methods ---------------------------------------------------------------------------------------
 
          /**
-          * Debug.js - Provides basic logging functionality that can be turned on via setting s_DEBUG_LOG = true;
+          * Regular expression used to split event strings.
+          * @type {RegExp}
+          */
+         'use strict';
+
+         s_EVENT_SPLITTER = /\s+/;
+
+         /**
+          * Iterates over the standard `event, callback` (as well as the fancy multiple space-separated events `"change blur",
+          * callback` and jQuery-style event maps `{event: callback}`).
           *
-          * This is temporary until stability is fully tested.
+          * @param {function} iteratee    - Event operation to invoke.
+          * @param {Object.<{callback: function, context: object, ctx: object, listening:{}}>} events - Events object
+          * @param {string|object} name   - A single event name, compound event names, or a hash of event names.
+          * @param {function} callback    - Event callback function
+          * @param {object}   opts        - Optional parameters
+          * @returns {*}
           */
 
-         Debug = (function () {
-            function Debug() {
-               _classCallCheck(this, Debug);
+         s_EVENTS_API = function s_EVENTS_API(iteratee, events, name, callback, opts) {
+            var i = 0,
+                names = undefined;
+            if (name && typeof name === 'object') {
+               // Handle event maps.
+               if (callback !== void 0 && 'context' in opts && opts.context === void 0) {
+                  opts.context = callback;
+               }
+               for (names = _.keys(name); i < names.length; i++) {
+                  events = s_EVENTS_API(iteratee, events, names[i], name[names[i]], opts);
+               }
+            } else if (name && s_EVENT_SPLITTER.test(name)) {
+               // Handle space separated event names by delegating them individually.
+               for (names = name.split(s_EVENT_SPLITTER); i < names.length; i++) {
+                  events = iteratee(events, names[i], callback, opts);
+               }
+            } else {
+               // Finally, standard events.
+               events = iteratee(events, name, callback, opts);
+            }
+            return events;
+         };
+
+         /**
+          * Guard the `listening` argument from the public API.
+          * 
+          * @param {Events}   obj      - The Events instance
+          * @param {string}   name     - Event name
+          * @param {function} callback - Event callback
+          * @param {object}   context  - Event context
+          * @param {Object.<{obj: object, objId: string, id: string, listeningTo: object, count: number}>} listening -
+          *                              Listening object
+          * @returns {*}
+          */
+
+         s_INTERNAL_ON = function s_INTERNAL_ON(obj, name, callback, context, listening) {
+            obj._events = s_EVENTS_API(s_ON_API, obj._events || {}, name, callback, { context: context, ctx: obj, listening: listening });
+
+            if (listening) {
+               var listeners = obj._listeners || (obj._listeners = {});
+               listeners[listening.id] = listening;
             }
 
-            _createClass(Debug, null, [{
-               key: 'log',
+            return obj;
+         };
+
+         /**
+          * The reducing API that removes a callback from the `events` object.
+          *
+          * @param {Object.<{callback: function, context: object, ctx: object, listening:{}}>} events - Events object
+          * @param {string}   name     - Event name
+          * @param {function} callback - Event callback
+          * @param {object}   options  - Optional parameters
+          * @returns {*}
+          */
+
+         s_OFF_API = function s_OFF_API(events, name, callback, options) {
+            if (!events) {
+               return;
+            }
+
+            var i = 0,
+                listening = undefined;
+            var context = options.context,
+                listeners = options.listeners;
+
+            // Delete all events listeners and "drop" events.
+            if (!name && !callback && !context) {
+               var ids = _.keys(listeners);
+               for (; i < ids.length; i++) {
+                  listening = listeners[ids[i]];
+                  delete listeners[listening.id];
+                  delete listening.listeningTo[listening.objId];
+               }
+               return;
+            }
+
+            var names = name ? [name] : _.keys(events);
+            for (; i < names.length; i++) {
+               name = names[i];
+               var handlers = events[name];
+
+               // Bail out if there are no events stored.
+               if (!handlers) {
+                  break;
+               }
+
+               // Replace events if there are any remaining.  Otherwise, clean up.
+               var remaining = [];
+               for (var j = 0; j < handlers.length; j++) {
+                  var handler = handlers[j];
+                  if (callback && callback !== handler.callback && callback !== handler.callback._callback || context && context !== handler.context) {
+                     remaining.push(handler);
+                  } else {
+                     listening = handler.listening;
+                     if (listening && --listening.count === 0) {
+                        delete listeners[listening.id];
+                        delete listening.listeningTo[listening.objId];
+                     }
+                  }
+               }
+
+               // Update tail event if the list has any events.  Otherwise, clean up.
+               if (remaining.length) {
+                  events[name] = remaining;
+               } else {
+                  delete events[name];
+               }
+            }
+            if (_.size(events)) {
+               return events;
+            }
+         };
+
+         /**
+          * The reducing API that adds a callback to the `events` object.
+          *
+          * @param {Object.<{callback: function, context: object, ctx: object, listening:{}}>} events - Events object
+          * @param {string}   name     - Event name
+          * @param {function} callback - Event callback
+          * @param {object}   options  - Optional parameters
+          * @returns {*}
+          */
+
+         s_ON_API = function s_ON_API(events, name, callback, options) {
+            if (callback) {
+               var handlers = events[name] || (events[name] = []);
+               var context = options.context,
+                   ctx = options.ctx,
+                   listening = options.listening;
+
+               if (listening) {
+                  listening.count++;
+               }
+
+               handlers.push({ callback: callback, context: context, ctx: context || ctx, listening: listening });
+            }
+            return events;
+         };
+
+         /**
+          * Reduces the event callbacks into a map of `{event: onceWrapper}`. `offer` unbinds the `onceWrapper` after
+          * it has been called.
+          *
+          * @param {Object.<{callback: function, context: object, ctx: object, listening:{}}>} map - Events object
+          * @param {string}   name     - Event name
+          * @param {function} callback - Event callback
+          * @param {function} offer    - Function to invoke after event has been triggered once; `off()`
+          * @returns {*}
+          */
+
+         s_ONCE_MAP = function s_ONCE_MAP(map, name, callback, offer) {
+            if (callback) {
+               (function () {
+                  var once = map[name] = _.once(function () {
+                     offer(name, once);
+                     callback.apply(this, arguments);
+                  });
+                  once._callback = callback;
+               })();
+            }
+            return map;
+         };
+
+         /**
+          * Handles triggering the appropriate event callbacks.
+          * 
+          * @param {Object.<{callback: function, context: object, ctx: object, listening:{}}>} objEvents - Events object
+          * @param {string}   name  - Event name
+          * @param {function} cb    - Event callback
+          * @param {Array<*>} args  - Event arguments
+          * @returns {*}
+          */
+
+         s_TRIGGER_API = function s_TRIGGER_API(objEvents, name, cb, args) {
+            if (objEvents) {
+               var events = objEvents[name];
+               var allEvents = objEvents.all;
+               if (events && allEvents) {
+                  allEvents = allEvents.slice();
+               }
+               if (events) {
+                  s_TRIGGER_EVENTS(events, args);
+               }
+               if (allEvents) {
+                  s_TRIGGER_EVENTS(allEvents, [name].concat(args));
+               }
+            }
+            return objEvents;
+         };
+
+         /**
+          * A difficult-to-believe, but optimized internal dispatch function for triggering events. Tries to keep the usual
+          * cases speedy (most internal Backbone events have 3 arguments).
+          *
+          * @param {Object.<{callback: function, context: object, ctx: object, listening:{}}>}  events - events array
+          * @param {Array<*>} args - event argument array
+          */
+
+         s_TRIGGER_EVENTS = function s_TRIGGER_EVENTS(events, args) {
+            var ev = undefined,
+                i = -1;
+            var a1 = args[0],
+                a2 = args[1],
+                a3 = args[2],
+                l = events.length;
+
+            switch (args.length) {
+               case 0:
+                  while (++i < l) {
+                     (ev = events[i]).callback.call(ev.ctx);
+                  }
+                  return;
+               case 1:
+                  while (++i < l) {
+                     (ev = events[i]).callback.call(ev.ctx, a1);
+                  }
+                  return;
+               case 2:
+                  while (++i < l) {
+                     (ev = events[i]).callback.call(ev.ctx, a1, a2);
+                  }
+                  return;
+               case 3:
+                  while (++i < l) {
+                     (ev = events[i]).callback.call(ev.ctx, a1, a2, a3);
+                  }
+                  return;
+               default:
+                  while (++i < l) {
+                     (ev = events[i]).callback.apply(ev.ctx, args);
+                  }
+                  return;
+            }
+         };
+
+         /**
+          * Backbone.Events - Provides the ability to bind and trigger custom named events. (http://backbonejs.org/#Events)
+          * ---------------
+          *
+          * An important consideration of Backbone-ES6 is that Events are no longer an object literal, but a full blown ES6
+          * class. This is the biggest potential breaking change for Backbone-ES6 when compared to the original Backbone.
+          *
+          * Previously Events could be mixed in to any object. This is no longer possible with Backbone-ES6 when working from
+          * source or the bundled versions. It should be noted that Events is also no longer mixed into Backbone itself, so
+          * Backbone is not a Global events instance.
+          *
+          * Catalog of Events:
+          * Here's the complete list of built-in Backbone events, with arguments. You're also free to trigger your own events on
+          * Models, Collections and Views as you see fit.
+          *
+          * "add" (model, collection, options) — when a model is added to a collection.
+          * "remove" (model, collection, options) — when a model is removed from a collection.
+          * "update" (collection, options) — single event triggered after any number of models have been added or removed from a
+          * collection.
+          * "reset" (collection, options) — when the collection's entire contents have been replaced.
+          * "sort" (collection, options) — when the collection has been re-sorted.
+          * "change" (model, options) — when a model's attributes have changed.
+          * "change:[attribute]" (model, value, options) — when a specific attribute has been updated.
+          * "destroy" (model, collection, options) — when a model is destroyed.
+          * "request" (model_or_collection, xhr, options) — when a model or collection has started a request to the server.
+          * "sync" (model_or_collection, resp, options) — when a model or collection has been successfully synced with the
+          * server.
+          * "error" (model_or_collection, resp, options) — when a model's or collection's request to the server has failed.
+          * "invalid" (model, error, options) — when a model's validation fails on the client.
+          * "route:[name]" (params) — Fired by the router when a specific route is matched.
+          * "route" (route, params) — Fired by the router when any route has been matched.
+          * "route" (router, route, params) — Fired by history when any route has been matched.
+          * "all" — this special event fires for any triggered event, passing the event name as the first argument.
+          *
+          * Generally speaking, when calling a function that emits an event (model.set, collection.add, and so on...), if you'd
+          * like to prevent the event from being triggered, you may pass {silent: true} as an option. Note that this is rarely,
+          * perhaps even never, a good idea. Passing through a specific flag in the options for your event callback to look at,
+          * and choose to ignore, will usually work out better.
+          *
+          * @example
+          * This no longer works:
+          *
+          * let object = {};
+          * _.extend(object, Backbone.Events);
+          * object.on('expand', function(){ alert('expanded'); });
+          * object.trigger('expand');
+          *
+          * One must now use ES6 extends syntax for Backbone.Events when inheriting events functionality:
+          * import Backbone from 'backbone';
+          *
+          * class MyClass extends Backbone.Events {}
+          *
+          * @example
+          * A nice ES6 pattern for creating a named events instance is the following:
+          *
+          * import Backbone from 'backbone';
+          *
+          * export default new Backbone.Events();
+          *
+          * This module / Events instance can then be imported by full path or if consuming in a modular runtime by creating
+          * a mapped path to it.
+          */
+
+         Events = (function () {
+            /** */
+
+            function Events() {
+               _classCallCheck(this, Events);
+            }
+
+            /**
+             * Delegates to `on`.
+             *
+             * @returns {*}
+             */
+
+            _createClass(Events, [{
+               key: 'bind',
+               value: function bind() {
+                  return this.on.apply(this, arguments);
+               }
 
                /**
-                * Posts a log message to console.
+                * Tell an object to listen to a particular event on an other object. The advantage of using this form, instead of
+                * other.on(event, callback, object), is that listenTo allows the object to keep track of the events, and they can
+                * be removed all at once later on. The callback will always be called with object as context.
                 *
-                * @param {string}   message  - A message to log
-                * @param {boolean}  trace    - A boolean indicating whether to also log `console.trace()`
+                * @example
+                * view.listenTo(model, 'change', view.render);
+                *
+                * @see http://backbonejs.org/#Events-listenTo
+                *
+                * @param {object}   obj      - Event context
+                * @param {string}   name     - Event name(s)
+                * @param {function} callback - Event callback function
+                * @returns {Events}
                 */
-               value: function log(message) {
-                  var trace = arguments.length <= 1 || arguments[1] === undefined ? s_DEBUG_TRACE : arguments[1];
+            }, {
+               key: 'listenTo',
+               value: function listenTo(obj, name, callback) {
+                  if (!obj) {
+                     return this;
+                  }
+                  var id = obj._listenId || (obj._listenId = _.uniqueId('l'));
+                  var listeningTo = this._listeningTo || (this._listeningTo = {});
+                  var listening = listeningTo[id];
 
-                  if (s_DEBUG_LOG) {
-                     console.log(message);
+                  // This object is not listening to any other events on `obj` yet.
+                  // Setup the necessary references to track the listening callbacks.
+                  if (!listening) {
+                     var thisId = this._listenId || (this._listenId = _.uniqueId('l'));
+                     listening = listeningTo[id] = { obj: obj, objId: id, id: thisId, listeningTo: listeningTo, count: 0 };
                   }
 
-                  if (s_DEBUG_LOG && trace) {
-                     console.trace();
+                  // Bind callbacks on obj, and keep track of them on listening.
+                  s_INTERNAL_ON(obj, name, callback, this, listening);
+                  return this;
+               }
+
+               /**
+                * Just like `listenTo`, but causes the bound callback to fire only once before being removed.
+                *
+                * @see http://backbonejs.org/#Events-listenToOnce
+                *
+                * @param {object}   obj      - Event context
+                * @param {string}   name     - Event name(s)
+                * @param {function} callback - Event callback function
+                * @returns {Events}
+                */
+            }, {
+               key: 'listenToOnce',
+               value: function listenToOnce(obj, name, callback) {
+                  // Map the event into a `{event: once}` object.
+                  var events = s_EVENTS_API(s_ONCE_MAP, {}, name, callback, _.bind(this.stopListening, this, obj));
+                  return this.listenTo(obj, events, void 0);
+               }
+
+               /**
+                * Remove a previously-bound callback function from an object. If no context is specified, all of the versions of
+                * the callback with different contexts will be removed. If no callback is specified, all callbacks for the event
+                * will be removed. If no event is specified, callbacks for all events will be removed.
+                *
+                * Note that calling model.off(), for example, will indeed remove all events on the model — including events that
+                * Backbone uses for internal bookkeeping.
+                *
+                * @example
+                * // Removes just the `onChange` callback.
+                * object.off("change", onChange);
+                *
+                * // Removes all "change" callbacks.
+                * object.off("change");
+                *
+                * // Removes the `onChange` callback for all events.
+                * object.off(null, onChange);
+                *
+                * // Removes all callbacks for `context` for all events.
+                * object.off(null, null, context);
+                *
+                * // Removes all callbacks on `object`.
+                * object.off();
+                *
+                * @see http://backbonejs.org/#Events-off
+                *
+                * @param {string}   name     - Event name(s)
+                * @param {function} callback - Event callback function
+                * @param {object}   context  - Event context
+                * @returns {Events}
+                */
+            }, {
+               key: 'off',
+               value: function off(name, callback, context) {
+                  if (!this._events) {
+                     return this;
                   }
+                  this._events = s_EVENTS_API(s_OFF_API, this._events, name, callback, { context: context, listeners: this._listeners });
+                  return this;
+               }
+
+               /**
+                * Bind a callback function to an object. The callback will be invoked whenever the event is fired. If you have a
+                * large number of different events on a page, the convention is to use colons to namespace them: "poll:start", or
+                * "change:selection".
+                *
+                * To supply a context value for this when the callback is invoked, pass the optional last argument:
+                * model.on('change', this.render, this) or model.on({change: this.render}, this).
+                *
+                * @example
+                * The event string may also be a space-delimited list of several events...
+                * book.on("change:title change:author", ...);
+                *
+                * @example
+                * Callbacks bound to the special "all" event will be triggered when any event occurs, and are passed the name of
+                * the event as the first argument. For example, to proxy all events from one object to another:
+                * proxy.on("all", function(eventName) {
+                *    object.trigger(eventName);
+                * });
+                *
+                * @example
+                * All Backbone event methods also support an event map syntax, as an alternative to positional arguments:
+                * book.on({
+                *    "change:author": authorPane.update,
+                *    "change:title change:subtitle": titleView.update,
+                *    "destroy": bookView.remove
+                * });
+                *
+                * @see http://backbonejs.org/#Events-on
+                *
+                * @param {string}   name     - Event name(s)
+                * @param {function} callback - Event callback function
+                * @param {object}   context  - Event context
+                * @returns {*}
+                */
+            }, {
+               key: 'on',
+               value: function on(name, callback, context) {
+                  return s_INTERNAL_ON(this, name, callback, context, void 0);
+               }
+
+               /**
+                * Just like `on`, but causes the bound callback to fire only once before being removed. Handy for saying "the next
+                * time that X happens, do this". When multiple events are passed in using the space separated syntax, the event
+                * will fire once for every event you passed in, not once for a combination of all events
+                *
+                * @see http://backbonejs.org/#Events-once
+                *
+                * @param {string}   name     - Event name(s)
+                * @param {function} callback - Event callback function
+                * @param {object}   context  - Event context
+                * @returns {*}
+                */
+            }, {
+               key: 'once',
+               value: function once(name, callback, context) {
+                  // Map the event into a `{event: once}` object.
+                  var events = s_EVENTS_API(s_ONCE_MAP, {}, name, callback, _.bind(this.off, this));
+                  return this.on(events, void 0, context);
+               }
+
+               /**
+                * Tell an object to stop listening to events. Either call stopListening with no arguments to have the object remove
+                * all of its registered callbacks ... or be more precise by telling it to remove just the events it's listening to
+                * on a specific object, or a specific event, or just a specific callback.
+                *
+                * @example
+                * view.stopListening();
+                *
+                * view.stopListening(model);
+                *
+                * @see http://backbonejs.org/#Events-stopListening
+                *
+                * @param {object}   obj      - Event context
+                * @param {string}   name     - Event name(s)
+                * @param {function} callback - Event callback function
+                * @returns {Events}
+                */
+            }, {
+               key: 'stopListening',
+               value: function stopListening(obj, name, callback) {
+                  var listeningTo = this._listeningTo;
+                  if (!listeningTo) {
+                     return this;
+                  }
+
+                  var ids = obj ? [obj._listenId] : _.keys(listeningTo);
+
+                  for (var i = 0; i < ids.length; i++) {
+                     var listening = listeningTo[ids[i]];
+
+                     // If listening doesn't exist, this object is not currently listening to obj. Break out early.
+                     if (!listening) {
+                        break;
+                     }
+
+                     listening.obj.off(name, callback, this);
+                  }
+                  if (_.isEmpty(listeningTo)) {
+                     this._listeningTo = void 0;
+                  }
+
+                  return this;
+               }
+
+               /**
+                * Trigger callbacks for the given event, or space-delimited list of events. Subsequent arguments to trigger will be
+                * passed along to the event callbacks.
+                *
+                * @see http://backbonejs.org/#Events-trigger
+                *
+                * @param {string}   name  - Event name(s)
+                * @returns {Events}
+                */
+            }, {
+               key: 'trigger',
+               value: function trigger(name) {
+                  if (!this._events) {
+                     return this;
+                  }
+
+                  var length = Math.max(0, arguments.length - 1);
+                  var args = new Array(length);
+
+                  for (var i = 0; i < length; i++) {
+                     args[i] = arguments[i + 1];
+                  }
+
+                  s_EVENTS_API(s_TRIGGER_API, this._events, name, void 0, args);
+
+                  return this;
+               }
+
+               /**
+                * Delegates to `off`.
+                *
+                * @returns {*}
+                */
+            }, {
+               key: 'unbind',
+               value: function unbind() {
+                  return this.off.apply(this, arguments);
                }
             }]);
 
-            return Debug;
+            return Events;
          })();
 
-         _export('default', Debug);
+         _export('default', Events);
       }
    };
 });
 
-$__System.register('42', ['2', '3', '6', '14', '22', '23', '40', '41', '1f', '3f'], function (_export) {
-   var _classCallCheck, BackboneProxy, _, _get, _createClass, Events, Model, Debug, _inherits, Utils, s_ADD_OPTIONS, s_SET_OPTIONS, s_ADD_REFERENCE, s_ON_MODEL_EVENT, s_REMOVE_MODELS, s_REMOVE_REFERENCE, s_SPLICE, Collection, collectionMethods;
+$__System.registerDynamic("35", ["23"], true, function(req, exports, module) {
+  ;
+  var global = this,
+      __define = global.define;
+  global.define = undefined;
+  var $ = req('23');
+  module.exports = function defineProperty(it, key, desc) {
+    return $.setDesc(it, key, desc);
+  };
+  global.define = __define;
+  return module.exports;
+});
+
+$__System.registerDynamic("36", ["35"], true, function(req, exports, module) {
+  ;
+  var global = this,
+      __define = global.define;
+  global.define = undefined;
+  module.exports = {
+    "default": req('35'),
+    __esModule: true
+  };
+  global.define = __define;
+  return module.exports;
+});
+
+$__System.registerDynamic("b", ["36"], true, function(req, exports, module) {
+  ;
+  var global = this,
+      __define = global.define;
+  global.define = undefined;
+  "use strict";
+  var _Object$defineProperty = req('36')["default"];
+  exports["default"] = (function() {
+    function defineProperties(target, props) {
+      for (var i = 0; i < props.length; i++) {
+        var descriptor = props[i];
+        descriptor.enumerable = descriptor.enumerable || false;
+        descriptor.configurable = true;
+        if ("value" in descriptor)
+          descriptor.writable = true;
+        _Object$defineProperty(target, descriptor.key, descriptor);
+      }
+    }
+    return function(Constructor, protoProps, staticProps) {
+      if (protoProps)
+        defineProperties(Constructor.prototype, protoProps);
+      if (staticProps)
+        defineProperties(Constructor, staticProps);
+      return Constructor;
+    };
+  })();
+  exports.__esModule = true;
+  global.define = __define;
+  return module.exports;
+});
+
+$__System.registerDynamic("37", [], true, function(req, exports, module) {
+  ;
+  var global = this,
+      __define = global.define;
+  global.define = undefined;
+  module.exports = function(it) {
+    if (typeof it != 'function')
+      throw TypeError(it + ' is not a function!');
+    return it;
+  };
+  global.define = __define;
+  return module.exports;
+});
+
+$__System.registerDynamic("20", ["37"], true, function(req, exports, module) {
+  ;
+  var global = this,
+      __define = global.define;
+  global.define = undefined;
+  var aFunction = req('37');
+  module.exports = function(fn, that, length) {
+    aFunction(fn);
+    if (that === undefined)
+      return fn;
+    switch (length) {
+      case 1:
+        return function(a) {
+          return fn.call(that, a);
+        };
+      case 2:
+        return function(a, b) {
+          return fn.call(that, a, b);
+        };
+      case 3:
+        return function(a, b, c) {
+          return fn.call(that, a, b, c);
+        };
+    }
+    return function() {
+      return fn.apply(that, arguments);
+    };
+  };
+  global.define = __define;
+  return module.exports;
+});
+
+$__System.registerDynamic("1c", ["38"], true, function(req, exports, module) {
+  ;
+  var global = this,
+      __define = global.define;
+  global.define = undefined;
+  var isObject = req('38');
+  module.exports = function(it) {
+    if (!isObject(it))
+      throw TypeError(it + ' is not an object!');
+    return it;
+  };
+  global.define = __define;
+  return module.exports;
+});
+
+$__System.registerDynamic("38", [], true, function(req, exports, module) {
+  ;
+  var global = this,
+      __define = global.define;
+  global.define = undefined;
+  module.exports = function(it) {
+    return typeof it === 'object' ? it !== null : typeof it === 'function';
+  };
+  global.define = __define;
+  return module.exports;
+});
+
+$__System.registerDynamic("39", ["23", "38", "1c", "20"], true, function(req, exports, module) {
+  ;
+  var global = this,
+      __define = global.define;
+  global.define = undefined;
+  var getDesc = req('23').getDesc,
+      isObject = req('38'),
+      anObject = req('1c');
+  var check = function(O, proto) {
+    anObject(O);
+    if (!isObject(proto) && proto !== null)
+      throw TypeError(proto + ": can't set as prototype!");
+  };
+  module.exports = {
+    set: Object.setPrototypeOf || ('__proto__' in {} ? function(test, buggy, set) {
+      try {
+        set = req('20')(Function.call, getDesc(Object.prototype, '__proto__').set, 2);
+        set(test, []);
+        buggy = !(test instanceof Array);
+      } catch (e) {
+        buggy = true;
+      }
+      return function setPrototypeOf(O, proto) {
+        check(O, proto);
+        if (buggy)
+          O.__proto__ = proto;
+        else
+          set(O, proto);
+        return O;
+      };
+    }({}, false) : undefined),
+    check: check
+  };
+  global.define = __define;
+  return module.exports;
+});
+
+$__System.registerDynamic("3a", ["21", "39"], true, function(req, exports, module) {
+  ;
+  var global = this,
+      __define = global.define;
+  global.define = undefined;
+  var $def = req('21');
+  $def($def.S, 'Object', {setPrototypeOf: req('39').set});
+  global.define = __define;
+  return module.exports;
+});
+
+$__System.registerDynamic("3b", ["3a", "17"], true, function(req, exports, module) {
+  ;
+  var global = this,
+      __define = global.define;
+  global.define = undefined;
+  req('3a');
+  module.exports = req('17').Object.setPrototypeOf;
+  global.define = __define;
+  return module.exports;
+});
+
+$__System.registerDynamic("3c", ["3b"], true, function(req, exports, module) {
+  ;
+  var global = this,
+      __define = global.define;
+  global.define = undefined;
+  module.exports = {
+    "default": req('3b'),
+    __esModule: true
+  };
+  global.define = __define;
+  return module.exports;
+});
+
+$__System.registerDynamic("3d", ["23"], true, function(req, exports, module) {
+  ;
+  var global = this,
+      __define = global.define;
+  global.define = undefined;
+  var $ = req('23');
+  module.exports = function create(P, D) {
+    return $.create(P, D);
+  };
+  global.define = __define;
+  return module.exports;
+});
+
+$__System.registerDynamic("3e", ["3d"], true, function(req, exports, module) {
+  ;
+  var global = this,
+      __define = global.define;
+  global.define = undefined;
+  module.exports = {
+    "default": req('3d'),
+    __esModule: true
+  };
+  global.define = __define;
+  return module.exports;
+});
+
+$__System.registerDynamic("a", ["3e", "3c"], true, function(req, exports, module) {
+  ;
+  var global = this,
+      __define = global.define;
+  global.define = undefined;
+  "use strict";
+  var _Object$create = req('3e')["default"];
+  var _Object$setPrototypeOf = req('3c')["default"];
+  exports["default"] = function(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+      throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+    }
+    subClass.prototype = _Object$create(superClass && superClass.prototype, {constructor: {
+        value: subClass,
+        enumerable: false,
+        writable: true,
+        configurable: true
+      }});
+    if (superClass)
+      _Object$setPrototypeOf ? _Object$setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+  };
+  exports.__esModule = true;
+  global.define = __define;
+  return module.exports;
+});
+
+$__System.registerDynamic("2c", [], true, function(req, exports, module) {
+  ;
+  var global = this,
+      __define = global.define;
+  global.define = undefined;
+  module.exports = function(exec) {
+    try {
+      return !!exec();
+    } catch (e) {
+      return true;
+    }
+  };
+  global.define = __define;
+  return module.exports;
+});
+
+$__System.registerDynamic("17", [], true, function(req, exports, module) {
+  ;
+  var global = this,
+      __define = global.define;
+  global.define = undefined;
+  var core = module.exports = {version: '1.2.4'};
+  if (typeof __e == 'number')
+    __e = core;
+  global.define = __define;
+  return module.exports;
+});
+
+$__System.registerDynamic("2a", [], true, function(req, exports, module) {
+  ;
+  var global = this,
+      __define = global.define;
+  global.define = undefined;
+  var global = module.exports = typeof window != 'undefined' && window.Math == Math ? window : typeof self != 'undefined' && self.Math == Math ? self : Function('return this')();
+  if (typeof __g == 'number')
+    __g = global;
+  global.define = __define;
+  return module.exports;
+});
+
+$__System.registerDynamic("21", ["2a", "17"], true, function(req, exports, module) {
+  ;
+  var global = this,
+      __define = global.define;
+  global.define = undefined;
+  var global = req('2a'),
+      core = req('17'),
+      PROTOTYPE = 'prototype';
+  var ctx = function(fn, that) {
+    return function() {
+      return fn.apply(that, arguments);
+    };
+  };
+  var $def = function(type, name, source) {
+    var key,
+        own,
+        out,
+        exp,
+        isGlobal = type & $def.G,
+        isProto = type & $def.P,
+        target = isGlobal ? global : type & $def.S ? global[name] : (global[name] || {})[PROTOTYPE],
+        exports = isGlobal ? core : core[name] || (core[name] = {});
+    if (isGlobal)
+      source = name;
+    for (key in source) {
+      own = !(type & $def.F) && target && key in target;
+      if (own && key in exports)
+        continue;
+      out = own ? target[key] : source[key];
+      if (isGlobal && typeof target[key] != 'function')
+        exp = source[key];
+      else if (type & $def.B && own)
+        exp = ctx(out, global);
+      else if (type & $def.W && target[key] == out)
+        !function(C) {
+          exp = function(param) {
+            return this instanceof C ? new C(param) : C(param);
+          };
+          exp[PROTOTYPE] = C[PROTOTYPE];
+        }(out);
+      else
+        exp = isProto && typeof out == 'function' ? ctx(Function.call, out) : out;
+      exports[key] = exp;
+      if (isProto)
+        (exports[PROTOTYPE] || (exports[PROTOTYPE] = {}))[key] = out;
+    }
+  };
+  $def.F = 1;
+  $def.G = 2;
+  $def.S = 4;
+  $def.P = 8;
+  $def.B = 16;
+  $def.W = 32;
+  module.exports = $def;
+  global.define = __define;
+  return module.exports;
+});
+
+$__System.registerDynamic("3f", ["21", "17", "2c"], true, function(req, exports, module) {
+  ;
+  var global = this,
+      __define = global.define;
+  global.define = undefined;
+  var $def = req('21'),
+      core = req('17'),
+      fails = req('2c');
+  module.exports = function(KEY, exec) {
+    var $def = req('21'),
+        fn = (core.Object || {})[KEY] || Object[KEY],
+        exp = {};
+    exp[KEY] = exec(fn);
+    $def($def.S + $def.F * fails(function() {
+      fn(1);
+    }), 'Object', exp);
+  };
+  global.define = __define;
+  return module.exports;
+});
+
+$__System.registerDynamic("1e", [], true, function(req, exports, module) {
+  ;
+  var global = this,
+      __define = global.define;
+  global.define = undefined;
+  module.exports = function(it) {
+    if (it == undefined)
+      throw TypeError("Can't call method on  " + it);
+    return it;
+  };
+  global.define = __define;
+  return module.exports;
+});
+
+$__System.registerDynamic("14", [], true, function(req, exports, module) {
+  ;
+  var global = this,
+      __define = global.define;
+  global.define = undefined;
+  var toString = {}.toString;
+  module.exports = function(it) {
+    return toString.call(it).slice(8, -1);
+  };
+  global.define = __define;
+  return module.exports;
+});
+
+$__System.registerDynamic("40", ["14"], true, function(req, exports, module) {
+  ;
+  var global = this,
+      __define = global.define;
+  global.define = undefined;
+  var cof = req('14');
+  module.exports = Object('z').propertyIsEnumerable(0) ? Object : function(it) {
+    return cof(it) == 'String' ? it.split('') : Object(it);
+  };
+  global.define = __define;
+  return module.exports;
+});
+
+$__System.registerDynamic("41", ["40", "1e"], true, function(req, exports, module) {
+  ;
+  var global = this,
+      __define = global.define;
+  global.define = undefined;
+  var IObject = req('40'),
+      defined = req('1e');
+  module.exports = function(it) {
+    return IObject(defined(it));
+  };
+  global.define = __define;
+  return module.exports;
+});
+
+$__System.registerDynamic("42", ["41", "3f"], true, function(req, exports, module) {
+  ;
+  var global = this,
+      __define = global.define;
+  global.define = undefined;
+  var toIObject = req('41');
+  req('3f')('getOwnPropertyDescriptor', function($getOwnPropertyDescriptor) {
+    return function getOwnPropertyDescriptor(it, key) {
+      return $getOwnPropertyDescriptor(toIObject(it), key);
+    };
+  });
+  global.define = __define;
+  return module.exports;
+});
+
+$__System.registerDynamic("23", [], true, function(req, exports, module) {
+  ;
+  var global = this,
+      __define = global.define;
+  global.define = undefined;
+  var $Object = Object;
+  module.exports = {
+    create: $Object.create,
+    getProto: $Object.getPrototypeOf,
+    isEnum: {}.propertyIsEnumerable,
+    getDesc: $Object.getOwnPropertyDescriptor,
+    setDesc: $Object.defineProperty,
+    setDescs: $Object.defineProperties,
+    getKeys: $Object.keys,
+    getNames: $Object.getOwnPropertyNames,
+    getSymbols: $Object.getOwnPropertySymbols,
+    each: [].forEach
+  };
+  global.define = __define;
+  return module.exports;
+});
+
+$__System.registerDynamic("43", ["23", "42"], true, function(req, exports, module) {
+  ;
+  var global = this,
+      __define = global.define;
+  global.define = undefined;
+  var $ = req('23');
+  req('42');
+  module.exports = function getOwnPropertyDescriptor(it, key) {
+    return $.getDesc(it, key);
+  };
+  global.define = __define;
+  return module.exports;
+});
+
+$__System.registerDynamic("44", ["43"], true, function(req, exports, module) {
+  ;
+  var global = this,
+      __define = global.define;
+  global.define = undefined;
+  module.exports = {
+    "default": req('43'),
+    __esModule: true
+  };
+  global.define = __define;
+  return module.exports;
+});
+
+$__System.registerDynamic("9", ["44"], true, function(req, exports, module) {
+  ;
+  var global = this,
+      __define = global.define;
+  global.define = undefined;
+  "use strict";
+  var _Object$getOwnPropertyDescriptor = req('44')["default"];
+  exports["default"] = function get(_x, _x2, _x3) {
+    var _again = true;
+    _function: while (_again) {
+      var object = _x,
+          property = _x2,
+          receiver = _x3;
+      _again = false;
+      if (object === null)
+        object = Function.prototype;
+      var desc = _Object$getOwnPropertyDescriptor(object, property);
+      if (desc === undefined) {
+        var parent = Object.getPrototypeOf(object);
+        if (parent === null) {
+          return undefined;
+        } else {
+          _x = parent;
+          _x2 = property;
+          _x3 = receiver;
+          _again = true;
+          desc = parent = undefined;
+          continue _function;
+        }
+      } else if ("value" in desc) {
+        return desc.value;
+      } else {
+        var getter = desc.get;
+        if (getter === undefined) {
+          return undefined;
+        }
+        return getter.call(receiver);
+      }
+    }
+  };
+  exports.__esModule = true;
+  global.define = __define;
+  return module.exports;
+});
+
+$__System.register('45', ['3', '4', '5', '8', '9', '10', '34', 'a', 'b', 'c'], function (_export) {
+   var _, BackboneProxy, Utils, Events, _get, Debug, Model, _inherits, _createClass, _classCallCheck, s_ADD_OPTIONS, s_SET_OPTIONS, s_ADD_REFERENCE, s_ON_MODEL_EVENT, s_REMOVE_MODELS, s_REMOVE_REFERENCE, s_SPLICE, Collection, collectionMethods;
 
    return {
-      setters: [function (_4) {
-         _classCallCheck = _4['default'];
-      }, function (_6) {
-         BackboneProxy = _6['default'];
+      setters: [function (_3) {
+         _ = _3['default'];
+      }, function (_4) {
+         BackboneProxy = _4['default'];
+      }, function (_7) {
+         Utils = _7['default'];
       }, function (_5) {
-         _ = _5['default'];
+         Events = _5['default'];
       }, function (_2) {
          _get = _2['default'];
-      }, function (_3) {
-         _createClass = _3['default'];
-      }, function (_7) {
-         Events = _7['default'];
       }, function (_8) {
-         Model = _8['default'];
-      }, function (_9) {
-         Debug = _9['default'];
-      }, function (_f) {
-         _inherits = _f['default'];
-      }, function (_f2) {
-         Utils = _f2['default'];
+         Debug = _8['default'];
+      }, function (_6) {
+         Model = _6['default'];
+      }, function (_a) {
+         _inherits = _a['default'];
+      }, function (_b) {
+         _createClass = _b['default'];
+      }, function (_c) {
+         _classCallCheck = _c['default'];
       }],
       execute: function () {
 
@@ -4780,1597 +6148,242 @@ $__System.register('42', ['2', '3', '6', '14', '22', '23', '40', '41', '1f', '3f
    };
 });
 
-$__System.register('43', ['2', '6', '14', '22', '23', '1f'], function (_export) {
-   var _classCallCheck, _, _get, _createClass, Events, _inherits, s_ROUTE_STRIPPER, s_ROOT_STRIPPER, s_PATH_STRIPPER, s_UPDATE_HASH, History;
-
-   return {
-      setters: [function (_4) {
-         _classCallCheck = _4['default'];
-      }, function (_5) {
-         _ = _5['default'];
-      }, function (_2) {
-         _get = _2['default'];
-      }, function (_3) {
-         _createClass = _3['default'];
-      }, function (_6) {
-         Events = _6['default'];
-      }, function (_f) {
-         _inherits = _f['default'];
-      }],
-      execute: function () {
-
-         // Private / internal methods ---------------------------------------------------------------------------------------
-
-         /**
-          * Cached regex for stripping a leading hash/slash and trailing space.
-          */
-         'use strict';
-
-         s_ROUTE_STRIPPER = /^[#\/]|\s+$/g;
-
-         /**
-          * Cached regex for stripping leading and trailing slashes.
-          */
-         s_ROOT_STRIPPER = /^\/+|\/+$/g;
-
-         /**
-          * Cached regex for stripping urls of hash.
-          */
-         s_PATH_STRIPPER = /#.*$/;
-
-         /**
-          * Update the hash location, either replacing the current entry, or adding a new one to the browser history.
-          *
-          * @param {object}   location - URL / current location
-          * @param {string}   fragment - URL fragment
-          * @param {boolean}  replace  - conditional replace
-          */
-
-         s_UPDATE_HASH = function s_UPDATE_HASH(location, fragment, replace) {
-            if (replace) {
-               var href = location.href.replace(/(javascript:|#).*$/, '');
-               location.replace(href + '#' + fragment);
-            } else {
-               // Some browsers require that `hash` contains a leading #.
-               location.hash = '#' + fragment;
-            }
-         };
-
-         /**
-          * Backbone.History - History serves as a global router. (http://backbonejs.org/#History)
-          * ----------------
-          *
-          * History serves as a global router (per frame) to handle hashchange events or pushState, match the appropriate route,
-          * and trigger callbacks. You shouldn't ever have to create one of these yourself since Backbone.history already
-          * contains one.
-          *
-          * pushState support exists on a purely opt-in basis in Backbone. Older browsers that don't support pushState will
-          * continue to use hash-based URL fragments, and if a hash URL is visited by a pushState-capable browser, it will be
-          * transparently upgraded to the true URL. Note that using real URLs requires your web server to be able to correctly
-          * render those pages, so back-end changes are required as well. For example, if you have a route of /documents/100,
-          * your web server must be able to serve that page, if the browser visits that URL directly. For full search-engine
-          * crawlability, it's best to have the server generate the complete HTML for the page ... but if it's a web application,
-          * just rendering the same content you would have for the root URL, and filling in the rest with Backbone Views and
-          * JavaScript works fine.
-          *
-          * Handles cross-browser history management, based on either [pushState](http://diveintohtml5.info/history.html) and
-          * real URLs, or [onhashchange](https://developer.mozilla.org/en-US/docs/DOM/window.onhashchange) and URL fragments.
-          * If the browser supports neither (old IE, natch), falls back to polling.
-          */
-
-         History = (function (_Events) {
-            _inherits(History, _Events);
-
-            /** */
-
-            function History() {
-               _classCallCheck(this, History);
-
-               _get(Object.getPrototypeOf(History.prototype), 'constructor', this).call(this);
-
-               /**
-                * Stores route / callback pairs for validation.
-                * @type {Array<Object<string, function>>}
-                */
-               this.handlers = [];
-               this.checkUrl = _.bind(this.checkUrl, this);
-
-               // Ensure that `History` can be used outside of the browser.
-               if (typeof window !== 'undefined') {
-                  /**
-                   * Browser Location or URL string.
-                   * @type {Location|String}
-                   */
-                  this.location = window.location;
-
-                  /**
-                   * Browser history
-                   * @type {History}
-                   */
-                  this.history = window.history;
-               }
-
-               /**
-                * Has the history handling already been started?
-                * @type {boolean}
-                */
-               this.started = false;
-
-               /**
-                * The default interval to poll for hash changes, if necessary, is twenty times a second.
-                * @type {number}
-                */
-               this.interval = 50;
-            }
-
-            /**
-             * Are we at the app root?
-             *
-             * @returns {boolean}
-             */
-
-            _createClass(History, [{
-               key: 'atRoot',
-               value: function atRoot() {
-                  var path = this.location.pathname.replace(/[^\/]$/, '$&/');
-                  return path === this.root && !this.getSearch();
-               }
-
-               /**
-                * Checks the current URL to see if it has changed, and if it has, calls `loadUrl`, normalizing across the
-                * hidden iframe.
-                *
-                * @returns {boolean}
-                */
-            }, {
-               key: 'checkUrl',
-               value: function checkUrl() {
-                  var current = this.getFragment();
-
-                  // If the user pressed the back button, the iframe's hash will have changed and we should use that for comparison.
-                  if (current === this.fragment && this.iframe) {
-                     current = this.getHash(this.iframe.contentWindow);
-                  }
-
-                  if (current === this.fragment) {
-                     return false;
-                  }
-                  if (this.iframe) {
-                     this.navigate(current);
-                  }
-                  this.loadUrl();
-               }
-
-               /**
-                * Unicode characters in `location.pathname` are percent encoded so they're decoded for comparison. `%25` should
-                * not be decoded since it may be part of an encoded parameter.
-                *
-                * @param {string}   fragment - URL fragment
-                * @return {string}
-                */
-            }, {
-               key: 'decodeFragment',
-               value: function decodeFragment(fragment) {
-                  return decodeURI(fragment.replace(/%25/g, '%2525'));
-               }
-
-               /**
-                * Get the cross-browser normalized URL fragment from the path or hash.
-                *
-                * @param {string} fragment   -- URL fragment
-                * @returns {*|void|string|XML}
-                */
-            }, {
-               key: 'getFragment',
-               value: function getFragment(fragment) {
-                  if (_.isUndefined(fragment) || fragment === null) {
-                     if (this._usePushState || !this._wantsHashChange) {
-                        fragment = this.getPath();
-                     } else {
-                        fragment = this.getHash();
-                     }
-                  }
-                  return fragment.replace(s_ROUTE_STRIPPER, '');
-               }
-
-               /**
-                * Gets the true hash value. Cannot use location.hash directly due to bug in Firefox where location.hash will
-                * always be decoded.
-                *
-                * @param {object}   window   - Browser `window`
-                * @returns {*}
-                */
-            }, {
-               key: 'getHash',
-               value: function getHash(window) {
-                  var match = (window || this).location.href.match(/#(.*)$/);
-                  return match ? match[1] : '';
-               }
-
-               /**
-                * Get the pathname and search params, without the root.
-                *
-                * @returns {*}
-                */
-            }, {
-               key: 'getPath',
-               value: function getPath() {
-                  var path = this.decodeFragment(this.location.pathname + this.getSearch()).slice(this.root.length - 1);
-                  return path.charAt(0) === '/' ? path.slice(1) : path;
-               }
-
-               /**
-                * In IE6, the hash fragment and search params are incorrect if the fragment contains `?`.
-                *
-                * @returns {string}
-                */
-            }, {
-               key: 'getSearch',
-               value: function getSearch() {
-                  var match = this.location.href.replace(/#.*/, '').match(/\?.+/);
-                  return match ? match[0] : '';
-               }
-
-               /**
-                * Attempt to load the current URL fragment. If a route succeeds with a match, returns `true`. If no defined routes
-                * matches the fragment, returns `false`.
-                *
-                * @param {string}   fragment - URL fragment
-                * @returns {boolean}
-                */
-            }, {
-               key: 'loadUrl',
-               value: function loadUrl(fragment) {
-                  // If the root doesn't match, no routes can match either.
-                  if (!this.matchRoot()) {
-                     return false;
-                  }
-                  fragment = this.fragment = this.getFragment(fragment);
-                  return _.some(this.handlers, function (handler) {
-                     if (handler.route.test(fragment)) {
-                        handler.callback(fragment);
-                        return true;
-                     }
-                  });
-               }
-
-               /**
-                * Does the pathname match the root?
-                *
-                * @returns {boolean}
-                */
-            }, {
-               key: 'matchRoot',
-               value: function matchRoot() {
-                  var path = this.decodeFragment(this.location.pathname);
-                  var root = path.slice(0, this.root.length - 1) + '/';
-                  return root === this.root;
-               }
-
-               /**
-                * Save a fragment into the hash history, or replace the URL state if the 'replace' option is passed. You are
-                * responsible for properly URL-encoding the fragment in advance.
-                *
-                * The options object can contain `trigger: true` if you wish to have the route callback be fired (not usually
-                * desirable), or `replace: true`, if you wish to modify the current URL without adding an entry to the history.
-                *
-                * @param {string}   fragment - String representing an URL fragment.
-                * @param {object}   options - Optional hash containing parameters for navigate.
-                * @returns {*}
-                */
-            }, {
-               key: 'navigate',
-               value: function navigate(fragment, options) {
-                  if (!History.started) {
-                     return false;
-                  }
-                  if (!options || options === true) {
-                     options = { trigger: !!options };
-                  }
-
-                  // Normalize the fragment.
-                  fragment = this.getFragment(fragment || '');
-
-                  // Don't include a trailing slash on the root.
-                  var root = this.root;
-
-                  if (fragment === '' || fragment.charAt(0) === '?') {
-                     root = root.slice(0, -1) || '/';
-                  }
-
-                  var url = root + fragment;
-
-                  // Strip the hash and decode for matching.
-                  fragment = this.decodeFragment(fragment.replace(s_PATH_STRIPPER, ''));
-
-                  if (this.fragment === fragment) {
-                     return;
-                  }
-
-                  /**
-                   * URL fragment
-                   * @type {*|void|string|XML}
-                   */
-                  this.fragment = fragment;
-
-                  // If pushState is available, we use it to set the fragment as a real URL.
-                  if (this._usePushState) {
-                     this.history[options.replace ? 'replaceState' : 'pushState']({}, document.title, url);
-
-                     // If hash changes haven't been explicitly disabled, update the hash fragment to store history.
-                  } else if (this._wantsHashChange) {
-                        s_UPDATE_HASH(this.location, fragment, options.replace);
-
-                        if (this.iframe && fragment !== this.getHash(this.iframe.contentWindow)) {
-                           var iWindow = this.iframe.contentWindow;
-
-                           // Opening and closing the iframe tricks IE7 and earlier to push a history
-                           // entry on hash-tag change.  When replace is true, we don't want this.
-                           if (!options.replace) {
-                              iWindow.document.open();
-                              iWindow.document.close();
-                           }
-
-                           s_UPDATE_HASH(iWindow.location, fragment, options.replace);
-                        }
-
-                        // If you've told us that you explicitly don't want fallback hashchange-
-                        // based history, then `navigate` becomes a page refresh.
-                     } else {
-                           return this.location.assign(url);
-                        }
-
-                  if (options.trigger) {
-                     return this.loadUrl(fragment);
-                  }
-               }
-
-               /**
-                * When all of your Routers have been created, and all of the routes are set up properly, call
-                * Backbone.history.start() to begin monitoring hashchange events, and dispatching routes. Subsequent calls to
-                * Backbone.history.start() will throw an error, and Backbone.History.started is a boolean value indicating whether
-                * it has already been called.
-                *
-                * To indicate that you'd like to use HTML5 pushState support in your application, use
-                * Backbone.history.start({pushState: true}). If you'd like to use pushState, but have browsers that don't support
-                * it natively use full page refreshes instead, you can add {hashChange: false} to the options.
-                *
-                * If your application is not being served from the root url / of your domain, be sure to tell History where the
-                * root really is, as an option: Backbone.history.start({pushState: true, root: "/public/search/"})
-                *
-                * When called, if a route succeeds with a match for the current URL, Backbone.history.start() returns true. If no
-                * defined route matches the current URL, it returns false.
-                *
-                * If the server has already rendered the entire page, and you don't want the initial route to trigger when starting
-                * History, pass silent: true.
-                *
-                * Because hash-based history in Internet Explorer relies on an <iframe>, be sure to call start() only after the DOM
-                * is ready.
-                *
-                * @example
-                * import WorkspaceRouter from 'WorkspaceRouter.js';
-                * import HelpPaneRouter  from 'HelpPaneRouter.js';
-                *
-                * new WorkspaceRouter();
-                * new HelpPaneRouter();
-                * Backbone.history.start({pushState: true});
-                *
-                * @param {object}   options  - Optional parameters
-                * @returns {*}
-                */
-            }, {
-               key: 'start',
-               value: function start(options) {
-                  if (History.started) {
-                     throw new Error('Backbone.history has already been started');
-                  }
-
-                  History.started = true;
-
-                  /**
-                   * Figure out the initial configuration. Do we need an iframe?
-                   * @type {Object}
-                   */
-                  this.options = _.extend({ root: '/' }, this.options, options);
-
-                  /**
-                   * URL root
-                   * @type {string}
-                   */
-                  this.root = this.options.root;
-
-                  this._wantsHashChange = this.options.hashChange !== false;
-                  this._hasHashChange = 'onhashchange' in window && (document.documentMode === void 0 || document.documentMode > 7);
-                  this._useHashChange = this._wantsHashChange && this._hasHashChange;
-
-                  // Is pushState desired ... is it available?
-                  this._wantsPushState = !!this.options.pushState;
-                  this._hasPushState = !!(this.history && this.history.pushState);
-                  this._usePushState = this._wantsPushState && this._hasPushState;
-
-                  this.fragment = this.getFragment();
-
-                  // Normalize root to always include a leading and trailing slash.
-                  this.root = ('/' + this.root + '/').replace(s_ROOT_STRIPPER, '/');
-
-                  // Transition from hashChange to pushState or vice versa if both are requested.
-                  if (this._wantsHashChange && this._wantsPushState) {
-
-                     // If we've started off with a route from a `pushState`-enabled
-                     // browser, but we're currently in a browser that doesn't support it...
-                     if (!this._hasPushState && !this.atRoot()) {
-                        var root = this.root.slice(0, -1) || '/';
-                        this.location.replace(root + '#' + this.getPath());
-
-                        // Return immediately as browser will do redirect to new url
-                        return true;
-
-                        // Or if we've started out with a hash-based route, but we're currently
-                        // in a browser where it could be `pushState`-based instead...
-                     } else if (this._hasPushState && this.atRoot()) {
-                           this.navigate(this.getHash(), { replace: true });
-                        }
-                  }
-
-                  // Proxy an iframe to handle location events if the browser doesn't support the `hashchange` event, HTML5
-                  // history, or the user wants `hashChange` but not `pushState`.
-                  if (!this._hasHashChange && this._wantsHashChange && !this._usePushState) {
-                     /**
-                      * Proxy iframe
-                      * @type {Element}
-                      */
-                     this.iframe = document.createElement('iframe');
-                     this.iframe.src = 'javascript:0';
-                     this.iframe.style.display = 'none';
-                     this.iframe.tabIndex = -1;
-
-                     var body = document.body;
-
-                     // Using `appendChild` will throw on IE < 9 if the document is not ready.
-                     var iWindow = body.insertBefore(this.iframe, body.firstChild).contentWindow;
-                     iWindow.document.open();
-                     iWindow.document.close();
-                     iWindow.location.hash = '#' + this.fragment;
-                  }
-
-                  // Add a cross-platform `addEventListener` shim for older browsers.
-                  var addEventListener = window.addEventListener || function (eventName, listener) {
-                     /* eslint-disable no-undef */
-                     return attachEvent('on' + eventName, listener);
-                     /* eslint-enable no-undef */
-                  };
-
-                  // Depending on whether we're using pushState or hashes, and whether
-                  // 'onhashchange' is supported, determine how we check the URL state.
-                  if (this._usePushState) {
-                     addEventListener('popstate', this.checkUrl, false);
-                  } else if (this._useHashChange && !this.iframe) {
-                     addEventListener('hashchange', this.checkUrl, false);
-                  } else if (this._wantsHashChange) {
-                     this._checkUrlInterval = setInterval(this.checkUrl, this.interval);
-                  }
-
-                  if (!this.options.silent) {
-                     return this.loadUrl();
-                  }
-               }
-
-               /**
-                * Disable Backbone.history, perhaps temporarily. Not useful in a real app, but possibly useful for unit
-                * testing Routers.
-                */
-            }, {
-               key: 'stop',
-               value: function stop() {
-                  // Add a cross-platform `removeEventListener` shim for older browsers.
-                  var removeEventListener = window.removeEventListener || function (eventName, listener) {
-                     /* eslint-disable no-undef */
-                     return detachEvent('on' + eventName, listener);
-                     /* eslint-enable no-undef */
-                  };
-
-                  // Remove window listeners.
-                  if (this._usePushState) {
-                     removeEventListener('popstate', this.checkUrl, false);
-                  } else if (this._useHashChange && !this.iframe) {
-                     removeEventListener('hashchange', this.checkUrl, false);
-                  }
-
-                  // Clean up the iframe if necessary.
-                  if (this.iframe) {
-                     document.body.removeChild(this.iframe);
-                     this.iframe = null;
-                  }
-
-                  // Some environments will throw when clearing an undefined interval.
-                  if (this._checkUrlInterval) {
-                     clearInterval(this._checkUrlInterval);
-                  }
-                  History.started = false;
-               }
-
-               /**
-                * Add a route to be tested when the fragment changes. Routes added later may override previous routes.
-                *
-                * @param {string}   route    -  Route to add for checking.
-                * @param {function} callback -  Callback function to invoke on match.
-                */
-            }, {
-               key: 'route',
-               value: function route(_route, callback) {
-                  this.handlers.unshift({ route: _route, callback: callback });
-               }
-            }]);
-
-            return History;
-         })(Events);
-
-         _export('default', History);
-      }
-   };
-});
-
-$__System.register('44', ['2', '3', '6', '14', '22', '23', '1f', '3e'], function (_export) {
-   var _classCallCheck, BackboneProxy, _, _get, _createClass, Events, _inherits, _toConsumableArray, s_ESCAPE_REGEX, s_NAMED_PARAM, s_OPTIONAL_PARAM, s_SPLAT_PARAM, s_BIND_ROUTES, s_EXTRACT_PARAMETERS, s_ROUTE_TO_REGEX, Router;
-
-   return {
-      setters: [function (_4) {
-         _classCallCheck = _4['default'];
-      }, function (_6) {
-         BackboneProxy = _6['default'];
-      }, function (_5) {
-         _ = _5['default'];
-      }, function (_2) {
-         _get = _2['default'];
-      }, function (_3) {
-         _createClass = _3['default'];
-      }, function (_7) {
-         Events = _7['default'];
-      }, function (_f) {
-         _inherits = _f['default'];
-      }, function (_e) {
-         _toConsumableArray = _e['default'];
-      }],
-      execute: function () {
-
-         // Private / internal methods ---------------------------------------------------------------------------------------
-
-         /**
-          * Cached regular expressions for matching named param parts and splatted parts of route strings.
-          * @type {RegExp}
-          */
-         'use strict';
-
-         s_ESCAPE_REGEX = /[\-{}\[\]+?.,\\\^$|#\s]/g;
-         s_NAMED_PARAM = /(\(\?)?:\w+/g;
-         s_OPTIONAL_PARAM = /\((.*?)\)/g;
-         s_SPLAT_PARAM = /\*\w+/g;
-
-         /**
-          * Bind all defined routes to `Backbone.history`. We have to reverse the order of the routes here to support behavior
-          * where the most general routes can be defined at the bottom of the route map.
-          *
-          * @param {Router}   router   - Instance of `Backbone.Router`.
-          */
-
-         s_BIND_ROUTES = function s_BIND_ROUTES(router) {
-            if (!router.routes) {
-               return;
-            }
-
-            router.routes = _.result(router, 'routes');
-
-            _.each(_.keys(router.routes), function (route) {
-               router.route(route, router.routes[route]);
-            });
-         };
-
-         /**
-          * Given a route, and a URL fragment that it matches, return the array of extracted decoded parameters. Empty or
-          * unmatched parameters will be treated as `null` to normalize cross-browser behavior.
-          *
-          * @param {string}   route - A route string or regex.
-          * @param {string}   fragment - URL fragment.
-          * @returns {*}
-          */
-
-         s_EXTRACT_PARAMETERS = function s_EXTRACT_PARAMETERS(route, fragment) {
-            var params = route.exec(fragment).slice(1);
-
-            return _.map(params, function (param, i) {
-               // Don't decode the search params.
-               if (i === params.length - 1) {
-                  return param || null;
-               }
-               return param ? decodeURIComponent(param) : null;
-            });
-         };
-
-         /**
-          * Convert a route string into a regular expression, suitable for matching against the current location hash.
-          *
-          * @param {string}   route - A route string or regex.
-          * @returns {RegExp}
-          */
-
-         s_ROUTE_TO_REGEX = function s_ROUTE_TO_REGEX(route) {
-            route = route.replace(s_ESCAPE_REGEX, '\\$&').replace(s_OPTIONAL_PARAM, '(?:$1)?').replace(s_NAMED_PARAM, function (match, optional) {
-               return optional ? match : '([^/?]+)';
-            }).replace(s_SPLAT_PARAM, '([^?]*?)');
-            return new RegExp('^' + route + '(?:\\?([\\s\\S]*))?$');
-         };
-
-         /**
-          * Backbone.Router - Provides methods for routing client-side pages, and connecting them to actions and events.
-          * (http://backbonejs.org/#Router)
-          * ---------------
-          * Web applications often provide linkable, bookmarkable, shareable URLs for important locations in the app. Until
-          * recently, hash fragments (#page) were used to provide these permalinks, but with the arrival of the History API,
-          * it's now possible to use standard URLs (/page). Backbone.Router provides methods for routing client-side pages, and
-          * connecting them to actions and events. For browsers which don't yet support the History API, the Router handles
-          * graceful fallback and transparent translation to the fragment version of the URL.
-          *
-          * During page load, after your application has finished creating all of its routers, be sure to call
-          * Backbone.history.start() or Backbone.history.start({pushState: true}) to route the initial URL.
-          *
-          * routes - router.routes
-          * The routes hash maps URLs with parameters to functions on your router (or just direct function definitions, if you
-          * prefer), similar to the View's events hash. Routes can contain parameter parts, :param, which match a single URL
-          * component between slashes; and splat parts *splat, which can match any number of URL components. Part of a route can
-          * be made optional by surrounding it in parentheses (/:optional).
-          *
-          * For example, a route of "search/:query/p:page" will match a fragment of #search/obama/p2, passing "obama" and "2" to
-          * the action.
-          *
-          * A route of "file/*path" will match #file/nested/folder/file.txt, passing "nested/folder/file.txt" to the action.
-          *
-          * A route of "docs/:section(/:subsection)" will match #docs/faq and #docs/faq/installing, passing "faq" to the action
-          * in the first case, and passing "faq" and "installing" to the action in the second.
-          *
-          * Trailing slashes are treated as part of the URL, and (correctly) treated as a unique route when accessed. docs and
-          * docs/ will fire different callbacks. If you can't avoid generating both types of URLs, you can define a "docs(/)"
-          * matcher to capture both cases.
-          *
-          * When the visitor presses the back button, or enters a URL, and a particular route is matched, the name of the action
-          * will be fired as an event, so that other objects can listen to the router, and be notified. In the following example,
-          * visiting #help/uploading will fire a route:help event from the router.
-          *
-          * @example
-          * routes: {
-          *    "help/:page":         "help",
-          *    "download/*path":     "download",
-          *    "folder/:name":       "openFolder",
-          *    "folder/:name-:mode": "openFolder"
-          * }
-          *
-          * router.on("route:help", function(page) {
-          *    ...
-          * });
-          *
-          * @example
-          * Old extend - Backbone.Router.extend(properties, [classProperties])
-          * Get started by creating a custom router class. Define actions that are triggered when certain URL fragments are
-          * matched, and provide a routes hash that pairs routes to actions. Note that you'll want to avoid using a leading
-          * slash in your route definitions:
-          *
-          * var Workspace = Backbone.Router.extend({
-          *    routes: {
-          *       "help":                 "help",    // #help
-          *       "search/:query":        "search",  // #search/kiwis
-          *       "search/:query/p:page": "search"   // #search/kiwis/p7
-          *    },
-          *
-          *    help: function() {
-          *       ...
-          *    },
-          *
-          *    search: function(query, page) {
-          *       ...
-          *    }
-          * });
-          *
-          * @example
-          * Converting the above example to ES6 using a getter method for `routes`:
-          * class Workspace extends Backbone.Router {
-          *    get routes() {
-          *       return {
-          *          "help":                 "help",    // #help
-          *          "search/:query":        "search",  // #search/kiwis
-          *          "search/:query/p:page": "search"   // #search/kiwis/p7
-          *       };
-          *    }
-          *
-          *    help() {
-          *       ...
-          *    },
-          *
-          *    search(query, page) {
-          *       ...
-          *    }
-          * }
-          *
-          * @example
-          * Basic default "no route router":
-          * new Backbone.Router({ routes: { '*actions': 'defaultRoute' } });
-          */
-
-         Router = (function (_Events) {
-            _inherits(Router, _Events);
-
-            /**
-             * When creating a new router, you may pass its routes hash directly as an option, if you choose. All options will
-             * also be passed to your initialize function, if defined.
-             *
-             * @see http://backbonejs.org/#Router-constructor
-             *
-             * @param {object}   options  - Optional parameters which may contain a "routes" object literal.
-             */
-
-            function Router() {
-               var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-
-               _classCallCheck(this, Router);
-
-               _get(Object.getPrototypeOf(Router.prototype), 'constructor', this).call(this);
-
-               // Must detect if there are any getters defined in order to skip setting this value.
-               var hasRoutesGetter = !_.isUndefined(this.routes);
-
-               if (!hasRoutesGetter && options.routes) {
-                  /**
-                   * Stores the routes hash.
-                   * @type {object}
-                   */
-                  this.routes = options.routes;
-               }
-
-               s_BIND_ROUTES(this);
-
-               this.initialize.apply(this, arguments);
-            }
-
-            /* eslint-disable no-unused-vars */
-            /**
-             * Execute a route handler with the provided parameters.  This is an excellent place to do pre-route setup or
-             * post-route cleanup.
-             *
-             * @see http://backbonejs.org/#Router-execute
-             *
-             * @param {function} callback - Callback function to execute.
-             * @param {*[]}      args     - Arguments to apply to callback.
-             * @param {string}   name     - Named route.
-             */
-
-            _createClass(Router, [{
-               key: 'execute',
-               value: function execute(callback, args, name) {
-                  /* eslint-enable no-unused-vars */
-                  if (callback) {
-                     callback.apply(this, args);
-                  }
-               }
-
-               /**
-                * Initialize is an empty function by default. Override it with your own initialization logic.
-                *
-                * @see http://backbonejs.org/#Router-constructor
-                * @abstract
-                */
-            }, {
-               key: 'initialize',
-               value: function initialize() {}
-
-               /**
-                * Simple proxy to `Backbone.history` to save a fragment into the history.
-                *
-                * @see http://backbonejs.org/#Router-navigate
-                * @see History
-                *
-                * @param {string}   fragment - String representing an URL fragment.
-                * @param {object}   options - Optional hash containing parameters for navigate.
-                * @returns {Router}
-                */
-            }, {
-               key: 'navigate',
-               value: function navigate(fragment, options) {
-                  BackboneProxy.backbone.history.navigate(fragment, options);
-                  return this;
-               }
-
-               /**
-                * Manually bind a single named route to a callback. For example:
-                *
-                * @example
-                * this.route('search/:query/p:num', 'search', function(query, num)
-                * {
-                *    ...
-                * });
-                *
-                * @see http://backbonejs.org/#Router-route
-                *
-                * @param {string|RegExp}  route    -  A route string or regex.
-                * @param {string}         name     -  A name for the route.
-                * @param {function}       callback -  A function to invoke when the route is matched.
-                * @returns {Router}
-                */
-            }, {
-               key: 'route',
-               value: function route(_route, name, callback) {
-                  var _this = this;
-
-                  if (!_.isRegExp(_route)) {
-                     _route = s_ROUTE_TO_REGEX(_route);
-                  }
-                  if (_.isFunction(name)) {
-                     callback = name;
-                     name = '';
-                  }
-                  if (!callback) {
-                     callback = this[name];
-                  }
-
-                  BackboneProxy.backbone.history.route(_route, function (fragment) {
-                     var args = s_EXTRACT_PARAMETERS(_route, fragment);
-
-                     if (_this.execute(callback, args, name) !== false) {
-                        _this.trigger.apply(_this, _toConsumableArray(['route:' + name].concat(args)));
-                        _this.trigger('route', name, args);
-                        BackboneProxy.backbone.history.trigger('route', _this, name, args);
-                     }
-                  });
-
-                  return this;
-               }
-            }]);
-
-            return Router;
-         })(Events);
-
-         _export('default', Router);
-      }
-   };
-});
-
-$__System.register('45', ['2', '3', '6', '14', '22', '23', '1f'], function (_export) {
-  var _classCallCheck, BackboneProxy, _, _get, _createClass, Events, _inherits, s_DELEGATE_EVENT_SPLITTER, s_VIEW_OPTIONS, View;
-
+$__System.register('4', [], function (_export) {
+  /**
+   * BackboneProxy -- Provides a proxy for the actual created Backbone instance. This is initialized in the constructor
+   * for Backbone (backbone-es6/src/Backbone.js). Anywhere a reference is needed for the composed Backbone instance
+   * import BackboneProxy and access it by "BackboneProxy.backbone".
+   *
+   * @example
+   * import BackboneProxy from 'backbone-es6/src/BackboneProxy.js';
+   *
+   * BackboneProxy.backbone.sync(...)
+   */
+
+  'use strict';
+
+  /**
+   * Defines a proxy Object to hold a reference of the Backbone object instantiated.
+   *
+   * @type {{backbone: null}}
+   */
+  var BackboneProxy;
   return {
-    setters: [function (_4) {
-      _classCallCheck = _4['default'];
-    }, function (_6) {
-      BackboneProxy = _6['default'];
-    }, function (_5) {
-      _ = _5['default'];
-    }, function (_2) {
-      _get = _2['default'];
-    }, function (_3) {
-      _createClass = _3['default'];
-    }, function (_7) {
-      Events = _7['default'];
-    }, function (_f) {
-      _inherits = _f['default'];
-    }],
+    setters: [],
     execute: function () {
+      BackboneProxy = {
+        backbone: null
+      };
 
-      // Private / internal methods ---------------------------------------------------------------------------------------
-
-      /**
-       * Cached regex to split keys for `delegate`.
-       * @type {RegExp}
-       */
-      'use strict';
-
-      s_DELEGATE_EVENT_SPLITTER = /^(\S+)\s*(.*)$/;
-
-      /**
-       * List of view options to be set as properties.
-       * @type {string[]}
-       */
-      s_VIEW_OPTIONS = ['model', 'collection', 'el', 'id', 'attributes', 'className', 'tagName', 'events'];
-
-      /**
-       * Backbone.View - Represents a logical chunk of UI in the DOM. (http://backbonejs.org/#View)
-       * -------------
-       *
-       * Backbone Views are almost more convention than they are actual code. A View is simply a JavaScript object that
-       * represents a logical chunk of UI in the DOM. This might be a single item, an entire list, a sidebar or panel, or
-       * even the surrounding frame which wraps your whole app. Defining a chunk of UI as a **View** allows you to define
-       * your DOM events declaratively, without having to worry about render order ... and makes it easy for the view to
-       * react to specific changes in the state of your models.
-       *
-       * Creating a Backbone.View creates its initial element outside of the DOM, if an existing element is not provided...
-       *
-       * Example if working with Backbone as ES6 source:
-       * @example
-       *
-       * import Backbone from 'backbone';
-       *
-       * export default class MyView extends Backbone.View
-       * {
-       *    constructor(options)
-       *    {
-       *       super(options);
-       *       ...
-       *    }
-       *
-       *    initialize()
-       *    {
-       *       ...
-       *    }
-       *    ...
-       * }
-       *
-       * @example
-       *
-       * To use a custom $el / element define it by a getter method:
-       *
-       *    get el() { return 'my-element'; }
-       *
-       * Likewise with events define it by a getter method:
-       *
-       *    get events()
-       *    {
-       *       return {
-       *         'submit form.login-form': 'logIn',
-       *         'click .sign-up': 'signUp',
-       *         'click .forgot-password': 'forgotPassword'
-       *       }
-       *    }
-       */
-
-      View = (function (_Events) {
-        _inherits(View, _Events);
-
-        _createClass(View, [{
-          key: 'tagName',
-
-          /**
-           * The default `tagName` of a View's element is `"div"`.
-           *
-           * @returns {string}
-           */
-          get: function get() {
-            return 'div';
-          }
-
-          /**
-           * There are several special options that, if passed, will be attached directly to the view: model, collection, el,
-           * id, className, tagName, attributes and events. If the view defines an initialize function, it will be called when
-           * the view is first created. If you'd like to create a view that references an element already in the DOM, pass in
-           * the element as an option: new View({el: existingElement})
-           *
-           * @see http://backbonejs.org/#View-constructor
-           *
-           * @param {object} options - Default options which are mixed into this class as properties via `_.pick` against
-           *                           s_VIEW_OPTIONS. Options also is passed onto the `initialize()` function.
-           */
-        }]);
-
-        function View(options) {
-          _classCallCheck(this, View);
-
-          _get(Object.getPrototypeOf(View.prototype), 'constructor', this).call(this);
-
-          /**
-           * Client ID
-           * @type {number}
-           */
-          this.cid = _.uniqueId('view');
-
-          _.extend(this, _.pick(options, s_VIEW_OPTIONS));
-
-          this._ensureElement();
-          this.initialize.apply(this, arguments);
-        }
-
-        /**
-         * If jQuery is included on the page, each view has a $ function that runs queries scoped within the view's element.
-         * If you use this scoped jQuery function, you don't have to use model ids as part of your query to pull out specific
-         * elements in a list, and can rely much more on HTML class attributes. It's equivalent to running:
-         * view.$el.find(selector)
-         *
-         * @see https://api.jquery.com/find/
-         *
-         * @example
-         * class Chapter extends Backbone.View {
-         *    serialize() {
-         *       return {
-         *          title: this.$(".title").text(),
-         *          start: this.$(".start-page").text(),
-         *          end:   this.$(".end-page").text()
-         *       };
-         *    }
-         * }
-         *
-         * @see http://backbonejs.org/#View-dollar
-         * @see https://api.jquery.com/find/
-         *
-         * @param {string}   selector - A string containing a selector expression to match elements against.
-         * @returns {Element|$}
-         */
-
-        _createClass(View, [{
-          key: '$',
-          value: function $(selector) {
-            return this.$el.find(selector);
-          }
-
-          /**
-           * Produces a DOM element to be assigned to your view. Exposed for subclasses using an alternative DOM
-           * manipulation API.
-           *
-           * @protected
-           * @param {string}   tagName  - Name of the tag element to create.
-           * @returns {Element}
-           *
-           * @see https://developer.mozilla.org/en-US/docs/Web/API/Document/createElement
-           */
-        }, {
-          key: '_createElement',
-          value: function _createElement(tagName) {
-            return document.createElement(tagName);
-          }
-
-          /**
-           * Add a single event listener to the view's element (or a child element using `selector`). This only works for
-           * delegate-able events: not `focus`, `blur`, and not `change`, `submit`, and `reset` in Internet Explorer.
-           *
-           * @see http://backbonejs.org/#View-delegateEvents
-           * @see http://api.jquery.com/on/
-           *
-           * @param {string}   eventName   - One or more space-separated event types and optional namespaces.
-           * @param {string}   selector    - A selector string to filter the descendants of the selected elements that trigger
-           *                                 the event.
-           * @param {function} listener    - A function to execute when the event is triggered.
-           * @returns {View}
-           */
-        }, {
-          key: 'delegate',
-          value: function delegate(eventName, selector, listener) {
-            this.$el.on(eventName + '.delegateEvents' + this.cid, selector, listener);
-            return this;
-          }
-
-          /**
-           * Uses jQuery's on function to provide declarative callbacks for DOM events within a view. If an events hash is not
-           * passed directly, uses this.events as the source. Events are written in the format {"event selector": "callback"}.
-           * The callback may be either the name of a method on the view, or a direct function body. Omitting the selector
-           * causes the event to be bound to the view's root element (this.el). By default, delegateEvents is called within
-           * the View's constructor for you, so if you have a simple events hash, all of your DOM events will always already
-           * be connected, and you will never have to call this function yourself.
-           *
-           * The events property may also be defined as a function that returns an events hash, to make it easier to
-           * programmatically define your events, as well as inherit them from parent views.
-           *
-           * Using delegateEvents provides a number of advantages over manually using jQuery to bind events to child elements
-           * during render. All attached callbacks are bound to the view before being handed off to jQuery, so when the
-           * callbacks are invoked, this continues to refer to the view object. When delegateEvents is run again, perhaps with
-           * a different events hash, all callbacks are removed and delegated afresh — useful for views which need to behave
-           * differently when in different modes.
-           *
-           * A single-event version of delegateEvents is available as delegate. In fact, delegateEvents is simply a multi-event
-           * wrapper around delegate. A counterpart to undelegateEvents is available as undelegate.
-           *
-           * Callbacks will be bound to the view, with `this` set properly. Uses event delegation for efficiency.
-           * Omitting the selector binds the event to `this.el`.
-           *
-           * @example
-           * Older `extend` example:
-           * var DocumentView = Backbone.View.extend({
-           *    events: {
-           *       "dblclick"                : "open",
-           *       "click .icon.doc"         : "select",
-           *       "contextmenu .icon.doc"   : "showMenu",
-           *       "click .show_notes"       : "toggleNotes",
-           *       "click .title .lock"      : "editAccessLevel",
-           *       "mouseover .title .date"  : "showTooltip"
-           *    },
-           *
-           *    render: function() {
-           *       this.$el.html(this.template(this.model.attributes));
-           *       return this;
-           *    },
-           *
-           *    open: function() {
-           *       window.open(this.model.get("viewer_url"));
-           *    },
-           *
-           *    select: function() {
-           *       this.model.set({selected: true});
-           *    },
-           *
-           *   ...
-           * });
-           *
-           * @example
-           * Converting the above `extend` example to ES6:
-           * class DocumentView extends Backbone.View {
-           *    get events() {
-           *       return {
-           *          "dblclick"                : "open",
-           *          "click .icon.doc"         : "select",
-           *          "contextmenu .icon.doc"   : "showMenu",
-           *          "click .show_notes"       : "toggleNotes",
-           *          "click .title .lock"      : "editAccessLevel",
-           *          "mouseover .title .date"  : "showTooltip"
-           *       };
-           *    }
-           *
-           *    render() {
-           *       this.$el.html(this.template(this.model.attributes));
-           *       return this;
-           *    }
-           *
-           *    open() {
-           *       window.open(this.model.get("viewer_url"));
-           *    }
-           *
-           *    select() {
-           *       this.model.set({selected: true});
-           *    }
-           *    ...
-           * }
-           *
-           * @see http://backbonejs.org/#View-delegateEvents
-           * @see http://api.jquery.com/on/
-           *
-           * @param {object}   events   - hash of event descriptions to bind.
-           * @returns {View}
-           */
-        }, {
-          key: 'delegateEvents',
-          value: function delegateEvents(events) {
-            events = events || _.result(this, 'events');
-            if (!events) {
-              return this;
-            }
-            this.undelegateEvents();
-            for (var key in events) {
-              var method = events[key];
-              if (!_.isFunction(method)) {
-                method = this[method];
-              }
-              if (!method) {
-                continue;
-              }
-              var match = key.match(s_DELEGATE_EVENT_SPLITTER);
-              this.delegate(match[1], match[2], _.bind(method, this));
-            }
-            return this;
-          }
-
-          /**
-           * Ensure that the View has a DOM element to render into. If `this.el` is a string, pass it through `$()`, take
-           * the first matching element, and re-assign it to `el`. Otherwise, create an element from the `id`, `className`
-           * and `tagName` properties.
-           *
-           * @protected
-           */
-        }, {
-          key: '_ensureElement',
-          value: function _ensureElement() {
-            if (!this.el) {
-              var attrs = _.extend({}, _.result(this, 'attributes'));
-              if (this.id) {
-                attrs.id = _.result(this, 'id');
-              }
-              if (this.className) {
-                attrs['class'] = _.result(this, 'className');
-              }
-              this.setElement(this._createElement(_.result(this, 'tagName')));
-              this._setAttributes(attrs);
-            } else {
-              this.setElement(_.result(this, 'el'));
-            }
-          }
-
-          /**
-           * Initialize is an empty function by default. Override it with your own initialization logic.
-           *
-           * @see http://backbonejs.org/#View-constructor
-           * @abstract
-           */
-        }, {
-          key: 'initialize',
-          value: function initialize() {}
-
-          /**
-           * Removes a view and its el from the DOM, and calls stopListening to remove any bound events that the view has
-           * listenTo'd.
-           *
-           * @see http://backbonejs.org/#View-remove
-           * @see {@link _removeElement}
-           * @see {@link stopListening}
-           *
-           * @returns {View}
-           */
-        }, {
-          key: 'remove',
-          value: function remove() {
-            this._removeElement();
-            this.stopListening();
-            return this;
-          }
-
-          /**
-           * Remove this view's element from the document and all event listeners attached to it. Exposed for subclasses
-           * using an alternative DOM manipulation API.
-           *
-           * @protected
-           * @see https://api.jquery.com/remove/
-           */
-        }, {
-          key: '_removeElement',
-          value: function _removeElement() {
-            this.$el.remove();
-          }
-
-          /**
-           * The default implementation of render is a no-op. Override this function with your code that renders the view
-           * template from model data, and updates this.el with the new HTML. A good convention is to return this at the end
-           * of render to enable chained calls.
-           *
-           * Backbone is agnostic with respect to your preferred method of HTML templating. Your render function could even
-           * munge together an HTML string, or use document.createElement to generate a DOM tree. However, we suggest choosing
-           * a nice JavaScript templating library. Mustache.js, Haml-js, and Eco are all fine alternatives. Because
-           * Underscore.js is already on the page, _.template is available, and is an excellent choice if you prefer simple
-           * interpolated-JavaScript style templates.
-           *
-           * Whatever templating strategy you end up with, it's nice if you never have to put strings of HTML in your
-           * JavaScript. At DocumentCloud, we use Jammit in order to package up JavaScript templates stored in /app/views as
-           * part of our main core.js asset package.
-           *
-           * @example
-           * class Bookmark extends Backbone.View {
-           *    get template() { return _.template(...); }
-           *
-           *    render() {
-           *       this.$el.html(this.template(this.model.attributes));
-           *       return this;
-           *    }
-           * }
-           *
-           * @see http://backbonejs.org/#View-render
-           *
-           * @abstract
-           * @returns {View}
-           */
-        }, {
-          key: 'render',
-          value: function render() {
-            return this;
-          }
-
-          /**
-           * Set attributes from a hash on this view's element.  Exposed for subclasses using an alternative DOM
-           * manipulation API.
-           *
-           * @protected
-           * @param {object}   attributes - An object defining attributes to associate with `this.$el`.
-           */
-        }, {
-          key: '_setAttributes',
-          value: function _setAttributes(attributes) {
-            this.$el.attr(attributes);
-          }
-
-          /**
-           * Creates the `this.el` and `this.$el` references for this view using the given `el`. `el` can be a CSS selector
-           * or an HTML string, a jQuery context or an element. Subclasses can override this to utilize an alternative DOM
-           * manipulation API and are only required to set the `this.el` property.
-           *
-           * @protected
-           * @param {string|object}  el - A CSS selector or an HTML string, a jQuery context or an element.
-           */
-        }, {
-          key: '_setElement',
-          value: function _setElement(el) {
-            /**
-             * Cached jQuery context for element.
-             * @type {object}
-             */
-            this.$el = el instanceof BackboneProxy.backbone.$ ? el : BackboneProxy.backbone.$(el);
-
-            /**
-             * Cached element
-             * @type {Element}
-             */
-            this.el = this.$el[0];
-          }
-
-          /**
-           * If you'd like to apply a Backbone view to a different DOM element, use setElement, which will also create the
-           * cached $el reference and move the view's delegated events from the old element to the new one.
-           *
-           * @see http://backbonejs.org/#View-setElement
-           * @see {@link undelegateEvents}
-           * @see {@link _setElement}
-           * @see {@link delegateEvents}
-           *
-           * @param {string|object}  element  - A CSS selector or an HTML string, a jQuery context or an element.
-           * @returns {View}
-           */
-        }, {
-          key: 'setElement',
-          value: function setElement(element) {
-            this.undelegateEvents();
-            this._setElement(element);
-            this.delegateEvents();
-            return this;
-          }
-
-          /**
-           * A finer-grained `undelegateEvents` for removing a single delegated event. `selector` and `listener` are
-           * both optional.
-           *
-           * @see http://backbonejs.org/#View-undelegateEvents
-           * @see http://api.jquery.com/off/
-           *
-           * @param {string}   eventName   - One or more space-separated event types and optional namespaces.
-           * @param {string}   selector    - A selector which should match the one originally passed to `.delegate()`.
-           * @param {function} listener    - A handler function previously attached for the event(s).
-           * @returns {View}
-           */
-        }, {
-          key: 'undelegate',
-          value: function undelegate(eventName, selector, listener) {
-            this.$el.off(eventName + '.delegateEvents' + this.cid, selector, listener);
-            return this;
-          }
-
-          /**
-           * Removes all of the view's delegated events. Useful if you want to disable or remove a view from the DOM
-           * temporarily.
-           *
-           * @see http://backbonejs.org/#View-undelegateEvents
-           * @see http://api.jquery.com/off/
-           *
-           * @returns {View}
-           */
-        }, {
-          key: 'undelegateEvents',
-          value: function undelegateEvents() {
-            if (this.$el) {
-              this.$el.off('.delegateEvents' + this.cid);
-            }
-            return this;
-          }
-        }]);
-
-        return View;
-      })(Events);
-
-      _export('default', View);
+      _export('default', BackboneProxy);
     }
   };
 });
 
-$__System.register('46', ['6'], function (_export) {
-
-   /**
-    * Provides older "extend" functionality for Backbone. While it is still accessible it is recommended
-    * to adopt the new Backbone-ES6 patterns and ES6 sub-classing via "extends".
-    *
-    * Helper function to correctly set up the prototype chain for subclasses. Similar to `goog.inherits`, but uses a hash
-    * of prototype properties and class properties to be extended.
-    *
-    * @see http://backbonejs.org/#Collection-extend
-    * @see http://backbonejs.org/#Model-extend
-    * @see http://backbonejs.org/#Router-extend
-    * @see http://backbonejs.org/#View-extend
-    *
-    * @param {object}   protoProps  - instance properties
-    * @param {object}   staticProps - class properties
-    * @returns {*}      Subclass of parent class.
-    */
-   'use strict';
-
-   var _;
-
-   _export('default', extend);
-
-   function extend(protoProps, staticProps) {
-      var parent = this;
-      var child = undefined;
-
-      // The constructor function for the new subclass is either defined by you (the "constructor" property in your
-      // `extend` definition), or defaulted by us to simply call the parent constructor.
-      if (protoProps && _.has(protoProps, 'constructor')) {
-         child = protoProps.constructor;
-      } else {
-         child = function () {
-            return parent.apply(this, arguments);
-         };
-      }
-
-      // Add static properties to the constructor function, if supplied.
-      _.extend(child, parent, staticProps);
-
-      // Set the prototype chain to inherit from `parent`, without calling `parent` constructor function.
-      var Surrogate = function Surrogate() {
-         this.constructor = child;
-      };
-
-      Surrogate.prototype = parent.prototype;
-      child.prototype = new Surrogate();
-
-      // Add prototype properties (instance properties) to the subclass, if supplied.
-      if (protoProps) {
-         _.extend(child.prototype, protoProps);
-      }
-
-      // Set a convenience property in case the parent's prototype is needed later.
-      child.__super__ = parent.prototype;
-
-      return child;
-   }
-
-   return {
-      setters: [function (_2) {
-         _ = _2['default'];
-      }],
-      execute: function () {}
-   };
+$__System.registerDynamic("c", [], true, function(req, exports, module) {
+  ;
+  var global = this,
+      __define = global.define;
+  global.define = undefined;
+  "use strict";
+  exports["default"] = function(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+      throw new TypeError("Cannot call a class as a function");
+    }
+  };
+  exports.__esModule = true;
+  global.define = __define;
+  return module.exports;
 });
 
-$__System.register('47', ['3', '6', '3f'], function (_export) {
+$__System.register('46', ['3', '4', '47', 'c'], function (_export) {
+  var _, BackboneProxy, $, _classCallCheck, Backbone;
 
-   /**
-    * Map from CRUD to HTTP for our default `Backbone.sync` implementation.
-    * @type {{create: string, update: string, patch: string, delete: string, read: string}}
-    */
-   'use strict';
+  return {
+    setters: [function (_3) {
+      _ = _3['default'];
+    }, function (_4) {
+      BackboneProxy = _4['default'];
+    }, function (_2) {
+      $ = _2['default'];
+    }, function (_c) {
+      _classCallCheck = _c['default'];
+    }],
+    execute: function () {
 
-   var BackboneProxy, _, Utils, s_METHOD_MAP;
+      /**
+       * Backbone.js
+       *
+       * (c) 2010-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
+       * Backbone may be freely distributed under the MIT license.
+       *
+       * For all details and documentation:
+       * http://backbonejs.org
+       *
+       * ---------
+       *
+       * Backbone-ES6
+       * https://github.com/typhonjs/backbone-es6
+       * (c) 2015 Michael Leahy
+       * Backbone-ES6 may be freely distributed under the MIT license.
+       *
+       * This fork of Backbone converts it to ES6 and provides extension through constructor injection for easy modification.
+       * The only major difference from Backbone is that Backbone itself is not a global Events instance anymore. Please
+       * see @link{Events.js} for documentation on easily setting up an ES6 event module for global usage.
+       *
+       * @see http://backbonejs.org
+       * @see https://github.com/typhonjs/backbone-es6
+       * @author Michael Leahy
+       * @version 1.2.3
+       * @copyright Michael Leahy 2015
+       */
+      'use strict';
 
-   _export('default', sync);
+      Backbone =
+      /**
+       * Initializes Backbone by constructor injection. You may provide variations on any component below by passing
+       * in a different version. The "runtime" initializing Backbone is responsible for further modification like
+       * supporting the older "extend" support. See backbone-es6/src/ModuleRuntime.js and backbone-es6/src/extend.js
+       * for an example on composing Backbone for usage.
+       *
+       * @param {Collection}  Collection  - A class defining Backbone.Collection.
+       * @param {Events}      Events      - A class defining Backbone.Events.
+       * @param {History}     History     - A class defining Backbone.History.
+       * @param {Model}       Model       - A class defining Backbone.Model.
+       * @param {Router}      Router      - A class defining Backbone.Router.
+       * @param {View}        View        - A class defining Backbone.View.
+       * @param {function}    sync        - A function defining synchronization for Collection & Model.
+       * @param {object}      options     - Options to mixin to Backbone.
+       * @constructor
+       */
+      function Backbone(Collection, Events, History, Model, Router, View, sync) {
+        var _this = this,
+            _arguments = arguments;
 
-   /**
-    * Backbone.sync - Persists models to the server. (http://backbonejs.org/#Sync)
-    * -------------
-    *
-    * Override this function to change the manner in which Backbone persists models to the server. You will be passed the
-    * type of request, and the model in question. By default, makes a RESTful Ajax request to the model's `url()`. Some
-    * possible customizations could be:
-    *
-    * Use `setTimeout` to batch rapid-fire updates into a single request.
-    * Send up the models as XML instead of JSON.
-    * Persist models via WebSockets instead of Ajax.
-    *
-    * Turn on `Backbone.emulateHTTP` in order to send `PUT` and `DELETE` requests as `POST`, with a `_method` parameter
-    * containing the true HTTP method, as well as all requests with the body as `application/x-www-form-urlencoded`
-    * instead of `application/json` with the model in a param named `model`. Useful when interfacing with server-side
-    * languages like **PHP** that make it difficult to read the body of `PUT` requests.
-    *
-    * @param {string}            method   - A string that defines the synchronization action to perform.
-    * @param {Model|Collection}  model    - The model or collection instance to synchronize.
-    * @param {object}            options  - Optional parameters
-    * @returns {XMLHttpRequest}  An XMLHttpRequest
-    */
+        var options = arguments.length <= 7 || arguments[7] === undefined ? {} : arguments[7];
 
-   function sync(method, model) {
-      var options = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
+        _classCallCheck(this, Backbone);
 
-      var type = s_METHOD_MAP[method];
+        /**
+         * Establish the root object, `window` (`self`) in the browser, or `global` on the server.
+         * We use `self` instead of `window` for `WebWorker` support.
+         *
+         * @type {object|global}
+         */
+        var root = typeof self === 'object' && self.self === self && self || typeof global === 'object' && global.global === global && global;
 
-      // Default options, unless specified.
-      _.defaults(options, {
-         emulateHTTP: BackboneProxy.backbone.emulateHTTP,
-         emulateJSON: BackboneProxy.backbone.emulateJSON
-      });
+        /**
+         * jQuery or equivalent
+         * @type {*}
+         */
+        this.$ = $ || root.jQuery || root.Zepto || root.ender || root.$;
 
-      // Default JSON-request options.
-      var params = { type: type, dataType: 'json' };
+        if (typeof this.$ === 'undefined') {
+          throw new Error("Backbone - ctor - could not locate global '$' (jQuery or equivalent).");
+        }
 
-      // Ensure that we have a URL.
-      if (!options.url) {
-         params.url = _.result(model, 'url') || Utils.urlError();
-      }
+        /**
+         * Initial setup. Mixin options and set the BackboneProxy instance to this.
+         */
+        if (_.isObject(options)) {
+          _.extend(this, options);
+        }
 
-      // Ensure that we have the appropriate request data.
-      if (options.data === null && model && (method === 'create' || method === 'update' || method === 'patch')) {
-         params.contentType = 'application/json';
-         params.data = JSON.stringify(options.attrs || model.toJSON(options));
-      }
+        BackboneProxy.backbone = this;
 
-      // For older servers, emulate JSON by encoding the request into an HTML-form.
-      if (options.emulateJSON) {
-         params.contentType = 'application/x-www-form-urlencoded';
-         params.data = params.data ? { model: params.data } : {};
-      }
+        /**
+         * A public reference of the Collection class.
+         * @class
+         */
+        this.Collection = Collection;
 
-      // For older servers, emulate HTTP by mimicking the HTTP method with `_method`
-      // And an `X-HTTP-Method-Override` header.
-      if (options.emulateHTTP && (type === 'PUT' || type === 'DELETE' || type === 'PATCH')) {
-         (function () {
-            params.type = 'POST';
+        /**
+         * A public reference of the Events class.
+         * @class
+         */
+        this.Events = Events;
 
-            if (options.emulateJSON) {
-               params.data._method = type;
-            }
+        /**
+         * A public reference of the History class.
+         * @class
+         */
+        this.History = History;
 
-            var beforeSend = options.beforeSend;
+        /**
+         * A public reference of the Model class.
+         * @class
+         */
+        this.Model = Model;
 
-            options.beforeSend = function (xhr) {
-               xhr.setRequestHeader('X-HTTP-Method-Override', type);
-               if (beforeSend) {
-                  return beforeSend.apply(this, arguments);
-               }
-            };
-         })();
-      }
+        /**
+         * A public reference of the Router class.
+         * @class
+         */
+        this.Router = Router;
 
-      // Don't process data on a non-GET request.
-      if (params.type !== 'GET' && !options.emulateJSON) {
-         params.processData = false;
-      }
+        /**
+         * A public reference of the View class.
+         * @class
+         */
+        this.View = View;
 
-      // Pass along `textStatus` and `errorThrown` from jQuery.
-      var error = options.error;
+        /**
+         * A public instance of History.
+         * @instance
+         */
+        this.history = new History();
 
-      options.error = function (xhr, textStatus, errorThrown) {
-         options.textStatus = textStatus;
-         options.errorThrown = errorThrown;
-         if (error) {
-            error.call(options.context, xhr, textStatus, errorThrown);
-         }
+        /**
+         * A public instance of the sync function.
+         * @instance
+         */
+        this.sync = sync;
+
+        /**
+         * Set the default implementation of `Backbone.ajax` to proxy through to `$`.
+         * Override this if you'd like to use a different library.
+         *
+         * @returns {XMLHttpRequest}   XMLHttpRequest
+         */
+        this.ajax = function () {
+          var _$;
+
+          return (_$ = _this.$).ajax.apply(_$, _arguments);
+        };
       };
 
-      // Make the request, allowing the user to override any Ajax options.
-      var xhr = options.xhr = BackboneProxy.backbone.ajax(_.extend(params, options));
-
-      model.trigger('request', model, xhr, options);
-
-      return xhr;
-   }
-
-   return {
-      setters: [function (_3) {
-         BackboneProxy = _3['default'];
-      }, function (_2) {
-         _ = _2['default'];
-      }, function (_f) {
-         Utils = _f['default'];
-      }],
-      execute: function () {
-         s_METHOD_MAP = {
-            'create': 'POST',
-            'update': 'PUT',
-            'patch': 'PATCH',
-            'delete': 'DELETE',
-            'read': 'GET'
-         };
-      }
-   };
+      _export('default', Backbone);
+    }
+  };
 });
 
-$__System.register('1', ['4', '23', '40', '42', '43', '44', '45', '46', '47'], function (_export) {
+$__System.register('1', ['2', '6', '7', '8', '34', '45', '46', 'f', 'd'], function (_export) {
   /**
    * ModuleRuntime.js -- Provides the standard / default configuration that is the same as Backbone 1.2.3
    */
 
   'use strict';
 
-  var Backbone, Events, Model, Collection, History, Router, View, extend, sync, options, backbone;
+  var sync, extend, View, Events, Model, Collection, Backbone, History, Router, options, backbone;
   return {
-    setters: [function (_) {
-      Backbone = _['default'];
+    setters: [function (_7) {
+      sync = _7['default'];
+    }, function (_6) {
+      extend = _6['default'];
+    }, function (_5) {
+      View = _5['default'];
     }, function (_3) {
       Events = _3['default'];
-    }, function (_5) {
-      Model = _5['default'];
+    }, function (_4) {
+      Model = _4['default'];
     }, function (_2) {
       Collection = _2['default'];
-    }, function (_4) {
-      History = _4['default'];
-    }, function (_6) {
-      Router = _6['default'];
-    }, function (_7) {
-      View = _7['default'];
-    }, function (_8) {
-      extend = _8['default'];
-    }, function (_9) {
-      sync = _9['default'];
+    }, function (_) {
+      Backbone = _['default'];
+    }, function (_f) {
+      History = _f['default'];
+    }, function (_d) {
+      Router = _d['default'];
     }],
     execute: function () {
       options = {

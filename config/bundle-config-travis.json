@@ -2,7 +2,7 @@
    "entryPoints":
    [
       {
-         "destBaseDir": "./dist/",
+         "destBaseDir": "./dist",
          "destFilename": "backbone.js",
          "formats": ["amd"],
          "mangle": false,

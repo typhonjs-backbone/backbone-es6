@@ -22,11 +22,8 @@
     }
   },
   "devDependencies": {
-    "bluebird": "^3.0.2",
     "gulp": "^3.9.0",
-    "gulp-esdoc": "^0.1.0",
-    "gulp-eslint": "^1.0.0",
     "jspm": "^0.16.14",
-    "yargs": "^3.27.0"
+    "typhon-core-gulptasks": "^0.1.0"
   }
 }

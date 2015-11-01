@@ -1,7 +1,7 @@
 /**
- * Provides ESLint configuration for Backbone-ES6. This configuration is rather comprehensive requiring complete
- * documentation and strict styling of source code. All commits and pull requests must use this ESLint configuration.
- * In the future Code Climate will be used to automate checking pull requests.
+ * Provides ESLint configuration for `backbone-parse-es6`. This configuration is rather comprehensive requiring
+ * complete documentation and strict styling of source code. All commits and pull requests must use this ESLint
+ * configuration. In the future Code Climate will be used to automate checking pull requests.
  */
 {
    "extends": "eslint:recommended",
@@ -11,18 +11,31 @@
       "modules": true
    },
 
+   "env":
+   {
+      "browser": true,
+      "es6": true
+   },
+
+   "globals":
+   {
+      "arguments": true,
+      "global": true,
+      "require": true
+   },
+
    "rules":
    {
-      // Architecture
+      /* Architecture */
       "eqeqeq": 2,
       "no-array-constructor": 2,
       "no-new-object": 2,
 
-      // Documentation
+      /* Documentation */
       "require-jsdoc": 2,
       "valid-jsdoc": [2,{ "requireReturn": false, "requireReturnDescription": false }],
 
-      // Styling
+      /* Styling */
       "array-bracket-spacing": 2,
       "block-spacing": 2,
       "brace-style": [2, "allman", { "allowSingleLine": true }],
@@ -53,11 +66,11 @@
       "spaced-comment": [2, "always"],
       "wrap-regex": 2,
 
-      // Styling (useful for checking source, but disable as generated SystemJS config.js does not honor these)
+      /* Styling (useful for checking source, but disable as generated SystemJS config.js does not honor these) */
       "quotes": [0, "single", "avoid-escape"],
       "quote-props": [0, "consistent-as-needed", { "keywords": true }],
 
-      // ES6
+      /* ES6 */
       "arrow-parens": [2, "always"],
       "arrow-spacing": 2,
       "constructor-super": 2,
@@ -74,20 +87,7 @@
       "prefer-template": 2,
       "require-yield": 2,
 
-      // Unused ES6 rules
+      /* Unused ES6 rules */
       "prefer-reflect": 0
-   },
-
-   "globals":
-   {
-      "arguments": true,
-      "global": true,
-      "require": true
-   },
-
-   "env":
-   {
-      "browser": true,
-      "es6": true
    }
 }

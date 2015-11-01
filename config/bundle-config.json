@@ -2,7 +2,7 @@
    "entryPoints":
    [
       {
-         "destBaseDir": "./dist/",
+         "destBaseDir": "./dist",
          "destFilename": "backbone.js",
          "formats": ["amd", "cjs"],
          "mangle": false,
@@ -19,7 +19,7 @@
       },
 
       {
-         "destBaseDir": "./dist/",
+         "destBaseDir": "./dist",
          "destFilename": "backbone.min.js",
          "formats": ["amd", "cjs"],
          "mangle": true,
@@ -36,7 +36,7 @@
       },
 
       {
-         "destBaseDir": "./dist/",
+         "destBaseDir": "./dist",
          "destFilename": "backbone.js",
          "formats": ["global"],
          "mangle": false,
@@ -53,7 +53,7 @@
       },
 
       {
-         "destBaseDir": "./dist/",
+         "destBaseDir": "./dist",
          "destFilename": "backbone.min.js",
          "formats": ["global"],
          "mangle": true,
@@ -70,7 +70,7 @@
       },
 
       {
-         "destBaseDir": "./dist/",
+         "destBaseDir": "./dist",
          "destFilename": "backbone-inclusive.js",
          "formats": ["global"],
          "mangle": false,
@@ -86,7 +86,7 @@
       },
 
       {
-         "destBaseDir": "./dist/",
+         "destBaseDir": "./dist",
          "destFilename": "backbone-inclusive.min.js",
          "formats": ["global"],
          "mangle": true,
