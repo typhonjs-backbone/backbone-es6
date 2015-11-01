@@ -8,5 +8,5 @@ before_script:
   - npm install -g jspm
   - jspm install
 
-script: gulp test --travis
+script: gulp test-basic --travis
 
