@@ -1,0 +1,7 @@
+config/
+dist/
+docs/
+jspm_packages/
+node_modules/
+config.js
+gulpfile.js
