@@ -24,6 +24,7 @@
   "devDependencies": {
     "gulp": "^3.9.0",
     "jspm": "^0.16.14",
+    "typhon-config-eslint-es6": "^0.1.0",
     "typhon-core-gulptasks": "^0.1.0"
   }
 }
