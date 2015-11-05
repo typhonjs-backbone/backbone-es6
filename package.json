@@ -13,18 +13,20 @@
   },
   "jspm": {
     "main": "src/ModuleRuntime.js",
+    "dependencies": {
+      "underscore": "npm:underscore@^1.8.3"
+    },
     "devDependencies": {
       "babel": "npm:babel-core@^5.8.25",
       "babel-runtime": "npm:babel-runtime@^5.8.25",
       "core-js": "npm:core-js@^1.2.1",
-      "jquery": "npm:jquery@^2.1.4",
-      "underscore": "npm:underscore@^1.8.3"
+      "jquery": "npm:jquery@^2.1.4"
     }
   },
   "devDependencies": {
     "gulp": "^3.9.0",
     "jspm": "^0.16.14",
-    "typhon-config-eslint-es6": "^0.1.0",
-    "typhon-core-gulptasks": "^0.1.0"
+    "typhonjs-config-eslint-es6": "^0.3.0",
+    "typhonjs-core-gulptasks": "^0.1.0"
   }
 }
