@@ -2,8 +2,7 @@
    "entryPoints":
    [
       {
-         "destBaseDir": "./dist",
-         "destFilename": "backbone.js",
+         "inMemoryBuild": true,
          "formats": ["amd"],
          "mangle": false,
          "minify": false,
