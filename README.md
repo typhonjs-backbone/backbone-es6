@@ -10,11 +10,14 @@
 
 Backbone supplies structure to JavaScript-heavy applications by providing models with key-value binding and custom events, collections with a rich API of enumerable functions, views with declarative event handling, and connects it all to your existing application over a RESTful JSON interface.
 
-Backbone-ES6 is a fork of Backbone (https://github.com/jashkenas/backbone) converting and modularizing it into idiomatic ES6. The impetus for this fork is to experiment with modernizing and making Backbone easier to modify in a granular fashion. In particular the Parse JS SDK (http://www.parse.com) previously also was a fork of Backbone, but with the 1.6+ SDK release the Backbone API was unceremoniously removed. Backbone-ES6 provides the base for Backbone-Parse-ES6 (https://github.com/typhonjs/backbone-parse-es6) which provides a solution for Backbone dependent Parse users. Another reason for Backbone-ES6 is supporting end to end documentation via ESDoc for ES6 frameworks and apps built on top of Backbone-ES6. Please see the [esdoc-plugin-jspm](https://github.com/typhonjs/esdoc-plugin-jspm) repo for more details on this plugin.
+backbone-es6 is a fork of Backbone (https://github.com/jashkenas/backbone) converting and modularizing it into idiomatic ES6. The impetus for this fork is to experiment with modernizing and making Backbone easier to modify in a granular fashion. In particular the [Parse JS SDK](http://www.parse.com) previously also was a fork of Backbone, but with the 1.6+ SDK release the Backbone API was unceremoniously removed. backbone-es6 provides the base for [backbone-parse-es6](https://github.com/typhonjs/backbone-parse-es6) which provides a solution for Backbone dependent Parse users. 
 
-Backbone-ES6 uses SystemJS / JSPM (www.jspm.io) for dependency management and bundling distributions. For an example of using SystemJS / JSPM directly, albeit w/ Parse via Backbone-Parse-ES6 please see this demo repo: https://github.com/typhonjs/backbone-parse-es6-demo
+Another reason for backbone-es6 is supporting end to end documentation via ESDoc for ES6 frameworks and apps built on top of backbone-es6. Two ESDoc plugins, [esdoc-plugin-jspm](https://github.com/typhonjs/esdoc-plugin-jspm) & [esdoc-plugin-extends-replace](https://github.com/typhonjs/esdoc-plugin-extends-replace) along with a complete integrated set of Gulp tasks, [typhonjs-core-gulptasks](https://github.com/typhonjs/typhonjs-core-gulptasks) provide documentation generation across multiple modules / source roots via JSPM along with ESLint and several JSPM & NPM tasks.
 
-When a new Backbone release is made (next 1.2.4) Backbone-ES6 will be updated. Tests from Backbone will be ported to Backbone-ES6 with the upcoming 1.2.4 release. 
+backbone-es6 uses [JSPM](www.jspm.io) / [SystemJS](https://github.com/systemjs/systemjs) for dependency management and bundling distributions. For an example of using JSPM / SystemJS directly with backbone-parse-es6 including typhonjs-core-gulptasks support please see this demo repo:
+https://github.com/typhonjs/backbone-parse-es6-demo
+
+When a new Backbone release is made (next 1.2.4) backbone-es6 will be updated. Tests from Backbone will be ported to backbone-es6 with the upcoming 1.2.4 release. 
 
 This repository contains several pre-packed downloads in the `dist/` directory. There are AMD, CJS, and Global distributions. The "global-inclusive" bundle includes the latest jQuery (2.1.4) and Underscore (1.8.3) libraries.
 
@@ -34,6 +37,6 @@ Many thanks to DocumentCloud & all Backbone contributors.
 
 Backbone (c) 2010-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
 
-Backbone-ES6 (c) 2015 Michael Leahy, TyphonRT, Inc. 
+backbone-es6 (c) 2015 Michael Leahy, TyphonRT, Inc. 
 
-Backbone / Backbone-ES6 may be freely distributed under the MIT license.
+backbone-es6 may be freely distributed under the MIT license.
