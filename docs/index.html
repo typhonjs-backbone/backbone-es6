@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl">
-  <title data-ice="title">Backbone-ES6 API Document</title>
+  <title data-ice="title">backbone-es6 API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -58,9 +58,11 @@
 <p><a href="https://travis-ci.org/typhonjs/backbone-es6"><img src="https://travis-ci.org/typhonjs/backbone-es6.svg" alt="Build Status"></a>
 <a href="https://www.versioneye.com/user/projects/5627b86536d0ab0021000f46"><img src="https://www.versioneye.com/user/projects/5627b86536d0ab0021000f46/badge.svg?style=flat" alt="Dependency Status"></a></p>
 <p>Backbone supplies structure to JavaScript-heavy applications by providing models with key-value binding and custom events, collections with a rich API of enumerable functions, views with declarative event handling, and connects it all to your existing application over a RESTful JSON interface.</p>
-<p>Backbone-ES6 is a fork of Backbone (<a href="https://github.com/jashkenas/backbone">https://github.com/jashkenas/backbone</a>) converting and modularizing it into idiomatic ES6. The impetus for this fork is to experiment with modernizing and making Backbone easier to modify in a granular fashion. In particular the Parse JS SDK (<a href="http://www.parse.com">http://www.parse.com</a>) previously also was a fork of Backbone, but with the 1.6+ SDK release the Backbone API was unceremoniously removed. Backbone-ES6 provides the base for Backbone-Parse-ES6 (<a href="https://github.com/typhonjs/backbone-parse-es6">https://github.com/typhonjs/backbone-parse-es6</a>) which provides a solution for Backbone dependent Parse users. Another reason for Backbone-ES6 is supporting end to end documentation via ESDoc for ES6 frameworks and apps built on top of Backbone-ES6. Please see the <a href="https://github.com/typhonjs/esdoc-plugin-jspm">esdoc-plugin-jspm</a> repo for more details on this plugin.</p>
-<p>Backbone-ES6 uses SystemJS / JSPM (www.jspm.io) for dependency management and bundling distributions. For an example of using SystemJS / JSPM directly, albeit w/ Parse via Backbone-Parse-ES6 please see this demo repo: <a href="https://github.com/typhonjs/backbone-parse-es6-demo">https://github.com/typhonjs/backbone-parse-es6-demo</a></p>
-<p>When a new Backbone release is made (next 1.2.4) Backbone-ES6 will be updated. Tests from Backbone will be ported to Backbone-ES6 with the upcoming 1.2.4 release. </p>
+<p>backbone-es6 is a fork of Backbone (<a href="https://github.com/jashkenas/backbone">https://github.com/jashkenas/backbone</a>) converting and modularizing it into idiomatic ES6. The impetus for this fork is to experiment with modernizing and making Backbone easier to modify in a granular fashion. In particular the <a href="http://www.parse.com">Parse JS SDK</a> previously also was a fork of Backbone, but with the 1.6+ SDK release the Backbone API was unceremoniously removed. backbone-es6 provides the base for <a href="https://github.com/typhonjs/backbone-parse-es6">backbone-parse-es6</a> which provides a solution for Backbone dependent Parse users. </p>
+<p>Another reason for backbone-es6 is supporting end to end documentation via ESDoc for ES6 frameworks and apps built on top of backbone-es6. Two ESDoc plugins, <a href="https://github.com/typhonjs/esdoc-plugin-jspm">esdoc-plugin-jspm</a> &amp; <a href="https://github.com/typhonjs/esdoc-plugin-extends-replace">esdoc-plugin-extends-replace</a> along with a complete integrated set of Gulp tasks, <a href="https://github.com/typhonjs/typhonjs-core-gulptasks">typhonjs-core-gulptasks</a> provide documentation generation across multiple modules / source roots via JSPM along with ESLint and several JSPM &amp; NPM tasks.</p>
+<p>backbone-es6 uses <a href="www.jspm.io">JSPM</a> / <a href="https://github.com/systemjs/systemjs">SystemJS</a> for dependency management and bundling distributions. For an example of using JSPM / SystemJS directly with backbone-parse-es6 including typhonjs-core-gulptasks support please see this demo repo:
+<a href="https://github.com/typhonjs/backbone-parse-es6-demo">https://github.com/typhonjs/backbone-parse-es6-demo</a></p>
+<p>When a new Backbone release is made (next 1.2.4) backbone-es6 will be updated. Tests from Backbone will be ported to backbone-es6 with the upcoming 1.2.4 release. </p>
 <p>This repository contains several pre-packed downloads in the <code>dist/</code> directory. There are AMD, CJS, and Global distributions. The &quot;global-inclusive&quot; bundle includes the latest jQuery (2.1.4) and Underscore (1.8.3) libraries.</p>
 <p>Please view the wiki for build instructions and other pertinent info:
 <a href="https://github.com/typhonjs/backbone-es6/wiki">https://github.com/typhonjs/backbone-es6/wiki</a></p>
@@ -72,13 +74,13 @@
 <a href="https://github.com/typhonjs/backbone-es6/issues">https://github.com/typhonjs/backbone-es6/issues</a></p>
 <p>Many thanks to DocumentCloud &amp; all Backbone contributors.</p>
 <p>Backbone (c) 2010-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters &amp; Editors</p>
-<p>Backbone-ES6 (c) 2015 Michael Leahy, TyphonRT, Inc. </p>
-<p>Backbone / Backbone-ES6 may be freely distributed under the MIT license.</p>
+<p>backbone-es6 (c) 2015 Michael Leahy, TyphonRT, Inc. </p>
+<p>backbone-es6 may be freely distributed under the MIT license.</p>
 </div>
 </div>
 
 <footer class="footer">
-  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(0.4.2)</span></a>
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(0.4.3)</span></a>
 </footer>
 
 <script src="script/search_index.js"></script>
