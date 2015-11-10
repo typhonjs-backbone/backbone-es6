@@ -782,7 +782,7 @@ Debug.log(`Collection - set - 1 - at: ${at}; models.length: ${models.length}`);
       const remove = options.remove;
 
       let sort = false;
-      const sortable = this.comparator && (at === null) && options.sort !== false;
+      const sortable = this.comparator && Utils.isNullOrUndef(at) && options.sort !== false;
       const sortAttr = _.isString(this.comparator) ? this.comparator : null;
 
       // Turn bare objects into model references, and prevent invalid models from being added.
