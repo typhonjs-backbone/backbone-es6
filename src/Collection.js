@@ -767,7 +767,6 @@ Debug.log(`Collection - set - 0`, true);
       models = singular ? [models] : models.slice();
 
       let at = options.at;
-//      if (at != null) { at = +at; }
       if (!Utils.isNullOrUndef(at)) { at = +at; }
       if (at < 0) { at += this.length + 1; }
 
