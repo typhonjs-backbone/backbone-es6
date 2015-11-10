@@ -35,7 +35,7 @@ const s_ADD_REFERENCE = (collection, model) =>
 
 Debug.log(`Collection - s_ADD_REFERENCE - id: ${id}; model.cid: ${model.cid}`, true);
 
-   if (id !== null) { collection._byId[id] = model; }
+   if (!Utils.isNullOrUndef(id)) { collection._byId[id] = model; }
    model.on('all', s_ON_MODEL_EVENT, collection);
 };
 
@@ -66,8 +66,8 @@ Debug.log(`Collection - s_ON_MODEL_EVENT - 1 - change - id: ${id}; prevId: ${pre
 
       if (prevId !== id)
       {
-         if (prevId !== null) { delete this._byId[prevId]; }
-         if (id !== null) { this._byId[id] = model; }
+         if (!Utils.isNullOrUndef(prevId)) { delete this._byId[prevId]; }
+         if (!Utils.isNullOrUndef(id)) { this._byId[id] = model; }
       }
    }
 
@@ -129,7 +129,7 @@ const s_REMOVE_REFERENCE = (collection, model) =>
 
 Debug.log(`Collection - s_REMOVE_REFERENCE - id: ${id}; model.cid: ${model.cid}`);
 
-   if (id !== null) { delete collection._byId[id]; }
+   if (!Utils.isNullOrUndef(id)) { delete collection._byId[id]; }
    if (collection === model.collection) { delete model.collection; }
    model.off('all', s_ON_MODEL_EVENT, collection);
 };
@@ -903,7 +903,7 @@ Debug.log(`Collection - set - 12 - !options.silent: ${!options.silent}`);
 
          for (let i = 0; i < toAdd.length; i++)
          {
-            if (at !== null) { options.index = at + i; }
+            if (!Utils.isNullOrUndef(at)) { options.index = at + i; }
 
             model = toAdd[i];
             model.trigger('add', model, this, options);
