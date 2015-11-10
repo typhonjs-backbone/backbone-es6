@@ -768,7 +768,7 @@ Debug.log(`Collection - set - 0`, true);
 
       let at = options.at;
 //      if (at != null) { at = +at; }
-      if (!Utils.isNullOrUndef(models)) { at = +at; }
+      if (!Utils.isNullOrUndef(at)) { at = +at; }
       if (at < 0) { at += this.length + 1; }
 
 Debug.log(`Collection - set - 1 - at: ${at}; models.length: ${models.length}`);
