@@ -883,7 +883,7 @@ Debug.log(`Collection - set - 9 - set.length > 0 && replace - orderChanged: ${or
 
 Debug.log(`Collection - set - 10 - toAdd.length > 0 - sort: ${sort}; at: ${at}`);
 
-         s_SPLICE(this.models, toAdd, at === null ? this.length : at);
+         s_SPLICE(this.models, toAdd, Utils.isNullOrUndef(at) ? this.length : at);
 
          this.length = this.models.length;
       }
