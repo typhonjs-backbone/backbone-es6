@@ -88,7 +88,7 @@ const s_ADD_REFERENCE = (collection, model) =&gt;
 
 Debug.log(`Collection - s_ADD_REFERENCE - id: ${id}; model.cid: ${model.cid}`, true);
 
-   if (id !== null) { collection._byId[id] = model; }
+   if (!Utils.isNullOrUndef(id)) { collection._byId[id] = model; }
    model.on(&apos;all&apos;, s_ON_MODEL_EVENT, collection);
 };
 
@@ -119,8 +119,8 @@ Debug.log(`Collection - s_ON_MODEL_EVENT - 1 - change - id: ${id}; prevId: ${pre
 
       if (prevId !== id)
       {
-         if (prevId !== null) { delete this._byId[prevId]; }
-         if (id !== null) { this._byId[id] = model; }
+         if (!Utils.isNullOrUndef(prevId)) { delete this._byId[prevId]; }
+         if (!Utils.isNullOrUndef(id)) { this._byId[id] = model; }
       }
    }
 
@@ -182,7 +182,7 @@ const s_REMOVE_REFERENCE = (collection, model) =&gt;
 
 Debug.log(`Collection - s_REMOVE_REFERENCE - id: ${id}; model.cid: ${model.cid}`);
 
-   if (id !== null) { delete collection._byId[id]; }
+   if (!Utils.isNullOrUndef(id)) { delete collection._byId[id]; }
    if (collection === model.collection) { delete model.collection; }
    model.off(&apos;all&apos;, s_ON_MODEL_EVENT, collection);
 };
@@ -820,7 +820,7 @@ Debug.log(`Collection - set - 0`, true);
       models = singular ? [models] : models.slice();
 
       let at = options.at;
-      if (at !== null) { at = +at; }
+      if (!Utils.isNullOrUndef(at)) { at = +at; }
       if (at &lt; 0) { at += this.length + 1; }
 
 Debug.log(`Collection - set - 1 - at: ${at}; models.length: ${models.length}`);
@@ -835,7 +835,7 @@ Debug.log(`Collection - set - 1 - at: ${at}; models.length: ${models.length}`);
       const remove = options.remove;
 
       let sort = false;
-      const sortable = this.comparator &amp;&amp; (at === null) &amp;&amp; options.sort !== false;
+      const sortable = this.comparator &amp;&amp; Utils.isNullOrUndef(at) &amp;&amp; options.sort !== false;
       const sortAttr = _.isString(this.comparator) ? this.comparator : null;
 
       // Turn bare objects into model references, and prevent invalid models from being added.
@@ -936,7 +936,7 @@ Debug.log(`Collection - set - 9 - set.length &gt; 0 &amp;&amp; replace - orderCh
 
 Debug.log(`Collection - set - 10 - toAdd.length &gt; 0 - sort: ${sort}; at: ${at}`);
 
-         s_SPLICE(this.models, toAdd, at === null ? this.length : at);
+         s_SPLICE(this.models, toAdd, Utils.isNullOrUndef(at) ? this.length : at);
 
          this.length = this.models.length;
       }
@@ -956,7 +956,7 @@ Debug.log(`Collection - set - 12 - !options.silent: ${!options.silent}`);
 
          for (let i = 0; i &lt; toAdd.length; i++)
          {
-            if (at !== null) { options.index = at + i; }
+            if (!Utils.isNullOrUndef(at)) { options.index = at + i; }
 
             model = toAdd[i];
             model.trigger(&apos;add&apos;, model, this, options);
