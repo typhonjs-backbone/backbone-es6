@@ -2,6 +2,7 @@
 
 import _       from 'underscore';
 import Events  from './Events.js';
+import Utils   from './Utils.js';
 
 // Private / internal methods ---------------------------------------------------------------------------------------
 
@@ -157,7 +158,7 @@ export default class History extends Events
     */
    getFragment(fragment)
    {
-      if (_.isUndefined(fragment) || fragment === null)
+      if (Utils.isNullOrUndef(fragment))
       {
          if (this._usePushState || !this._wantsHashChange)
          {
