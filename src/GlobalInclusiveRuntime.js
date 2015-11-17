@@ -1,7 +1,7 @@
 /**
- * GlobalInclusiveRuntime.js (Backbone) -- Initializes $ and _ setting them to "root.$" and "root._" before
- * delegating to GlobalRuntime.js to initialize Backbone. "root" is defined as self in the browser or global if
- * on the server.
+ * GlobalInclusiveRuntime.js (Backbone) -- Initializes jQuery and Underscore setting them to "root.$", "root.jQuery"
+ * and "root._" respectively before delegating to GlobalRuntime.js to initialize Backbone. "root" is defined as self in
+ * the browser or global if on the server.
  *
  * Note: We use CJS here as ES6 imports are hoisted. We must set root.$ before initializing Backbone.
  */
@@ -17,7 +17,7 @@ var root = (typeof self === 'object' && self.self === self && self) ||
 
 if (typeof root !== 'undefined' && root !== null)
 {
-   root.$ = require('jquery');
+   root.$ = root.jQuery = require('jquery');
    root._ = require('underscore');
 }
 else

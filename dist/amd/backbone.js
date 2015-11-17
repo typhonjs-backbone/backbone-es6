@@ -501,7 +501,7 @@ $__System.register('2', ['3', '4', '5'], function (_export) {
       }
 
       // Ensure that we have the appropriate request data.
-      if (options.data === null && model && (method === 'create' || method === 'update' || method === 'patch')) {
+      if (Utils.isNullOrUndef(options.data) && model && (method === 'create' || method === 'update' || method === 'patch')) {
          params.contentType = 'application/json';
          params.data = JSON.stringify(options.attrs || model.toJSON(options));
       }
@@ -1480,12 +1480,14 @@ $__System.register('d', ['3', '4', '8', '9', 'a', 'b', 'c', 'e'], function (_exp
    };
 });
 
-$__System.register('f', ['3', '8', '9', 'a', 'b', 'c'], function (_export) {
-   var _, Events, _get, _inherits, _createClass, _classCallCheck, s_ROUTE_STRIPPER, s_ROOT_STRIPPER, s_PATH_STRIPPER, s_UPDATE_HASH, History;
+$__System.register('f', ['3', '5', '8', '9', 'a', 'b', 'c'], function (_export) {
+   var _, Utils, Events, _get, _inherits, _createClass, _classCallCheck, s_ROUTE_STRIPPER, s_ROOT_STRIPPER, s_PATH_STRIPPER, s_UPDATE_HASH, History;
 
    return {
       setters: [function (_3) {
          _ = _3['default'];
+      }, function (_5) {
+         Utils = _5['default'];
       }, function (_4) {
          Events = _4['default'];
       }, function (_2) {
@@ -1663,7 +1665,7 @@ $__System.register('f', ['3', '8', '9', 'a', 'b', 'c'], function (_export) {
             }, {
                key: 'getFragment',
                value: function getFragment(fragment) {
-                  if (_.isUndefined(fragment) || fragment === null) {
+                  if (Utils.isNullOrUndef(fragment)) {
                      if (this._usePushState || !this._wantsHashChange) {
                         fragment = this.getPath();
                      } else {
@@ -5425,31 +5427,6 @@ $__System.register('45', ['3', '4', '5', '8', '9', '10', '34', 'a', 'b', 'c'], f
                }
 
                /**
-                * Get a model from a collection, specified by an id, a cid, or by passing in a model.
-                *
-                * @example
-                * var book = library.get(110);
-                *
-                * @see http://backbonejs.org/#Collection-get
-                *
-                * @param {Model} obj   - An instance of a model to search for by object, id, or cid.
-                * @returns {*}
-                */
-            }, {
-               key: 'get',
-               value: function get(obj) {
-                  if (Utils.isNullOrUndef(obj)) {
-                     return void 0;
-                  }
-
-                  var id = this.modelId(Utils.isModel(obj) ? obj.attributes : obj);
-
-                  Debug.log('Collection - get - id: ' + id);
-
-                  return this._byId[obj] || this._byId[id] || this._byId[obj.cid];
-               }
-
-               /**
                 * Fetch the default set of models for this collection from the server, setting them on the collection when they
                 * arrive. The options hash takes success and error callbacks which will both be passed (collection, response,
                 * options) as arguments. When the model data returns from the server, it uses set to (intelligently) merge the
@@ -5521,6 +5498,31 @@ $__System.register('45', ['3', '4', '5', '8', '9', '10', '34', 'a', 'b', 'c'], f
                key: 'findWhere',
                value: function findWhere(attrs) {
                   return this.where(attrs, true);
+               }
+
+               /**
+                * Get a model from a collection, specified by an id, a cid, or by passing in a model.
+                *
+                * @example
+                * var book = library.get(110);
+                *
+                * @see http://backbonejs.org/#Collection-get
+                *
+                * @param {Model} obj   - An instance of a model to search for by object, id, or cid.
+                * @returns {*}
+                */
+            }, {
+               key: 'get',
+               value: function get(obj) {
+                  if (Utils.isNullOrUndef(obj)) {
+                     return void 0;
+                  }
+
+                  var id = this.modelId(Utils.isModel(obj) ? obj.attributes : obj);
+
+                  Debug.log('Collection - get - id: ' + id);
+
+                  return this._byId[obj] || this._byId[id] || this._byId[obj.cid];
                }
 
                /**

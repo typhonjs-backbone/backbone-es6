@@ -21,18 +21,11 @@
       "babel-runtime": "npm:babel-runtime@^5.8.29",
       "core-js": "npm:core-js@^1.2.6",
       "jquery": "npm:jquery@^2.1.4"
-    },
-    "files": [
-      "src/",
-      "esdoc.json",
-      "package.json",
-      "CHANGELOG.md",
-      "README.md"
-    ]
+    }
   },
   "devDependencies": {
     "gulp": "^3.9.0",
-    "jspm": "^0.16.14",
+    "jspm": "^0.16.15",
     "typhonjs-config-eslint": "^0.2.0",
     "typhonjs-core-gulptasks": "^0.3.0"
   }

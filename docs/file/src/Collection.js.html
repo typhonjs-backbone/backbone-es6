@@ -15,7 +15,7 @@
 
 <header>
   <a href="./">Home</a>
-  
+  <a href="./manual/index.html" data-ice="manualHeaderLink">Manual</a>
   <a href="identifiers.html">Reference</a>
   <a href="source.html">Source</a>
   
@@ -456,28 +456,6 @@ class Collection extends Events
    }
 
    /**
-    * Get a model from a collection, specified by an id, a cid, or by passing in a model.
-    *
-    * @example
-    * var book = library.get(110);
-    *
-    * @see http://backbonejs.org/#Collection-get
-    *
-    * @param {Model} obj   - An instance of a model to search for by object, id, or cid.
-    * @returns {*}
-    */
-   get(obj)
-   {
-      if (Utils.isNullOrUndef(obj)) { return void 0; }
-
-      const id = this.modelId(Utils.isModel(obj) ? obj.attributes : obj);
-
-Debug.log(`Collection - get - id: ${id}`);
-
-      return this._byId[obj] || this._byId[id] || this._byId[obj.cid];
-   }
-
-   /**
     * Fetch the default set of models for this collection from the server, setting them on the collection when they
     * arrive. The options hash takes success and error callbacks which will both be passed (collection, response,
     * options) as arguments. When the model data returns from the server, it uses set to (intelligently) merge the
@@ -544,6 +522,28 @@ Debug.log(`Collection - fetch - success callback - method: ${method}`, true);
    findWhere(attrs)
    {
       return this.where(attrs, true);
+   }
+
+   /**
+    * Get a model from a collection, specified by an id, a cid, or by passing in a model.
+    *
+    * @example
+    * var book = library.get(110);
+    *
+    * @see http://backbonejs.org/#Collection-get
+    *
+    * @param {Model} obj   - An instance of a model to search for by object, id, or cid.
+    * @returns {*}
+    */
+   get(obj)
+   {
+      if (Utils.isNullOrUndef(obj)) { return void 0; }
+
+      const id = this.modelId(Utils.isModel(obj) ? obj.attributes : obj);
+
+Debug.log(`Collection - get - id: ${id}`);
+
+      return this._byId[obj] || this._byId[id] || this._byId[obj.cid];
    }
 
    /**

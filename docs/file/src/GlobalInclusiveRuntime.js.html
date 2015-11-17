@@ -15,7 +15,7 @@
 
 <header>
   <a href="./">Home</a>
-  
+  <a href="./manual/index.html" data-ice="manualHeaderLink">Manual</a>
   <a href="identifiers.html">Reference</a>
   <a href="source.html">Source</a>
   
@@ -52,9 +52,9 @@
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/GlobalInclusiveRuntime.js</h1>
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">/**
- * GlobalInclusiveRuntime.js (Backbone) -- Initializes $ and _ setting them to &quot;root.$&quot; and &quot;root._&quot; before
- * delegating to GlobalRuntime.js to initialize Backbone. &quot;root&quot; is defined as self in the browser or global if
- * on the server.
+ * GlobalInclusiveRuntime.js (Backbone) -- Initializes jQuery and Underscore setting them to &quot;root.$&quot;, &quot;root.jQuery&quot;
+ * and &quot;root._&quot; respectively before delegating to GlobalRuntime.js to initialize Backbone. &quot;root&quot; is defined as self in
+ * the browser or global if on the server.
  *
  * Note: We use CJS here as ES6 imports are hoisted. We must set root.$ before initializing Backbone.
  */
@@ -70,7 +70,7 @@ var root = (typeof self === &apos;object&apos; &amp;&amp; self.self === self &am
 
 if (typeof root !== &apos;undefined&apos; &amp;&amp; root !== null)
 {
-   root.$ = require(&apos;jquery&apos;);
+   root.$ = root.jQuery = require(&apos;jquery&apos;);
    root._ = require(&apos;underscore&apos;);
 }
 else
