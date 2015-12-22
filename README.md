@@ -38,6 +38,6 @@ Many thanks to DocumentCloud & all Backbone contributors.
 
 Backbone (c) 2010-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
 
-backbone-es6 (c) 2015 Michael Leahy, TyphonRT, Inc. 
+backbone-es6 (c) 2015-present Michael Leahy, TyphonRT Inc. 
 
 backbone-es6 may be freely distributed under the MIT license.
