@@ -2,6 +2,7 @@
    "title": "backbone-es6",
    "source": "src",
    "destination": "docs",
+   "plugins": [ { "name": "esdoc-plugin-jspm" } ],
    "manual":
    {
       "overview": ["./manual/overview.md"],
