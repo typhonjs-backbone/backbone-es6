@@ -3,7 +3,3 @@
 npm-debug.log
 node_modules
 jspm_packages
-docs/ast
-docs/coverage.json
-docs/dump.json
-docs/package.json
