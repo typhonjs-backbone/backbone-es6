@@ -6,7 +6,7 @@
 
 import Backbone      from './Backbone.js';
 import Collection    from './Collection.js';
-import Events        from './Events.js';
+import Events        from 'typhonjs-core-backbone-events/src/Events.js';
 import History       from './History.js';
 import Model         from './Model.js';
 import Router        from './Router.js';

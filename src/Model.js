@@ -2,7 +2,7 @@
 
 import _             from 'underscore';
 import BackboneProxy from './BackboneProxy.js';
-import Events        from './Events.js';
+import Events        from 'typhonjs-core-backbone-events/src/Events.js';
 import Utils         from './Utils.js';
 
 /**

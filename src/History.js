@@ -1,7 +1,7 @@
 'use strict';
 
 import _       from 'underscore';
-import Events  from './Events.js';
+import Events  from 'typhonjs-core-backbone-events/src/Events.js';
 import Utils   from './Utils.js';
 
 // Private / internal methods ---------------------------------------------------------------------------------------
