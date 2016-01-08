@@ -193,6 +193,14 @@ class Model extends Events
       let attrs = attributes;
 
       /**
+       * The prefix is used to create the client id which is used to identify models locally.
+       * You may want to override this if you're experiencing name clashes with model ids.
+       *
+       * @type {string}
+       */
+      this.cidPrefix = 'c';
+
+      /**
        * Client side ID
        * @type {number}
        */
@@ -224,14 +232,6 @@ class Model extends Events
        * @type {*}
        */
       this.validationError = null;
-
-      /**
-       * The prefix is used to create the client id which is used to identify models locally.
-       * You may want to override this if you're experiencing name clashes with model ids.
-       *
-       * @type {string}
-       */
-      this.cidPrefix = 'c';
 
       // Allows child classes to postpone initialization.
       if (_.isBoolean(options.abortCtorInit) && options.abortCtorInit) { return; }
