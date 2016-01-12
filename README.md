@@ -20,7 +20,7 @@ backbone-es6 uses [JSPM](http://www.jspm.io) / [SystemJS](https://github.com/sys
 
 When a new Backbone release is made (next 1.2.4) backbone-es6 will be updated. Tests from Backbone will be ported to backbone-es6 with the upcoming 1.2.4 release. 
 
-This repository contains several pre-packed downloads in the `dist/` directory. There are AMD, CJS, and Global distributions. The "global-inclusive" bundle includes the latest jQuery (2.1.4) and Underscore (1.8.3) libraries.
+This repository contains several pre-packed downloads in the `dist/` directory. There are AMD, CJS, and Global distributions. The "global-inclusive" bundle includes the latest jQuery (2.2.0) and Underscore (1.8.3) libraries.
 
 Please view the wiki for build instructions and other pertinent info:
 https://github.com/typhonjs/backbone-es6/wiki
