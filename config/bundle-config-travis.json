@@ -6,7 +6,7 @@
          "formats": ["amd"],
          "mangle": false,
          "minify": false,
-         "src": "src/ModuleRuntime.js - [jquery] - [underscore]",
+         "src": "src/ModuleRuntime.js",
          "extraConfig":
          {
             "meta":

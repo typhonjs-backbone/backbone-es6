@@ -4,10 +4,10 @@
       {
          "destBaseDir": "./dist",
          "destFilename": "backbone.js",
-         "formats": ["amd", "cjs"],
+         "formats": ["amd", "cjs", "umd"],
          "mangle": false,
          "minify": false,
-         "src": "src/ModuleRuntime.js - [jquery] - [underscore]",
+         "src": "src/ModuleRuntime.js",
          "extraConfig":
          {
             "meta":
@@ -21,10 +21,10 @@
       {
          "destBaseDir": "./dist",
          "destFilename": "backbone.min.js",
-         "formats": ["amd", "cjs"],
+         "formats": ["amd", "cjs", "umd"],
          "mangle": true,
          "minify": true,
-         "src": "src/ModuleRuntime.js - [jquery] - [underscore]",
+         "src": "src/ModuleRuntime.js",
          "extraConfig":
          {
             "meta":
