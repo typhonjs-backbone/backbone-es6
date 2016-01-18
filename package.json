@@ -28,6 +28,6 @@
     "gulp": "^3.9.0",
     "jspm": "^0.16.23",
     "typhonjs-config-eslint": "^0.2.1",
-    "typhonjs-core-gulptasks": "^0.4.0"
+    "typhonjs-core-gulptasks": "^0.4.1"
   }
 }
