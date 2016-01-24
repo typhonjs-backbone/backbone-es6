@@ -50,7 +50,17 @@ export default function extend(protoProps, staticProps)
    child.prototype = new Surrogate();
 
    // Add prototype properties (instance properties) to the subclass, if supplied.
-   if (protoProps) { _.extend(child.prototype, protoProps); }
+   if (protoProps)
+   {
+      _.extend(child.prototype, protoProps);
+
+      // backbone-es6 addition: Because View defines a getter for tagName we must actually redefine this getter
+      // from the `protoProps.tagName` if it exists.
+      if (protoProps.tagName)
+      {
+         Object.defineProperty(child.prototype, "tagName", { get: () => { return protoProps.tagName; } });
+      }
+   }
 
    // Set a convenience property in case the parent's prototype is needed later.
    child.__super__ = parent.prototype;
