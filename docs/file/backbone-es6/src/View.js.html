@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../">
+  <title data-ice="title">backbone-es6/src/View.js | backbone-es6 API Document</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  
+  
+  <script src="script/manual.js"></script>
+</head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  <a href="./manual/index.html" data-ice="manualHeaderLink">Manual</a>
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <a data-ice="repoURL" href="https://github.com/typhonjs/backbone-es6/" class="repo-url-github">Repository</a>
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">src</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/backbone-es6/src/Backbone.js~Backbone.html">Backbone</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/backbone-es6/src/Collection.js~Collection.html">Collection</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/backbone-es6/src/Debug.js~Debug.html">Debug</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/backbone-es6/src/History.js~History.html">History</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/backbone-es6/src/Model.js~Model.html">Model</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/backbone-es6/src/Router.js~Router.html">Router</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/backbone-es6/src/Utils.js~Utils.html">Utils</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/backbone-es6/src/View.js~View.html">View</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-extend">extend</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-sync">sync</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-BackboneProxy">BackboneProxy</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-collection">collection</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-model">model</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">typhonjs-core-backbone-events/src</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/backbone-es6/jspm_packages/github/typhonjs/typhonjs-core-backbone-events@master/src/Events.js~Events.html">Events</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/backbone-es6/jspm_packages/github/typhonjs/typhonjs-core-backbone-events@master/src/TyphonEvents.js~TyphonEvents.html">TyphonEvents</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">backbone-es6/src/View.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">&apos;use strict&apos;;
+
+import _             from &apos;underscore&apos;;
+import BackboneProxy from &apos;./BackboneProxy.js&apos;;
+import Events        from &apos;typhonjs-core-backbone-events/src/Events.js&apos;;
+
+// Private / internal methods ---------------------------------------------------------------------------------------
+
+/**
+ * Cached regex to split keys for `delegate`.
+ * @type {RegExp}
+ */
+const s_DELEGATE_EVENT_SPLITTER = /^(\S+)\s*(.*)$/;
+
+/**
+ * List of view options to be set as properties.
+ * @type {string[]}
+ */
+const s_VIEW_OPTIONS = [&apos;model&apos;, &apos;collection&apos;, &apos;el&apos;, &apos;id&apos;, &apos;attributes&apos;, &apos;className&apos;, &apos;tagName&apos;, &apos;events&apos;];
+
+/**
+ * Backbone.View - Represents a logical chunk of UI in the DOM. (http://backbonejs.org/#View)
+ * -------------
+ *
+ * Backbone Views are almost more convention than they are actual code. A View is simply a JavaScript object that
+ * represents a logical chunk of UI in the DOM. This might be a single item, an entire list, a sidebar or panel, or
+ * even the surrounding frame which wraps your whole app. Defining a chunk of UI as a **View** allows you to define
+ * your DOM events declaratively, without having to worry about render order ... and makes it easy for the view to
+ * react to specific changes in the state of your models.
+ *
+ * Creating a Backbone.View creates its initial element outside of the DOM, if an existing element is not provided...
+ *
+ * Example if working with Backbone as ES6 source:
+ * @example
+ *
+ * import Backbone from &apos;backbone&apos;;
+ *
+ * export default class MyView extends Backbone.View
+ * {
+ *    constructor(options)
+ *    {
+ *       super(options);
+ *       ...
+ *    }
+ *
+ *    initialize()
+ *    {
+ *       ...
+ *    }
+ *    ...
+ * }
+ *
+ * @example
+ *
+ * To use a custom $el / element define it by a getter method:
+ *
+ *    get el() { return &apos;my-element&apos;; }
+ *
+ * Likewise with events define it by a getter method:
+ *
+ *    get events()
+ *    {
+ *       return {
+ *         &apos;submit form.login-form&apos;: &apos;logIn&apos;,
+ *         &apos;click .sign-up&apos;: &apos;signUp&apos;,
+ *         &apos;click .forgot-password&apos;: &apos;forgotPassword&apos;
+ *       }
+ *    }
+ */
+export default class View extends Events
+{
+   /**
+    * The default `tagName` of a View&apos;s element is `&quot;div&quot;`.
+    *
+    * @returns {string}
+    */
+   get tagName() { return &apos;div&apos;; }
+
+   /**
+    * There are several special options that, if passed, will be attached directly to the view: model, collection, el,
+    * id, className, tagName, attributes and events. If the view defines an initialize function, it will be called when
+    * the view is first created. If you&apos;d like to create a view that references an element already in the DOM, pass in
+    * the element as an option: new View({el: existingElement})
+    *
+    * @see http://backbonejs.org/#View-constructor
+    *
+    * @param {object} options - Default options which are mixed into this class as properties via `_.pick` against
+    *                           s_VIEW_OPTIONS. Options also is passed onto the `initialize()` function.
+    */
+   constructor(options)
+   {
+      super();
+
+      /**
+       * Client ID
+       * @type {number}
+       */
+      this.cid = _.uniqueId(&apos;view&apos;);
+
+      _.extend(this, _.pick(options, s_VIEW_OPTIONS));
+
+      this._ensureElement();
+      this.initialize(...arguments);
+   }
+
+   /**
+    * If jQuery is included on the page, each view has a $ function that runs queries scoped within the view&apos;s element.
+    * If you use this scoped jQuery function, you don&apos;t have to use model ids as part of your query to pull out specific
+    * elements in a list, and can rely much more on HTML class attributes. It&apos;s equivalent to running:
+    * view.$el.find(selector)
+    *
+    * @see https://api.jquery.com/find/
+    *
+    * @example
+    * class Chapter extends Backbone.View {
+    *    serialize() {
+    *       return {
+    *          title: this.$(&quot;.title&quot;).text(),
+    *          start: this.$(&quot;.start-page&quot;).text(),
+    *          end:   this.$(&quot;.end-page&quot;).text()
+    *       };
+    *    }
+    * }
+    *
+    * @see http://backbonejs.org/#View-dollar
+    * @see https://api.jquery.com/find/
+    *
+    * @param {string}   selector - A string containing a selector expression to match elements against.
+    * @returns {Element|$}
+    */
+   $(selector)
+   {
+      return this.$el.find(selector);
+   }
+
+   /**
+    * Produces a DOM element to be assigned to your view. Exposed for subclasses using an alternative DOM
+    * manipulation API.
+    *
+    * @protected
+    * @param {string}   tagName  - Name of the tag element to create.
+    * @returns {Element}
+    *
+    * @see https://developer.mozilla.org/en-US/docs/Web/API/Document/createElement
+    */
+   _createElement(tagName)
+   {
+      return document.createElement(tagName);
+   }
+
+   /**
+    * Add a single event listener to the view&apos;s element (or a child element using `selector`). This only works for
+    * delegate-able events: not `focus`, `blur`, and not `change`, `submit`, and `reset` in Internet Explorer.
+    *
+    * @see http://backbonejs.org/#View-delegateEvents
+    * @see http://api.jquery.com/on/
+    *
+    * @param {string}   eventName   - One or more space-separated event types and optional namespaces.
+    * @param {string}   selector    - A selector string to filter the descendants of the selected elements that trigger
+    *                                 the event.
+    * @param {function} listener    - A function to execute when the event is triggered.
+    * @returns {View}
+    */
+   delegate(eventName, selector, listener)
+   {
+      this.$el.on(`${eventName}.delegateEvents${this.cid}`, selector, listener);
+      return this;
+   }
+
+   /**
+    * Uses jQuery&apos;s on function to provide declarative callbacks for DOM events within a view. If an events hash is not
+    * passed directly, uses this.events as the source. Events are written in the format {&quot;event selector&quot;: &quot;callback&quot;}.
+    * The callback may be either the name of a method on the view, or a direct function body. Omitting the selector
+    * causes the event to be bound to the view&apos;s root element (this.el). By default, delegateEvents is called within
+    * the View&apos;s constructor for you, so if you have a simple events hash, all of your DOM events will always already
+    * be connected, and you will never have to call this function yourself.
+    *
+    * The events property may also be defined as a function that returns an events hash, to make it easier to
+    * programmatically define your events, as well as inherit them from parent views.
+    *
+    * Using delegateEvents provides a number of advantages over manually using jQuery to bind events to child elements
+    * during render. All attached callbacks are bound to the view before being handed off to jQuery, so when the
+    * callbacks are invoked, this continues to refer to the view object. When delegateEvents is run again, perhaps with
+    * a different events hash, all callbacks are removed and delegated afresh &#x2014; useful for views which need to behave
+    * differently when in different modes.
+    *
+    * A single-event version of delegateEvents is available as delegate. In fact, delegateEvents is simply a multi-event
+    * wrapper around delegate. A counterpart to undelegateEvents is available as undelegate.
+    *
+    * Callbacks will be bound to the view, with `this` set properly. Uses event delegation for efficiency.
+    * Omitting the selector binds the event to `this.el`.
+    *
+    * @example
+    * Older `extend` example:
+    * var DocumentView = Backbone.View.extend({
+    *    events: {
+    *       &quot;dblclick&quot;                : &quot;open&quot;,
+    *       &quot;click .icon.doc&quot;         : &quot;select&quot;,
+    *       &quot;contextmenu .icon.doc&quot;   : &quot;showMenu&quot;,
+    *       &quot;click .show_notes&quot;       : &quot;toggleNotes&quot;,
+    *       &quot;click .title .lock&quot;      : &quot;editAccessLevel&quot;,
+    *       &quot;mouseover .title .date&quot;  : &quot;showTooltip&quot;
+    *    },
+    *
+    *    render: function() {
+    *       this.$el.html(this.template(this.model.attributes));
+    *       return this;
+    *    },
+    *
+    *    open: function() {
+    *       window.open(this.model.get(&quot;viewer_url&quot;));
+    *    },
+    *
+    *    select: function() {
+    *       this.model.set({selected: true});
+    *    },
+    *
+    *   ...
+    * });
+    *
+    * @example
+    * Converting the above `extend` example to ES6:
+    * class DocumentView extends Backbone.View {
+    *    get events() {
+    *       return {
+    *          &quot;dblclick&quot;                : &quot;open&quot;,
+    *          &quot;click .icon.doc&quot;         : &quot;select&quot;,
+    *          &quot;contextmenu .icon.doc&quot;   : &quot;showMenu&quot;,
+    *          &quot;click .show_notes&quot;       : &quot;toggleNotes&quot;,
+    *          &quot;click .title .lock&quot;      : &quot;editAccessLevel&quot;,
+    *          &quot;mouseover .title .date&quot;  : &quot;showTooltip&quot;
+    *       };
+    *    }
+    *
+    *    render() {
+    *       this.$el.html(this.template(this.model.attributes));
+    *       return this;
+    *    }
+    *
+    *    open() {
+    *       window.open(this.model.get(&quot;viewer_url&quot;));
+    *    }
+    *
+    *    select() {
+    *       this.model.set({selected: true});
+    *    }
+    *    ...
+    * }
+    *
+    * @see http://backbonejs.org/#View-delegateEvents
+    * @see http://api.jquery.com/on/
+    *
+    * @param {object}   events   - hash of event descriptions to bind.
+    * @returns {View}
+    */
+   delegateEvents(events)
+   {
+      events = events || _.result(this, &apos;events&apos;);
+      if (!events) { return this; }
+      this.undelegateEvents();
+      for (const key in events)
+      {
+         let method = events[key];
+         if (!_.isFunction(method)) { method = this[method]; }
+         if (!method) { continue; }
+         const match = key.match(s_DELEGATE_EVENT_SPLITTER);
+         this.delegate(match[1], match[2], _.bind(method, this));
+      }
+      return this;
+   }
+
+   /**
+    * Ensure that the View has a DOM element to render into. If `this.el` is a string, pass it through `$()`, take
+    * the first matching element, and re-assign it to `el`. Otherwise, create an element from the `id`, `className`
+    * and `tagName` properties.
+    *
+    * @protected
+    */
+   _ensureElement()
+   {
+      if (!this.el)
+      {
+         const attrs = _.extend({}, _.result(this, &apos;attributes&apos;));
+         if (this.id) { attrs.id = _.result(this, &apos;id&apos;); }
+         if (this.className) { attrs[&apos;class&apos;] = _.result(this, &apos;className&apos;); }
+         this.setElement(this._createElement(_.result(this, &apos;tagName&apos;)));
+         this._setAttributes(attrs);
+      }
+      else
+      {
+         this.setElement(_.result(this, &apos;el&apos;));
+      }
+   }
+
+   /**
+    * Initialize is an empty function by default. Override it with your own initialization logic.
+    *
+    * @see http://backbonejs.org/#View-constructor
+    * @abstract
+    */
+   initialize()
+   {
+   }
+
+   /**
+    * Removes a view and its el from the DOM, and calls stopListening to remove any bound events that the view has
+    * listenTo&apos;d.
+    *
+    * @see http://backbonejs.org/#View-remove
+    * @see {@link _removeElement}
+    * @see {@link stopListening}
+    *
+    * @returns {View}
+    */
+   remove()
+   {
+      this._removeElement();
+      this.stopListening();
+      return this;
+   }
+
+   /**
+    * Remove this view&apos;s element from the document and all event listeners attached to it. Exposed for subclasses
+    * using an alternative DOM manipulation API.
+    *
+    * @protected
+    * @see https://api.jquery.com/remove/
+    */
+   _removeElement()
+   {
+      this.$el.remove();
+   }
+
+   /**
+    * The default implementation of render is a no-op. Override this function with your code that renders the view
+    * template from model data, and updates this.el with the new HTML. A good convention is to return this at the end
+    * of render to enable chained calls.
+    *
+    * Backbone is agnostic with respect to your preferred method of HTML templating. Your render function could even
+    * munge together an HTML string, or use document.createElement to generate a DOM tree. However, we suggest choosing
+    * a nice JavaScript templating library. Mustache.js, Haml-js, and Eco are all fine alternatives. Because
+    * Underscore.js is already on the page, _.template is available, and is an excellent choice if you prefer simple
+    * interpolated-JavaScript style templates.
+    *
+    * Whatever templating strategy you end up with, it&apos;s nice if you never have to put strings of HTML in your
+    * JavaScript. At DocumentCloud, we use Jammit in order to package up JavaScript templates stored in /app/views as
+    * part of our main core.js asset package.
+    *
+    * @example
+    * class Bookmark extends Backbone.View {
+    *    get template() { return _.template(...); }
+    *
+    *    render() {
+    *       this.$el.html(this.template(this.model.attributes));
+    *       return this;
+    *    }
+    * }
+    *
+    * @see http://backbonejs.org/#View-render
+    *
+    * @abstract
+    * @returns {View}
+    */
+   render()
+   {
+      return this;
+   }
+
+   /**
+    * Set attributes from a hash on this view&apos;s element.  Exposed for subclasses using an alternative DOM
+    * manipulation API.
+    *
+    * @protected
+    * @param {object}   attributes - An object defining attributes to associate with `this.$el`.
+    */
+   _setAttributes(attributes)
+   {
+      this.$el.attr(attributes);
+   }
+
+   /**
+    * Creates the `this.el` and `this.$el` references for this view using the given `el`. `el` can be a CSS selector
+    * or an HTML string, a jQuery context or an element. Subclasses can override this to utilize an alternative DOM
+    * manipulation API and are only required to set the `this.el` property.
+    *
+    * @protected
+    * @param {string|object}  el - A CSS selector or an HTML string, a jQuery context or an element.
+    */
+   _setElement(el)
+   {
+      /**
+       * Cached jQuery context for element.
+       * @type {object}
+       */
+      this.$el = el instanceof BackboneProxy.backbone.$ ? el : BackboneProxy.backbone.$(el);
+
+      /**
+       * Cached element
+       * @type {Element}
+       */
+      this.el = this.$el[0];
+   }
+
+   /**
+    * If you&apos;d like to apply a Backbone view to a different DOM element, use setElement, which will also create the
+    * cached $el reference and move the view&apos;s delegated events from the old element to the new one.
+    *
+    * @see http://backbonejs.org/#View-setElement
+    * @see {@link undelegateEvents}
+    * @see {@link _setElement}
+    * @see {@link delegateEvents}
+    *
+    * @param {string|object}  element  - A CSS selector or an HTML string, a jQuery context or an element.
+    * @returns {View}
+    */
+   setElement(element)
+   {
+      this.undelegateEvents();
+      this._setElement(element);
+      this.delegateEvents();
+      return this;
+   }
+
+   /**
+    * A finer-grained `undelegateEvents` for removing a single delegated event. `selector` and `listener` are
+    * both optional.
+    *
+    * @see http://backbonejs.org/#View-undelegateEvents
+    * @see http://api.jquery.com/off/
+    *
+    * @param {string}   eventName   - One or more space-separated event types and optional namespaces.
+    * @param {string}   selector    - A selector which should match the one originally passed to `.delegate()`.
+    * @param {function} listener    - A handler function previously attached for the event(s).
+    * @returns {View}
+    */
+   undelegate(eventName, selector, listener)
+   {
+      this.$el.off(`${eventName}.delegateEvents${this.cid}`, selector, listener);
+      return this;
+   }
+
+   /**
+    * Removes all of the view&apos;s delegated events. Useful if you want to disable or remove a view from the DOM
+    * temporarily.
+    *
+    * @see http://backbonejs.org/#View-undelegateEvents
+    * @see http://api.jquery.com/off/
+    *
+    * @returns {View}
+    */
+   undelegateEvents()
+   {
+      if (this.$el) { this.$el.off(`.delegateEvents${this.cid}`); }
+      return this;
+   }
+}</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(0.4.3)</span></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

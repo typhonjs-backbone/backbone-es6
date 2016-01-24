@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl">
+  <title data-ice="title">backbone-es6 API Document</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  
+  
+  <script src="script/manual.js"></script>
+</head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  <a href="./manual/index.html" data-ice="manualHeaderLink">Manual</a>
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <a data-ice="repoURL" href="https://github.com/typhonjs/backbone-es6/" class="repo-url-github">Repository</a>
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">src</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/backbone-es6/src/Backbone.js~Backbone.html">Backbone</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/backbone-es6/src/Collection.js~Collection.html">Collection</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/backbone-es6/src/Debug.js~Debug.html">Debug</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/backbone-es6/src/History.js~History.html">History</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/backbone-es6/src/Model.js~Model.html">Model</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/backbone-es6/src/Router.js~Router.html">Router</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/backbone-es6/src/Utils.js~Utils.html">Utils</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/backbone-es6/src/View.js~View.html">View</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-extend">extend</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-sync">sync</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-BackboneProxy">BackboneProxy</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-collection">collection</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-model">model</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">typhonjs-core-backbone-events/src</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/backbone-es6/jspm_packages/github/typhonjs/typhonjs-core-backbone-events@master/src/Events.js~Events.html">Events</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/backbone-es6/jspm_packages/github/typhonjs/typhonjs-core-backbone-events@master/src/TyphonEvents.js~TyphonEvents.html">TyphonEvents</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><div data-ice="index" class="github-markdown"><p><img src="http://i.imgur.com/KKkgP8P.png" alt="Backbone-ES6"></p>
+<p><a href="https://github.com/jashkenas/backbone"><img src="https://img.shields.io/badge/backbone-1.2.3-yellowgreen.svg?style=flat" alt="Backbone"></a>
+<a href="http://js.docs.typhonrt.org/backbone-es6/"><img src="http://js.docs.typhonrt.org/backbone-es6/badge.svg" alt="Documentation"></a>
+<a href="https://en.wikipedia.org/wiki/Indent_style#Allman_style"><img src="https://img.shields.io/badge/code%20style-allman-yellowgreen.svg?style=flat" alt="Code Style"></a>
+<a href="https://github.com/typhonjs/backbone-es6/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-MIT-yellowgreen.svg?style=flat" alt="License"></a></p>
+<p><a href="https://travis-ci.org/typhonjs/backbone-es6"><img src="https://travis-ci.org/typhonjs/backbone-es6.svg" alt="Build Status"></a>
+<a href="https://www.versioneye.com/user/projects/5627b86536d0ab0021000f46"><img src="https://www.versioneye.com/user/projects/5627b86536d0ab0021000f46/badge.svg?style=flat" alt="Dependency Status"></a></p>
+<p>Backbone supplies structure to JavaScript-heavy applications by providing models with key-value binding and custom events, collections with a rich API of enumerable functions, views with declarative event handling, and connects it all to your existing application over a RESTful JSON interface.</p>
+<p>backbone-es6 is a fork of Backbone (<a href="https://github.com/jashkenas/backbone">https://github.com/jashkenas/backbone</a>) converting and modularizing it into idiomatic ES6. The impetus for this fork is to experiment with modernizing and making Backbone easier to modify in a granular fashion. In particular the <a href="http://www.parse.com">Parse JS SDK</a> previously also was a fork of Backbone, but with the 1.6+ SDK release the Backbone API was unceremoniously removed. backbone-es6 provides the base for <a href="https://github.com/typhonjs/backbone-parse-es6">backbone-parse-es6</a> which provides a solution for Backbone dependent Parse users. </p>
+<p>Another reason for backbone-es6 is supporting end to end documentation via ESDoc for ES6 frameworks and apps built on top of backbone-es6. Two ESDoc plugins, <a href="https://github.com/typhonjs/esdoc-plugin-jspm">esdoc-plugin-jspm</a> &amp; <a href="https://github.com/typhonjs/esdoc-plugin-extends-replace">esdoc-plugin-extends-replace</a> along with a complete integrated set of Gulp tasks, <a href="https://github.com/typhonjs/typhonjs-core-gulptasks">typhonjs-core-gulptasks</a> provide documentation generation across multiple modules / source roots via JSPM along with ESLint and several JSPM &amp; NPM tasks.</p>
+<p>backbone-es6 uses <a href="http://www.jspm.io">JSPM</a> / <a href="https://github.com/systemjs/systemjs">SystemJS</a> for dependency management and bundling distributions. For an example of using JSPM / SystemJS directly with backbone-es6 &amp; Backbone.localStorage including typhonjs-core-gulptasks support please see this demo repo:</p>
+<ul>
+<li><a href="https://github.com/typhonjs-demos/backbone-es6-localstorage-todos">https://github.com/typhonjs-demos/backbone-es6-localstorage-todos</a></li>
+</ul>
+<p>When a new Backbone release is made (next 1.2.4) backbone-es6 will be updated. Tests from Backbone will be ported to backbone-es6 with the upcoming 1.2.4 release. </p>
+<p>This repository contains several pre-packed downloads in the <code>dist/</code> directory. There are AMD, CJS, and Global distributions. The &quot;global-inclusive&quot; bundle includes the latest jQuery (2.2.0) and Underscore (1.8.3) libraries.</p>
+<p>Please view the wiki for build instructions and other pertinent info:
+<a href="https://github.com/typhonjs/backbone-es6/wiki">https://github.com/typhonjs/backbone-es6/wiki</a></p>
+<p>API documentation can be found in the <code>docs/</code> directory and online here:
+<a href="http://js.docs.typhonrt.org/backbone-es6/">http://js.docs.typhonrt.org/backbone-es6/</a></p>
+<p>For original Backbone Docs, License, Tests, pre-packed downloads, see:
+<a href="http://backbonejs.org">http://backbonejs.org</a></p>
+<p>To suggest a feature or report a bug:
+<a href="https://github.com/typhonjs/backbone-es6/issues">https://github.com/typhonjs/backbone-es6/issues</a></p>
+<p>Many thanks to DocumentCloud &amp; all Backbone contributors.</p>
+<p>Backbone (c) 2010-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters &amp; Editors</p>
+<p>backbone-es6 (c) 2015-present Michael Leahy, TyphonRT Inc. </p>
+<p>backbone-es6 may be freely distributed under the MIT license.</p>
+</div>
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(0.4.3)</span></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>
