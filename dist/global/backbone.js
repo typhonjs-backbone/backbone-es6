@@ -1,36 +1,9 @@
-"format global";
-
 !function(e){function r(e,r,o){return 4===arguments.length?t.apply(this,arguments):void n(e,{declarative:!0,deps:r,declare:o})}function t(e,r,t,o){n(e,{declarative:!1,deps:r,executingRequire:t,execute:o})}function n(e,r){r.name=e,e in p||(p[e]=r),r.normalizedDeps=r.deps}function o(e,r){if(r[e.groupIndex]=r[e.groupIndex]||[],-1==v.call(r[e.groupIndex],e)){r[e.groupIndex].push(e);for(var t=0,n=e.normalizedDeps.length;n>t;t++){var a=e.normalizedDeps[t],u=p[a];if(u&&!u.evaluated){var d=e.groupIndex+(u.declarative!=e.declarative);if(void 0===u.groupIndex||u.groupIndex<d){if(void 0!==u.groupIndex&&(r[u.groupIndex].splice(v.call(r[u.groupIndex],u),1),0==r[u.groupIndex].length))throw new TypeError("Mixed dependency cycle detected");u.groupIndex=d}o(u,r)}}}}function a(e){var r=p[e];r.groupIndex=0;var t=[];o(r,t);for(var n=!!r.declarative==t.length%2,a=t.length-1;a>=0;a--){for(var u=t[a],i=0;i<u.length;i++){var s=u[i];n?d(s):l(s)}n=!n}}function u(e){return x[e]||(x[e]={name:e,dependencies:[],exports:{},importers:[]})}function d(r){if(!r.module){var t=r.module=u(r.name),n=r.module.exports,o=r.declare.call(e,function(e,r){if(t.locked=!0,"object"==typeof e)for(var o in e)n[o]=e[o];else n[e]=r;for(var a=0,u=t.importers.length;u>a;a++){var d=t.importers[a];if(!d.locked)for(var i=0;i<d.dependencies.length;++i)d.dependencies[i]===t&&d.setters[i](n)}return t.locked=!1,r},r.name);t.setters=o.setters,t.execute=o.execute;for(var a=0,i=r.normalizedDeps.length;i>a;a++){var l,s=r.normalizedDeps[a],c=p[s],v=x[s];v?l=v.exports:c&&!c.declarative?l=c.esModule:c?(d(c),v=c.module,l=v.exports):l=f(s),v&&v.importers?(v.importers.push(t),t.dependencies.push(v)):t.dependencies.push(null),t.setters[a]&&t.setters[a](l)}}}function i(e){var r,t=p[e];if(t)t.declarative?c(e,[]):t.evaluated||l(t),r=t.module.exports;else if(r=f(e),!r)throw new Error("Unable to load dependency "+e+".");return(!t||t.declarative)&&r&&r.__useDefault?r["default"]:r}function l(r){if(!r.module){var t={},n=r.module={exports:t,id:r.name};if(!r.executingRequire)for(var o=0,a=r.normalizedDeps.length;a>o;o++){var u=r.normalizedDeps[o],d=p[u];d&&l(d)}r.evaluated=!0;var c=r.execute.call(e,function(e){for(var t=0,n=r.deps.length;n>t;t++)if(r.deps[t]==e)return i(r.normalizedDeps[t]);throw new TypeError("Module "+e+" not declared as a dependency.")},t,n);c&&(n.exports=c),t=n.exports,t&&t.__esModule?r.esModule=t:r.esModule=s(t)}}function s(r){if(r===e)return r;var t={};if("object"==typeof r||"function"==typeof r)if(g){var n;for(var o in r)(n=Object.getOwnPropertyDescriptor(r,o))&&h(t,o,n)}else{var a=r&&r.hasOwnProperty;for(var o in r)(!a||r.hasOwnProperty(o))&&(t[o]=r[o])}return t["default"]=r,h(t,"__useDefault",{value:!0}),t}function c(r,t){var n=p[r];if(n&&!n.evaluated&&n.declarative){t.push(r);for(var o=0,a=n.normalizedDeps.length;a>o;o++){var u=n.normalizedDeps[o];-1==v.call(t,u)&&(p[u]?c(u,t):f(u))}n.evaluated||(n.evaluated=!0,n.module.execute.call(e))}}function f(e){if(D[e])return D[e];if("@node/"==e.substr(0,6))return y(e.substr(6));var r=p[e];if(!r)throw"Module "+e+" not present.";return a(e),c(e,[]),p[e]=void 0,r.declarative&&h(r.module.exports,"__esModule",{value:!0}),D[e]=r.declarative?r.module.exports:r.esModule}var p={},v=Array.prototype.indexOf||function(e){for(var r=0,t=this.length;t>r;r++)if(this[r]===e)return r;return-1},g=!0;try{Object.getOwnPropertyDescriptor({a:0},"a")}catch(m){g=!1}var h;!function(){try{Object.defineProperty({},"a",{})&&(h=Object.defineProperty)}catch(e){h=function(e,r,t){try{e[r]=t.value||t.get.call(e)}catch(n){}}}}();var x={},y="undefined"!=typeof System&&System._nodeRequire||"undefined"!=typeof require&&require.resolve&&"undefined"!=typeof process&&require,D={"@empty":{}};return function(e,n,o){return function(a){a(function(a){for(var u={_nodeRequire:y,register:r,registerDynamic:t,get:f,set:function(e,r){D[e]=r},newModule:function(e){return e}},d=0;d<n.length;d++)(function(e,r){r&&r.__esModule?D[e]=r:D[e]=s(r)})(n[d],arguments[d]);o(u);var i=f(e[0]);if(e.length>1)for(var d=1;d<e.length;d++)f(e[d]);return i.__useDefault?i["default"]:i})}}}("undefined"!=typeof self?self:global)
 
-(["1"], [], function($__System) {
+(["1"], ["4","3"], function($__System) {
 
 !function(){var t=$__System;if("undefined"!=typeof window&&"undefined"!=typeof document&&window.location)var s=location.protocol+"//"+location.hostname+(location.port?":"+location.port:"");t.set("@@cjs-helpers",t.newModule({getPathVars:function(t){var n,o=t.lastIndexOf("!");n=-1!=o?t.substr(0,o):t;var e=n.split("/");return e.pop(),e=e.join("/"),"file:///"==n.substr(0,8)?(n=n.substr(7),e=e.substr(7),isWindows&&(n=n.substr(1),e=e.substr(1))):s&&n.substr(0,s.length)===s&&(n=n.substr(s.length),e=e.substr(s.length)),{filename:n,dirname:e}}}))}();
-$__System.register('2', [], function (_export) {
-  /**
-   * A little hack for SystemJS Builder to replace the jQuery module loading it from any globally defined version from
-   * external script tags. This is used when creating a partial inclusive bundle via GlobalRuntime.js.
-   */
-
-  'use strict';
-
-  // Establish the root object, `window` (`self`) in the browser, or `global` on the server.
-  // We use `self` instead of `window` for `WebWorker` support.
-  var root;
-  return {
-    setters: [],
-    execute: function () {
-      root = typeof self === 'object' && self.self === self && self || typeof global === 'object' && global.global === global && global;
-
-      if (typeof root === 'undefined' || root === null) {
-        throw new Error('Could not find a valid global object.');
-      }
-
-      _export('default', root.jQuery || root.Zepto || root.ender || root.$);
-    }
-  };
-});
-
-$__System.register('3', ['2', '4', '5', '6'], function (_export) {
+$__System.register('2', ['3', '4', '5', '6'], function (_export) {
   var $, _, BackboneProxy, _classCallCheck, Backbone;
 
   return {
@@ -3563,1235 +3536,16 @@ $__System.registerDynamic("d", ["1f", "26"], true, function($__require, exports,
   return module.exports;
 });
 
-$__System.registerDynamic("27", [], true, function($__require, exports, module) {
-  ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
-  "format cjs";
-  (function() {
-    var root = this;
-    var previousUnderscore = root._;
-    var ArrayProto = Array.prototype,
-        ObjProto = Object.prototype,
-        FuncProto = Function.prototype;
-    var push = ArrayProto.push,
-        slice = ArrayProto.slice,
-        toString = ObjProto.toString,
-        hasOwnProperty = ObjProto.hasOwnProperty;
-    var nativeIsArray = Array.isArray,
-        nativeKeys = Object.keys,
-        nativeBind = FuncProto.bind,
-        nativeCreate = Object.create;
-    var Ctor = function() {};
-    var _ = function(obj) {
-      if (obj instanceof _)
-        return obj;
-      if (!(this instanceof _))
-        return new _(obj);
-      this._wrapped = obj;
-    };
-    if (typeof exports !== 'undefined') {
-      if (typeof module !== 'undefined' && module.exports) {
-        exports = module.exports = _;
-      }
-      exports._ = _;
-    } else {
-      root._ = _;
-    }
-    _.VERSION = '1.8.3';
-    var optimizeCb = function(func, context, argCount) {
-      if (context === void 0)
-        return func;
-      switch (argCount == null ? 3 : argCount) {
-        case 1:
-          return function(value) {
-            return func.call(context, value);
-          };
-        case 2:
-          return function(value, other) {
-            return func.call(context, value, other);
-          };
-        case 3:
-          return function(value, index, collection) {
-            return func.call(context, value, index, collection);
-          };
-        case 4:
-          return function(accumulator, value, index, collection) {
-            return func.call(context, accumulator, value, index, collection);
-          };
-      }
-      return function() {
-        return func.apply(context, arguments);
-      };
-    };
-    var cb = function(value, context, argCount) {
-      if (value == null)
-        return _.identity;
-      if (_.isFunction(value))
-        return optimizeCb(value, context, argCount);
-      if (_.isObject(value))
-        return _.matcher(value);
-      return _.property(value);
-    };
-    _.iteratee = function(value, context) {
-      return cb(value, context, Infinity);
-    };
-    var createAssigner = function(keysFunc, undefinedOnly) {
-      return function(obj) {
-        var length = arguments.length;
-        if (length < 2 || obj == null)
-          return obj;
-        for (var index = 1; index < length; index++) {
-          var source = arguments[index],
-              keys = keysFunc(source),
-              l = keys.length;
-          for (var i = 0; i < l; i++) {
-            var key = keys[i];
-            if (!undefinedOnly || obj[key] === void 0)
-              obj[key] = source[key];
-          }
-        }
-        return obj;
-      };
-    };
-    var baseCreate = function(prototype) {
-      if (!_.isObject(prototype))
-        return {};
-      if (nativeCreate)
-        return nativeCreate(prototype);
-      Ctor.prototype = prototype;
-      var result = new Ctor;
-      Ctor.prototype = null;
-      return result;
-    };
-    var property = function(key) {
-      return function(obj) {
-        return obj == null ? void 0 : obj[key];
-      };
-    };
-    var MAX_ARRAY_INDEX = Math.pow(2, 53) - 1;
-    var getLength = property('length');
-    var isArrayLike = function(collection) {
-      var length = getLength(collection);
-      return typeof length == 'number' && length >= 0 && length <= MAX_ARRAY_INDEX;
-    };
-    _.each = _.forEach = function(obj, iteratee, context) {
-      iteratee = optimizeCb(iteratee, context);
-      var i,
-          length;
-      if (isArrayLike(obj)) {
-        for (i = 0, length = obj.length; i < length; i++) {
-          iteratee(obj[i], i, obj);
-        }
-      } else {
-        var keys = _.keys(obj);
-        for (i = 0, length = keys.length; i < length; i++) {
-          iteratee(obj[keys[i]], keys[i], obj);
-        }
-      }
-      return obj;
-    };
-    _.map = _.collect = function(obj, iteratee, context) {
-      iteratee = cb(iteratee, context);
-      var keys = !isArrayLike(obj) && _.keys(obj),
-          length = (keys || obj).length,
-          results = Array(length);
-      for (var index = 0; index < length; index++) {
-        var currentKey = keys ? keys[index] : index;
-        results[index] = iteratee(obj[currentKey], currentKey, obj);
-      }
-      return results;
-    };
-    function createReduce(dir) {
-      function iterator(obj, iteratee, memo, keys, index, length) {
-        for (; index >= 0 && index < length; index += dir) {
-          var currentKey = keys ? keys[index] : index;
-          memo = iteratee(memo, obj[currentKey], currentKey, obj);
-        }
-        return memo;
-      }
-      return function(obj, iteratee, memo, context) {
-        iteratee = optimizeCb(iteratee, context, 4);
-        var keys = !isArrayLike(obj) && _.keys(obj),
-            length = (keys || obj).length,
-            index = dir > 0 ? 0 : length - 1;
-        if (arguments.length < 3) {
-          memo = obj[keys ? keys[index] : index];
-          index += dir;
-        }
-        return iterator(obj, iteratee, memo, keys, index, length);
-      };
-    }
-    _.reduce = _.foldl = _.inject = createReduce(1);
-    _.reduceRight = _.foldr = createReduce(-1);
-    _.find = _.detect = function(obj, predicate, context) {
-      var key;
-      if (isArrayLike(obj)) {
-        key = _.findIndex(obj, predicate, context);
-      } else {
-        key = _.findKey(obj, predicate, context);
-      }
-      if (key !== void 0 && key !== -1)
-        return obj[key];
-    };
-    _.filter = _.select = function(obj, predicate, context) {
-      var results = [];
-      predicate = cb(predicate, context);
-      _.each(obj, function(value, index, list) {
-        if (predicate(value, index, list))
-          results.push(value);
-      });
-      return results;
-    };
-    _.reject = function(obj, predicate, context) {
-      return _.filter(obj, _.negate(cb(predicate)), context);
-    };
-    _.every = _.all = function(obj, predicate, context) {
-      predicate = cb(predicate, context);
-      var keys = !isArrayLike(obj) && _.keys(obj),
-          length = (keys || obj).length;
-      for (var index = 0; index < length; index++) {
-        var currentKey = keys ? keys[index] : index;
-        if (!predicate(obj[currentKey], currentKey, obj))
-          return false;
-      }
-      return true;
-    };
-    _.some = _.any = function(obj, predicate, context) {
-      predicate = cb(predicate, context);
-      var keys = !isArrayLike(obj) && _.keys(obj),
-          length = (keys || obj).length;
-      for (var index = 0; index < length; index++) {
-        var currentKey = keys ? keys[index] : index;
-        if (predicate(obj[currentKey], currentKey, obj))
-          return true;
-      }
-      return false;
-    };
-    _.contains = _.includes = _.include = function(obj, item, fromIndex, guard) {
-      if (!isArrayLike(obj))
-        obj = _.values(obj);
-      if (typeof fromIndex != 'number' || guard)
-        fromIndex = 0;
-      return _.indexOf(obj, item, fromIndex) >= 0;
-    };
-    _.invoke = function(obj, method) {
-      var args = slice.call(arguments, 2);
-      var isFunc = _.isFunction(method);
-      return _.map(obj, function(value) {
-        var func = isFunc ? method : value[method];
-        return func == null ? func : func.apply(value, args);
-      });
-    };
-    _.pluck = function(obj, key) {
-      return _.map(obj, _.property(key));
-    };
-    _.where = function(obj, attrs) {
-      return _.filter(obj, _.matcher(attrs));
-    };
-    _.findWhere = function(obj, attrs) {
-      return _.find(obj, _.matcher(attrs));
-    };
-    _.max = function(obj, iteratee, context) {
-      var result = -Infinity,
-          lastComputed = -Infinity,
-          value,
-          computed;
-      if (iteratee == null && obj != null) {
-        obj = isArrayLike(obj) ? obj : _.values(obj);
-        for (var i = 0,
-            length = obj.length; i < length; i++) {
-          value = obj[i];
-          if (value > result) {
-            result = value;
-          }
-        }
-      } else {
-        iteratee = cb(iteratee, context);
-        _.each(obj, function(value, index, list) {
-          computed = iteratee(value, index, list);
-          if (computed > lastComputed || computed === -Infinity && result === -Infinity) {
-            result = value;
-            lastComputed = computed;
-          }
-        });
-      }
-      return result;
-    };
-    _.min = function(obj, iteratee, context) {
-      var result = Infinity,
-          lastComputed = Infinity,
-          value,
-          computed;
-      if (iteratee == null && obj != null) {
-        obj = isArrayLike(obj) ? obj : _.values(obj);
-        for (var i = 0,
-            length = obj.length; i < length; i++) {
-          value = obj[i];
-          if (value < result) {
-            result = value;
-          }
-        }
-      } else {
-        iteratee = cb(iteratee, context);
-        _.each(obj, function(value, index, list) {
-          computed = iteratee(value, index, list);
-          if (computed < lastComputed || computed === Infinity && result === Infinity) {
-            result = value;
-            lastComputed = computed;
-          }
-        });
-      }
-      return result;
-    };
-    _.shuffle = function(obj) {
-      var set = isArrayLike(obj) ? obj : _.values(obj);
-      var length = set.length;
-      var shuffled = Array(length);
-      for (var index = 0,
-          rand; index < length; index++) {
-        rand = _.random(0, index);
-        if (rand !== index)
-          shuffled[index] = shuffled[rand];
-        shuffled[rand] = set[index];
-      }
-      return shuffled;
-    };
-    _.sample = function(obj, n, guard) {
-      if (n == null || guard) {
-        if (!isArrayLike(obj))
-          obj = _.values(obj);
-        return obj[_.random(obj.length - 1)];
-      }
-      return _.shuffle(obj).slice(0, Math.max(0, n));
-    };
-    _.sortBy = function(obj, iteratee, context) {
-      iteratee = cb(iteratee, context);
-      return _.pluck(_.map(obj, function(value, index, list) {
-        return {
-          value: value,
-          index: index,
-          criteria: iteratee(value, index, list)
-        };
-      }).sort(function(left, right) {
-        var a = left.criteria;
-        var b = right.criteria;
-        if (a !== b) {
-          if (a > b || a === void 0)
-            return 1;
-          if (a < b || b === void 0)
-            return -1;
-        }
-        return left.index - right.index;
-      }), 'value');
-    };
-    var group = function(behavior) {
-      return function(obj, iteratee, context) {
-        var result = {};
-        iteratee = cb(iteratee, context);
-        _.each(obj, function(value, index) {
-          var key = iteratee(value, index, obj);
-          behavior(result, value, key);
-        });
-        return result;
-      };
-    };
-    _.groupBy = group(function(result, value, key) {
-      if (_.has(result, key))
-        result[key].push(value);
-      else
-        result[key] = [value];
-    });
-    _.indexBy = group(function(result, value, key) {
-      result[key] = value;
-    });
-    _.countBy = group(function(result, value, key) {
-      if (_.has(result, key))
-        result[key]++;
-      else
-        result[key] = 1;
-    });
-    _.toArray = function(obj) {
-      if (!obj)
-        return [];
-      if (_.isArray(obj))
-        return slice.call(obj);
-      if (isArrayLike(obj))
-        return _.map(obj, _.identity);
-      return _.values(obj);
-    };
-    _.size = function(obj) {
-      if (obj == null)
-        return 0;
-      return isArrayLike(obj) ? obj.length : _.keys(obj).length;
-    };
-    _.partition = function(obj, predicate, context) {
-      predicate = cb(predicate, context);
-      var pass = [],
-          fail = [];
-      _.each(obj, function(value, key, obj) {
-        (predicate(value, key, obj) ? pass : fail).push(value);
-      });
-      return [pass, fail];
-    };
-    _.first = _.head = _.take = function(array, n, guard) {
-      if (array == null)
-        return void 0;
-      if (n == null || guard)
-        return array[0];
-      return _.initial(array, array.length - n);
-    };
-    _.initial = function(array, n, guard) {
-      return slice.call(array, 0, Math.max(0, array.length - (n == null || guard ? 1 : n)));
-    };
-    _.last = function(array, n, guard) {
-      if (array == null)
-        return void 0;
-      if (n == null || guard)
-        return array[array.length - 1];
-      return _.rest(array, Math.max(0, array.length - n));
-    };
-    _.rest = _.tail = _.drop = function(array, n, guard) {
-      return slice.call(array, n == null || guard ? 1 : n);
-    };
-    _.compact = function(array) {
-      return _.filter(array, _.identity);
-    };
-    var flatten = function(input, shallow, strict, startIndex) {
-      var output = [],
-          idx = 0;
-      for (var i = startIndex || 0,
-          length = getLength(input); i < length; i++) {
-        var value = input[i];
-        if (isArrayLike(value) && (_.isArray(value) || _.isArguments(value))) {
-          if (!shallow)
-            value = flatten(value, shallow, strict);
-          var j = 0,
-              len = value.length;
-          output.length += len;
-          while (j < len) {
-            output[idx++] = value[j++];
-          }
-        } else if (!strict) {
-          output[idx++] = value;
-        }
-      }
-      return output;
-    };
-    _.flatten = function(array, shallow) {
-      return flatten(array, shallow, false);
-    };
-    _.without = function(array) {
-      return _.difference(array, slice.call(arguments, 1));
-    };
-    _.uniq = _.unique = function(array, isSorted, iteratee, context) {
-      if (!_.isBoolean(isSorted)) {
-        context = iteratee;
-        iteratee = isSorted;
-        isSorted = false;
-      }
-      if (iteratee != null)
-        iteratee = cb(iteratee, context);
-      var result = [];
-      var seen = [];
-      for (var i = 0,
-          length = getLength(array); i < length; i++) {
-        var value = array[i],
-            computed = iteratee ? iteratee(value, i, array) : value;
-        if (isSorted) {
-          if (!i || seen !== computed)
-            result.push(value);
-          seen = computed;
-        } else if (iteratee) {
-          if (!_.contains(seen, computed)) {
-            seen.push(computed);
-            result.push(value);
-          }
-        } else if (!_.contains(result, value)) {
-          result.push(value);
-        }
-      }
-      return result;
-    };
-    _.union = function() {
-      return _.uniq(flatten(arguments, true, true));
-    };
-    _.intersection = function(array) {
-      var result = [];
-      var argsLength = arguments.length;
-      for (var i = 0,
-          length = getLength(array); i < length; i++) {
-        var item = array[i];
-        if (_.contains(result, item))
-          continue;
-        for (var j = 1; j < argsLength; j++) {
-          if (!_.contains(arguments[j], item))
-            break;
-        }
-        if (j === argsLength)
-          result.push(item);
-      }
-      return result;
-    };
-    _.difference = function(array) {
-      var rest = flatten(arguments, true, true, 1);
-      return _.filter(array, function(value) {
-        return !_.contains(rest, value);
-      });
-    };
-    _.zip = function() {
-      return _.unzip(arguments);
-    };
-    _.unzip = function(array) {
-      var length = array && _.max(array, getLength).length || 0;
-      var result = Array(length);
-      for (var index = 0; index < length; index++) {
-        result[index] = _.pluck(array, index);
-      }
-      return result;
-    };
-    _.object = function(list, values) {
-      var result = {};
-      for (var i = 0,
-          length = getLength(list); i < length; i++) {
-        if (values) {
-          result[list[i]] = values[i];
-        } else {
-          result[list[i][0]] = list[i][1];
-        }
-      }
-      return result;
-    };
-    function createPredicateIndexFinder(dir) {
-      return function(array, predicate, context) {
-        predicate = cb(predicate, context);
-        var length = getLength(array);
-        var index = dir > 0 ? 0 : length - 1;
-        for (; index >= 0 && index < length; index += dir) {
-          if (predicate(array[index], index, array))
-            return index;
-        }
-        return -1;
-      };
-    }
-    _.findIndex = createPredicateIndexFinder(1);
-    _.findLastIndex = createPredicateIndexFinder(-1);
-    _.sortedIndex = function(array, obj, iteratee, context) {
-      iteratee = cb(iteratee, context, 1);
-      var value = iteratee(obj);
-      var low = 0,
-          high = getLength(array);
-      while (low < high) {
-        var mid = Math.floor((low + high) / 2);
-        if (iteratee(array[mid]) < value)
-          low = mid + 1;
-        else
-          high = mid;
-      }
-      return low;
-    };
-    function createIndexFinder(dir, predicateFind, sortedIndex) {
-      return function(array, item, idx) {
-        var i = 0,
-            length = getLength(array);
-        if (typeof idx == 'number') {
-          if (dir > 0) {
-            i = idx >= 0 ? idx : Math.max(idx + length, i);
-          } else {
-            length = idx >= 0 ? Math.min(idx + 1, length) : idx + length + 1;
-          }
-        } else if (sortedIndex && idx && length) {
-          idx = sortedIndex(array, item);
-          return array[idx] === item ? idx : -1;
-        }
-        if (item !== item) {
-          idx = predicateFind(slice.call(array, i, length), _.isNaN);
-          return idx >= 0 ? idx + i : -1;
-        }
-        for (idx = dir > 0 ? i : length - 1; idx >= 0 && idx < length; idx += dir) {
-          if (array[idx] === item)
-            return idx;
-        }
-        return -1;
-      };
-    }
-    _.indexOf = createIndexFinder(1, _.findIndex, _.sortedIndex);
-    _.lastIndexOf = createIndexFinder(-1, _.findLastIndex);
-    _.range = function(start, stop, step) {
-      if (stop == null) {
-        stop = start || 0;
-        start = 0;
-      }
-      step = step || 1;
-      var length = Math.max(Math.ceil((stop - start) / step), 0);
-      var range = Array(length);
-      for (var idx = 0; idx < length; idx++, start += step) {
-        range[idx] = start;
-      }
-      return range;
-    };
-    var executeBound = function(sourceFunc, boundFunc, context, callingContext, args) {
-      if (!(callingContext instanceof boundFunc))
-        return sourceFunc.apply(context, args);
-      var self = baseCreate(sourceFunc.prototype);
-      var result = sourceFunc.apply(self, args);
-      if (_.isObject(result))
-        return result;
-      return self;
-    };
-    _.bind = function(func, context) {
-      if (nativeBind && func.bind === nativeBind)
-        return nativeBind.apply(func, slice.call(arguments, 1));
-      if (!_.isFunction(func))
-        throw new TypeError('Bind must be called on a function');
-      var args = slice.call(arguments, 2);
-      var bound = function() {
-        return executeBound(func, bound, context, this, args.concat(slice.call(arguments)));
-      };
-      return bound;
-    };
-    _.partial = function(func) {
-      var boundArgs = slice.call(arguments, 1);
-      var bound = function() {
-        var position = 0,
-            length = boundArgs.length;
-        var args = Array(length);
-        for (var i = 0; i < length; i++) {
-          args[i] = boundArgs[i] === _ ? arguments[position++] : boundArgs[i];
-        }
-        while (position < arguments.length)
-          args.push(arguments[position++]);
-        return executeBound(func, bound, this, this, args);
-      };
-      return bound;
-    };
-    _.bindAll = function(obj) {
-      var i,
-          length = arguments.length,
-          key;
-      if (length <= 1)
-        throw new Error('bindAll must be passed function names');
-      for (i = 1; i < length; i++) {
-        key = arguments[i];
-        obj[key] = _.bind(obj[key], obj);
-      }
-      return obj;
-    };
-    _.memoize = function(func, hasher) {
-      var memoize = function(key) {
-        var cache = memoize.cache;
-        var address = '' + (hasher ? hasher.apply(this, arguments) : key);
-        if (!_.has(cache, address))
-          cache[address] = func.apply(this, arguments);
-        return cache[address];
-      };
-      memoize.cache = {};
-      return memoize;
-    };
-    _.delay = function(func, wait) {
-      var args = slice.call(arguments, 2);
-      return setTimeout(function() {
-        return func.apply(null, args);
-      }, wait);
-    };
-    _.defer = _.partial(_.delay, _, 1);
-    _.throttle = function(func, wait, options) {
-      var context,
-          args,
-          result;
-      var timeout = null;
-      var previous = 0;
-      if (!options)
-        options = {};
-      var later = function() {
-        previous = options.leading === false ? 0 : _.now();
-        timeout = null;
-        result = func.apply(context, args);
-        if (!timeout)
-          context = args = null;
-      };
-      return function() {
-        var now = _.now();
-        if (!previous && options.leading === false)
-          previous = now;
-        var remaining = wait - (now - previous);
-        context = this;
-        args = arguments;
-        if (remaining <= 0 || remaining > wait) {
-          if (timeout) {
-            clearTimeout(timeout);
-            timeout = null;
-          }
-          previous = now;
-          result = func.apply(context, args);
-          if (!timeout)
-            context = args = null;
-        } else if (!timeout && options.trailing !== false) {
-          timeout = setTimeout(later, remaining);
-        }
-        return result;
-      };
-    };
-    _.debounce = function(func, wait, immediate) {
-      var timeout,
-          args,
-          context,
-          timestamp,
-          result;
-      var later = function() {
-        var last = _.now() - timestamp;
-        if (last < wait && last >= 0) {
-          timeout = setTimeout(later, wait - last);
-        } else {
-          timeout = null;
-          if (!immediate) {
-            result = func.apply(context, args);
-            if (!timeout)
-              context = args = null;
-          }
-        }
-      };
-      return function() {
-        context = this;
-        args = arguments;
-        timestamp = _.now();
-        var callNow = immediate && !timeout;
-        if (!timeout)
-          timeout = setTimeout(later, wait);
-        if (callNow) {
-          result = func.apply(context, args);
-          context = args = null;
-        }
-        return result;
-      };
-    };
-    _.wrap = function(func, wrapper) {
-      return _.partial(wrapper, func);
-    };
-    _.negate = function(predicate) {
-      return function() {
-        return !predicate.apply(this, arguments);
-      };
-    };
-    _.compose = function() {
-      var args = arguments;
-      var start = args.length - 1;
-      return function() {
-        var i = start;
-        var result = args[start].apply(this, arguments);
-        while (i--)
-          result = args[i].call(this, result);
-        return result;
-      };
-    };
-    _.after = function(times, func) {
-      return function() {
-        if (--times < 1) {
-          return func.apply(this, arguments);
-        }
-      };
-    };
-    _.before = function(times, func) {
-      var memo;
-      return function() {
-        if (--times > 0) {
-          memo = func.apply(this, arguments);
-        }
-        if (times <= 1)
-          func = null;
-        return memo;
-      };
-    };
-    _.once = _.partial(_.before, 2);
-    var hasEnumBug = !{toString: null}.propertyIsEnumerable('toString');
-    var nonEnumerableProps = ['valueOf', 'isPrototypeOf', 'toString', 'propertyIsEnumerable', 'hasOwnProperty', 'toLocaleString'];
-    function collectNonEnumProps(obj, keys) {
-      var nonEnumIdx = nonEnumerableProps.length;
-      var constructor = obj.constructor;
-      var proto = (_.isFunction(constructor) && constructor.prototype) || ObjProto;
-      var prop = 'constructor';
-      if (_.has(obj, prop) && !_.contains(keys, prop))
-        keys.push(prop);
-      while (nonEnumIdx--) {
-        prop = nonEnumerableProps[nonEnumIdx];
-        if (prop in obj && obj[prop] !== proto[prop] && !_.contains(keys, prop)) {
-          keys.push(prop);
-        }
-      }
-    }
-    _.keys = function(obj) {
-      if (!_.isObject(obj))
-        return [];
-      if (nativeKeys)
-        return nativeKeys(obj);
-      var keys = [];
-      for (var key in obj)
-        if (_.has(obj, key))
-          keys.push(key);
-      if (hasEnumBug)
-        collectNonEnumProps(obj, keys);
-      return keys;
-    };
-    _.allKeys = function(obj) {
-      if (!_.isObject(obj))
-        return [];
-      var keys = [];
-      for (var key in obj)
-        keys.push(key);
-      if (hasEnumBug)
-        collectNonEnumProps(obj, keys);
-      return keys;
-    };
-    _.values = function(obj) {
-      var keys = _.keys(obj);
-      var length = keys.length;
-      var values = Array(length);
-      for (var i = 0; i < length; i++) {
-        values[i] = obj[keys[i]];
-      }
-      return values;
-    };
-    _.mapObject = function(obj, iteratee, context) {
-      iteratee = cb(iteratee, context);
-      var keys = _.keys(obj),
-          length = keys.length,
-          results = {},
-          currentKey;
-      for (var index = 0; index < length; index++) {
-        currentKey = keys[index];
-        results[currentKey] = iteratee(obj[currentKey], currentKey, obj);
-      }
-      return results;
-    };
-    _.pairs = function(obj) {
-      var keys = _.keys(obj);
-      var length = keys.length;
-      var pairs = Array(length);
-      for (var i = 0; i < length; i++) {
-        pairs[i] = [keys[i], obj[keys[i]]];
-      }
-      return pairs;
-    };
-    _.invert = function(obj) {
-      var result = {};
-      var keys = _.keys(obj);
-      for (var i = 0,
-          length = keys.length; i < length; i++) {
-        result[obj[keys[i]]] = keys[i];
-      }
-      return result;
-    };
-    _.functions = _.methods = function(obj) {
-      var names = [];
-      for (var key in obj) {
-        if (_.isFunction(obj[key]))
-          names.push(key);
-      }
-      return names.sort();
-    };
-    _.extend = createAssigner(_.allKeys);
-    _.extendOwn = _.assign = createAssigner(_.keys);
-    _.findKey = function(obj, predicate, context) {
-      predicate = cb(predicate, context);
-      var keys = _.keys(obj),
-          key;
-      for (var i = 0,
-          length = keys.length; i < length; i++) {
-        key = keys[i];
-        if (predicate(obj[key], key, obj))
-          return key;
-      }
-    };
-    _.pick = function(object, oiteratee, context) {
-      var result = {},
-          obj = object,
-          iteratee,
-          keys;
-      if (obj == null)
-        return result;
-      if (_.isFunction(oiteratee)) {
-        keys = _.allKeys(obj);
-        iteratee = optimizeCb(oiteratee, context);
-      } else {
-        keys = flatten(arguments, false, false, 1);
-        iteratee = function(value, key, obj) {
-          return key in obj;
-        };
-        obj = Object(obj);
-      }
-      for (var i = 0,
-          length = keys.length; i < length; i++) {
-        var key = keys[i];
-        var value = obj[key];
-        if (iteratee(value, key, obj))
-          result[key] = value;
-      }
-      return result;
-    };
-    _.omit = function(obj, iteratee, context) {
-      if (_.isFunction(iteratee)) {
-        iteratee = _.negate(iteratee);
-      } else {
-        var keys = _.map(flatten(arguments, false, false, 1), String);
-        iteratee = function(value, key) {
-          return !_.contains(keys, key);
-        };
-      }
-      return _.pick(obj, iteratee, context);
-    };
-    _.defaults = createAssigner(_.allKeys, true);
-    _.create = function(prototype, props) {
-      var result = baseCreate(prototype);
-      if (props)
-        _.extendOwn(result, props);
-      return result;
-    };
-    _.clone = function(obj) {
-      if (!_.isObject(obj))
-        return obj;
-      return _.isArray(obj) ? obj.slice() : _.extend({}, obj);
-    };
-    _.tap = function(obj, interceptor) {
-      interceptor(obj);
-      return obj;
-    };
-    _.isMatch = function(object, attrs) {
-      var keys = _.keys(attrs),
-          length = keys.length;
-      if (object == null)
-        return !length;
-      var obj = Object(object);
-      for (var i = 0; i < length; i++) {
-        var key = keys[i];
-        if (attrs[key] !== obj[key] || !(key in obj))
-          return false;
-      }
-      return true;
-    };
-    var eq = function(a, b, aStack, bStack) {
-      if (a === b)
-        return a !== 0 || 1 / a === 1 / b;
-      if (a == null || b == null)
-        return a === b;
-      if (a instanceof _)
-        a = a._wrapped;
-      if (b instanceof _)
-        b = b._wrapped;
-      var className = toString.call(a);
-      if (className !== toString.call(b))
-        return false;
-      switch (className) {
-        case '[object RegExp]':
-        case '[object String]':
-          return '' + a === '' + b;
-        case '[object Number]':
-          if (+a !== +a)
-            return +b !== +b;
-          return +a === 0 ? 1 / +a === 1 / b : +a === +b;
-        case '[object Date]':
-        case '[object Boolean]':
-          return +a === +b;
-      }
-      var areArrays = className === '[object Array]';
-      if (!areArrays) {
-        if (typeof a != 'object' || typeof b != 'object')
-          return false;
-        var aCtor = a.constructor,
-            bCtor = b.constructor;
-        if (aCtor !== bCtor && !(_.isFunction(aCtor) && aCtor instanceof aCtor && _.isFunction(bCtor) && bCtor instanceof bCtor) && ('constructor' in a && 'constructor' in b)) {
-          return false;
-        }
-      }
-      aStack = aStack || [];
-      bStack = bStack || [];
-      var length = aStack.length;
-      while (length--) {
-        if (aStack[length] === a)
-          return bStack[length] === b;
-      }
-      aStack.push(a);
-      bStack.push(b);
-      if (areArrays) {
-        length = a.length;
-        if (length !== b.length)
-          return false;
-        while (length--) {
-          if (!eq(a[length], b[length], aStack, bStack))
-            return false;
-        }
-      } else {
-        var keys = _.keys(a),
-            key;
-        length = keys.length;
-        if (_.keys(b).length !== length)
-          return false;
-        while (length--) {
-          key = keys[length];
-          if (!(_.has(b, key) && eq(a[key], b[key], aStack, bStack)))
-            return false;
-        }
-      }
-      aStack.pop();
-      bStack.pop();
-      return true;
-    };
-    _.isEqual = function(a, b) {
-      return eq(a, b);
-    };
-    _.isEmpty = function(obj) {
-      if (obj == null)
-        return true;
-      if (isArrayLike(obj) && (_.isArray(obj) || _.isString(obj) || _.isArguments(obj)))
-        return obj.length === 0;
-      return _.keys(obj).length === 0;
-    };
-    _.isElement = function(obj) {
-      return !!(obj && obj.nodeType === 1);
-    };
-    _.isArray = nativeIsArray || function(obj) {
-      return toString.call(obj) === '[object Array]';
-    };
-    _.isObject = function(obj) {
-      var type = typeof obj;
-      return type === 'function' || type === 'object' && !!obj;
-    };
-    _.each(['Arguments', 'Function', 'String', 'Number', 'Date', 'RegExp', 'Error'], function(name) {
-      _['is' + name] = function(obj) {
-        return toString.call(obj) === '[object ' + name + ']';
-      };
-    });
-    if (!_.isArguments(arguments)) {
-      _.isArguments = function(obj) {
-        return _.has(obj, 'callee');
-      };
-    }
-    if (typeof/./ != 'function' && typeof Int8Array != 'object') {
-      _.isFunction = function(obj) {
-        return typeof obj == 'function' || false;
-      };
-    }
-    _.isFinite = function(obj) {
-      return isFinite(obj) && !isNaN(parseFloat(obj));
-    };
-    _.isNaN = function(obj) {
-      return _.isNumber(obj) && obj !== +obj;
-    };
-    _.isBoolean = function(obj) {
-      return obj === true || obj === false || toString.call(obj) === '[object Boolean]';
-    };
-    _.isNull = function(obj) {
-      return obj === null;
-    };
-    _.isUndefined = function(obj) {
-      return obj === void 0;
-    };
-    _.has = function(obj, key) {
-      return obj != null && hasOwnProperty.call(obj, key);
-    };
-    _.noConflict = function() {
-      root._ = previousUnderscore;
-      return this;
-    };
-    _.identity = function(value) {
-      return value;
-    };
-    _.constant = function(value) {
-      return function() {
-        return value;
-      };
-    };
-    _.noop = function() {};
-    _.property = property;
-    _.propertyOf = function(obj) {
-      return obj == null ? function() {} : function(key) {
-        return obj[key];
-      };
-    };
-    _.matcher = _.matches = function(attrs) {
-      attrs = _.extendOwn({}, attrs);
-      return function(obj) {
-        return _.isMatch(obj, attrs);
-      };
-    };
-    _.times = function(n, iteratee, context) {
-      var accum = Array(Math.max(0, n));
-      iteratee = optimizeCb(iteratee, context, 1);
-      for (var i = 0; i < n; i++)
-        accum[i] = iteratee(i);
-      return accum;
-    };
-    _.random = function(min, max) {
-      if (max == null) {
-        max = min;
-        min = 0;
-      }
-      return min + Math.floor(Math.random() * (max - min + 1));
-    };
-    _.now = Date.now || function() {
-      return new Date().getTime();
-    };
-    var escapeMap = {
-      '&': '&amp;',
-      '<': '&lt;',
-      '>': '&gt;',
-      '"': '&quot;',
-      "'": '&#x27;',
-      '`': '&#x60;'
-    };
-    var unescapeMap = _.invert(escapeMap);
-    var createEscaper = function(map) {
-      var escaper = function(match) {
-        return map[match];
-      };
-      var source = '(?:' + _.keys(map).join('|') + ')';
-      var testRegexp = RegExp(source);
-      var replaceRegexp = RegExp(source, 'g');
-      return function(string) {
-        string = string == null ? '' : '' + string;
-        return testRegexp.test(string) ? string.replace(replaceRegexp, escaper) : string;
-      };
-    };
-    _.escape = createEscaper(escapeMap);
-    _.unescape = createEscaper(unescapeMap);
-    _.result = function(object, property, fallback) {
-      var value = object == null ? void 0 : object[property];
-      if (value === void 0) {
-        value = fallback;
-      }
-      return _.isFunction(value) ? value.call(object) : value;
-    };
-    var idCounter = 0;
-    _.uniqueId = function(prefix) {
-      var id = ++idCounter + '';
-      return prefix ? prefix + id : id;
-    };
-    _.templateSettings = {
-      evaluate: /<%([\s\S]+?)%>/g,
-      interpolate: /<%=([\s\S]+?)%>/g,
-      escape: /<%-([\s\S]+?)%>/g
-    };
-    var noMatch = /(.)^/;
-    var escapes = {
-      "'": "'",
-      '\\': '\\',
-      '\r': 'r',
-      '\n': 'n',
-      '\u2028': 'u2028',
-      '\u2029': 'u2029'
-    };
-    var escaper = /\\|'|\r|\n|\u2028|\u2029/g;
-    var escapeChar = function(match) {
-      return '\\' + escapes[match];
-    };
-    _.template = function(text, settings, oldSettings) {
-      if (!settings && oldSettings)
-        settings = oldSettings;
-      settings = _.defaults({}, settings, _.templateSettings);
-      var matcher = RegExp([(settings.escape || noMatch).source, (settings.interpolate || noMatch).source, (settings.evaluate || noMatch).source].join('|') + '|$', 'g');
-      var index = 0;
-      var source = "__p+='";
-      text.replace(matcher, function(match, escape, interpolate, evaluate, offset) {
-        source += text.slice(index, offset).replace(escaper, escapeChar);
-        index = offset + match.length;
-        if (escape) {
-          source += "'+\n((__t=(" + escape + "))==null?'':_.escape(__t))+\n'";
-        } else if (interpolate) {
-          source += "'+\n((__t=(" + interpolate + "))==null?'':__t)+\n'";
-        } else if (evaluate) {
-          source += "';\n" + evaluate + "\n__p+='";
-        }
-        return match;
-      });
-      source += "';\n";
-      if (!settings.variable)
-        source = 'with(obj||{}){\n' + source + '}\n';
-      source = "var __t,__p='',__j=Array.prototype.join," + "print=function(){__p+=__j.call(arguments,'');};\n" + source + 'return __p;\n';
-      try {
-        var render = new Function(settings.variable || 'obj', '_', source);
-      } catch (e) {
-        e.source = source;
-        throw e;
-      }
-      var template = function(data) {
-        return render.call(this, data, _);
-      };
-      var argument = settings.variable || 'obj';
-      template.source = 'function(' + argument + '){\n' + source + '}';
-      return template;
-    };
-    _.chain = function(obj) {
-      var instance = _(obj);
-      instance._chain = true;
-      return instance;
-    };
-    var result = function(instance, obj) {
-      return instance._chain ? _(obj).chain() : obj;
-    };
-    _.mixin = function(obj) {
-      _.each(_.functions(obj), function(name) {
-        var func = _[name] = obj[name];
-        _.prototype[name] = function() {
-          var args = [this._wrapped];
-          push.apply(args, arguments);
-          return result(this, func.apply(_, args));
-        };
-      });
-    };
-    _.mixin(_);
-    _.each(['pop', 'push', 'reverse', 'shift', 'sort', 'splice', 'unshift'], function(name) {
-      var method = ArrayProto[name];
-      _.prototype[name] = function() {
-        var obj = this._wrapped;
-        method.apply(obj, arguments);
-        if ((name === 'shift' || name === 'splice') && obj.length === 0)
-          delete obj[0];
-        return result(this, obj);
-      };
-    });
-    _.each(['concat', 'join', 'slice'], function(name) {
-      var method = ArrayProto[name];
-      _.prototype[name] = function() {
-        return result(this, method.apply(this._wrapped, arguments));
-      };
-    });
-    _.prototype.value = function() {
-      return this._wrapped;
-    };
-    _.prototype.valueOf = _.prototype.toJSON = _.prototype.value;
-    _.prototype.toString = function() {
-      return '' + this._wrapped;
-    };
-    if (typeof define === 'function' && define.amd) {
-      define('underscore', [], function() {
-        return _;
-      });
-    }
-  }.call(this));
-  global.define = __define;
-  return module.exports;
-});
-
-$__System.registerDynamic("28", ["27"], true, function($__require, exports, module) {
-  ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
-  module.exports = $__require('27');
-  global.define = __define;
-  return module.exports;
-});
-
-$__System.register('e', ['6', '8', '28'], function (_export) {
-   var _classCallCheck, _createClass, _, s_EVENT_SPLITTER, s_EVENTS_API, s_INTERNAL_ON, s_OFF_API, s_ON_API, s_ONCE_MAP, s_TRIGGER_API, s_TRIGGER_EVENTS, Events;
+$__System.register('e', ['4', '6', '8'], function (_export) {
+   var _, _classCallCheck, _createClass, s_EVENT_SPLITTER, s_EVENTS_API, s_INTERNAL_ON, s_OFF_API, s_ON_API, s_ONCE_MAP, s_TRIGGER_API, s_TRIGGER_EVENTS, Events;
 
    return {
-      setters: [function (_3) {
+      setters: [function (_4) {
+         _ = _4['default'];
+      }, function (_3) {
          _classCallCheck = _3['default'];
       }, function (_2) {
          _createClass = _2['default'];
-      }, function (_4) {
-         _ = _4['default'];
       }],
       execute: function () {
 
@@ -5383,7 +4137,7 @@ $__System.register('e', ['6', '8', '28'], function (_export) {
    };
 });
 
-$__System.register('29', ['4', '5', '6', '8', 'c', 'd', 'e'], function (_export) {
+$__System.register('27', ['4', '5', '6', '8', 'c', 'd', 'e'], function (_export) {
   var _, BackboneProxy, _classCallCheck, _createClass, _get, _inherits, Events, s_DELEGATE_EVENT_SPLITTER, s_VIEW_OPTIONS, View;
 
   return {
@@ -5897,7 +4651,7 @@ $__System.register('29', ['4', '5', '6', '8', 'c', 'd', 'e'], function (_export)
   };
 });
 
-$__System.register('2a', ['4'], function (_export) {
+$__System.register('28', ['4'], function (_export) {
 
    /**
     * Provides older "extend" functionality for Backbone. While it is still accessible it is recommended
@@ -5949,6 +4703,14 @@ $__System.register('2a', ['4'], function (_export) {
       // Add prototype properties (instance properties) to the subclass, if supplied.
       if (protoProps) {
          _.extend(child.prototype, protoProps);
+
+         // backbone-es6 addition: Because View defines a getter for tagName we must actually redefine this getter
+         // from the `protoProps.tagName` if it exists.
+         if (protoProps.tagName) {
+            Object.defineProperty(child.prototype, 'tagName', { get: function get() {
+                  return protoProps.tagName;
+               } });
+         }
       }
 
       // Set a convenience property in case the parent's prototype is needed later.
@@ -5965,7 +4727,7 @@ $__System.register('2a', ['4'], function (_export) {
    };
 });
 
-$__System.registerDynamic("2b", ["1c"], true, function($__require, exports, module) {
+$__System.registerDynamic("29", ["1c"], true, function($__require, exports, module) {
   ;
   var global = this,
       __define = global.define;
@@ -5978,26 +4740,26 @@ $__System.registerDynamic("2b", ["1c"], true, function($__require, exports, modu
   return module.exports;
 });
 
-$__System.registerDynamic("2c", ["2b"], true, function($__require, exports, module) {
+$__System.registerDynamic("2a", ["29"], true, function($__require, exports, module) {
   ;
   var global = this,
       __define = global.define;
   global.define = undefined;
   module.exports = {
-    "default": $__require('2b'),
+    "default": $__require('29'),
     __esModule: true
   };
   global.define = __define;
   return module.exports;
 });
 
-$__System.registerDynamic("8", ["2c"], true, function($__require, exports, module) {
+$__System.registerDynamic("8", ["2a"], true, function($__require, exports, module) {
   "use strict";
   ;
   var global = this,
       __define = global.define;
   global.define = undefined;
-  var _Object$defineProperty = $__require('2c')["default"];
+  var _Object$defineProperty = $__require('2a')["default"];
   exports["default"] = (function() {
     function defineProperties(target, props) {
       for (var i = 0; i < props.length; i++) {
@@ -6038,12 +4800,12 @@ $__System.registerDynamic("6", [], true, function($__require, exports, module) {
   return module.exports;
 });
 
-$__System.registerDynamic("2d", ["2e", "15"], true, function($__require, exports, module) {
+$__System.registerDynamic("2b", ["2c", "15"], true, function($__require, exports, module) {
   ;
   var global = this,
       __define = global.define;
   global.define = undefined;
-  var toInteger = $__require('2e'),
+  var toInteger = $__require('2c'),
       defined = $__require('15');
   module.exports = function(TO_STRING) {
     return function(that, pos) {
@@ -6062,7 +4824,7 @@ $__System.registerDynamic("2d", ["2e", "15"], true, function($__require, exports
   return module.exports;
 });
 
-$__System.registerDynamic("2f", [], true, function($__require, exports, module) {
+$__System.registerDynamic("2d", [], true, function($__require, exports, module) {
   ;
   var global = this,
       __define = global.define;
@@ -6072,17 +4834,17 @@ $__System.registerDynamic("2f", [], true, function($__require, exports, module) 
   return module.exports;
 });
 
-$__System.registerDynamic("30", ["31"], true, function($__require, exports, module) {
+$__System.registerDynamic("2e", ["2f"], true, function($__require, exports, module) {
   ;
   var global = this,
       __define = global.define;
   global.define = undefined;
-  module.exports = $__require('31');
+  module.exports = $__require('2f');
   global.define = __define;
   return module.exports;
 });
 
-$__System.registerDynamic("32", [], true, function($__require, exports, module) {
+$__System.registerDynamic("30", [], true, function($__require, exports, module) {
   ;
   var global = this,
       __define = global.define;
@@ -6115,7 +4877,7 @@ $__System.registerDynamic("19", [], true, function($__require, exports, module) 
   return module.exports;
 });
 
-$__System.registerDynamic("33", ["19"], true, function($__require, exports, module) {
+$__System.registerDynamic("31", ["19"], true, function($__require, exports, module) {
   ;
   var global = this,
       __define = global.define;
@@ -6129,14 +4891,14 @@ $__System.registerDynamic("33", ["19"], true, function($__require, exports, modu
   return module.exports;
 });
 
-$__System.registerDynamic("31", ["1c", "32", "33"], true, function($__require, exports, module) {
+$__System.registerDynamic("2f", ["1c", "30", "31"], true, function($__require, exports, module) {
   ;
   var global = this,
       __define = global.define;
   global.define = undefined;
   var $ = $__require('1c'),
-      createDesc = $__require('32');
-  module.exports = $__require('33') ? function(object, key, value) {
+      createDesc = $__require('30');
+  module.exports = $__require('31') ? function(object, key, value) {
     return $.setDesc(object, key, createDesc(1, value));
   } : function(object, key, value) {
     object[key] = value;
@@ -6146,17 +4908,17 @@ $__System.registerDynamic("31", ["1c", "32", "33"], true, function($__require, e
   return module.exports;
 });
 
-$__System.registerDynamic("34", ["1c", "32", "35", "31", "36"], true, function($__require, exports, module) {
+$__System.registerDynamic("32", ["1c", "30", "33", "2f", "34"], true, function($__require, exports, module) {
   "use strict";
   ;
   var global = this,
       __define = global.define;
   global.define = undefined;
   var $ = $__require('1c'),
-      descriptor = $__require('32'),
-      setToStringTag = $__require('35'),
+      descriptor = $__require('30'),
+      setToStringTag = $__require('33'),
       IteratorPrototype = {};
-  $__require('31')(IteratorPrototype, $__require('36')('iterator'), function() {
+  $__require('2f')(IteratorPrototype, $__require('34')('iterator'), function() {
     return this;
   });
   module.exports = function(Constructor, NAME, next) {
@@ -6167,7 +4929,7 @@ $__System.registerDynamic("34", ["1c", "32", "35", "31", "36"], true, function($
   return module.exports;
 });
 
-$__System.registerDynamic("37", [], true, function($__require, exports, module) {
+$__System.registerDynamic("35", [], true, function($__require, exports, module) {
   ;
   var global = this,
       __define = global.define;
@@ -6180,14 +4942,14 @@ $__System.registerDynamic("37", [], true, function($__require, exports, module) 
   return module.exports;
 });
 
-$__System.registerDynamic("35", ["1c", "37", "36"], true, function($__require, exports, module) {
+$__System.registerDynamic("33", ["1c", "35", "34"], true, function($__require, exports, module) {
   ;
   var global = this,
       __define = global.define;
   global.define = undefined;
   var def = $__require('1c').setDesc,
-      has = $__require('37'),
-      TAG = $__require('36')('toStringTag');
+      has = $__require('35'),
+      TAG = $__require('34')('toStringTag');
   module.exports = function(it, tag, stat) {
     if (it && !has(it = stat ? it : it.prototype, TAG))
       def(it, TAG, {
@@ -6221,22 +4983,22 @@ $__System.registerDynamic("1c", [], true, function($__require, exports, module) 
   return module.exports;
 });
 
-$__System.registerDynamic("38", ["2f", "17", "30", "31", "37", "39", "34", "35", "1c", "36"], true, function($__require, exports, module) {
+$__System.registerDynamic("36", ["2d", "17", "2e", "2f", "35", "37", "32", "33", "1c", "34"], true, function($__require, exports, module) {
   "use strict";
   ;
   var global = this,
       __define = global.define;
   global.define = undefined;
-  var LIBRARY = $__require('2f'),
+  var LIBRARY = $__require('2d'),
       $export = $__require('17'),
-      redefine = $__require('30'),
-      hide = $__require('31'),
-      has = $__require('37'),
-      Iterators = $__require('39'),
-      $iterCreate = $__require('34'),
-      setToStringTag = $__require('35'),
+      redefine = $__require('2e'),
+      hide = $__require('2f'),
+      has = $__require('35'),
+      Iterators = $__require('37'),
+      $iterCreate = $__require('32'),
+      setToStringTag = $__require('33'),
       getProto = $__require('1c').getProto,
-      ITERATOR = $__require('36')('iterator'),
+      ITERATOR = $__require('34')('iterator'),
       BUGGY = !([].keys && 'next' in [].keys()),
       FF_ITERATOR = '@@iterator',
       KEYS = 'keys',
@@ -6308,14 +5070,14 @@ $__System.registerDynamic("38", ["2f", "17", "30", "31", "37", "39", "34", "35",
   return module.exports;
 });
 
-$__System.registerDynamic("3a", ["2d", "38"], true, function($__require, exports, module) {
+$__System.registerDynamic("38", ["2b", "36"], true, function($__require, exports, module) {
   "use strict";
   ;
   var global = this,
       __define = global.define;
   global.define = undefined;
-  var $at = $__require('2d')(true);
-  $__require('38')(String, 'String', function(iterated) {
+  var $at = $__require('2b')(true);
+  $__require('36')(String, 'String', function(iterated) {
     this._t = String(iterated);
     this._i = 0;
   }, function() {
@@ -6338,7 +5100,7 @@ $__System.registerDynamic("3a", ["2d", "38"], true, function($__require, exports
   return module.exports;
 });
 
-$__System.registerDynamic("3b", [], true, function($__require, exports, module) {
+$__System.registerDynamic("39", [], true, function($__require, exports, module) {
   ;
   var global = this,
       __define = global.define;
@@ -6352,12 +5114,12 @@ $__System.registerDynamic("3b", [], true, function($__require, exports, module) 
   return module.exports;
 });
 
-$__System.registerDynamic("23", ["3b"], true, function($__require, exports, module) {
+$__System.registerDynamic("23", ["39"], true, function($__require, exports, module) {
   ;
   var global = this,
       __define = global.define;
   global.define = undefined;
-  var aFunction = $__require('3b');
+  var aFunction = $__require('39');
   module.exports = function(fn, that, length) {
     aFunction(fn);
     if (that === undefined)
@@ -6384,12 +5146,12 @@ $__System.registerDynamic("23", ["3b"], true, function($__require, exports, modu
   return module.exports;
 });
 
-$__System.registerDynamic("17", ["3c", "18", "23"], true, function($__require, exports, module) {
+$__System.registerDynamic("17", ["3a", "18", "23"], true, function($__require, exports, module) {
   ;
   var global = this,
       __define = global.define;
   global.define = undefined;
-  var global = $__require('3c'),
+  var global = $__require('3a'),
       core = $__require('18'),
       ctx = $__require('23'),
       PROTOTYPE = 'prototype';
@@ -6448,7 +5210,7 @@ $__System.registerDynamic("15", [], true, function($__require, exports, module) 
   return module.exports;
 });
 
-$__System.registerDynamic("3d", ["15"], true, function($__require, exports, module) {
+$__System.registerDynamic("3b", ["15"], true, function($__require, exports, module) {
   ;
   var global = this,
       __define = global.define;
@@ -6488,7 +5250,7 @@ $__System.registerDynamic("22", ["21"], true, function($__require, exports, modu
   return module.exports;
 });
 
-$__System.registerDynamic("3e", ["22"], true, function($__require, exports, module) {
+$__System.registerDynamic("3c", ["22"], true, function($__require, exports, module) {
   ;
   var global = this,
       __define = global.define;
@@ -6508,13 +5270,13 @@ $__System.registerDynamic("3e", ["22"], true, function($__require, exports, modu
   return module.exports;
 });
 
-$__System.registerDynamic("3f", ["39", "36"], true, function($__require, exports, module) {
+$__System.registerDynamic("3d", ["37", "34"], true, function($__require, exports, module) {
   ;
   var global = this,
       __define = global.define;
   global.define = undefined;
-  var Iterators = $__require('39'),
-      ITERATOR = $__require('36')('iterator'),
+  var Iterators = $__require('37'),
+      ITERATOR = $__require('34')('iterator'),
       ArrayProto = Array.prototype;
   module.exports = function(it) {
     return it !== undefined && (Iterators.Array === it || ArrayProto[ITERATOR] === it);
@@ -6523,7 +5285,7 @@ $__System.registerDynamic("3f", ["39", "36"], true, function($__require, exports
   return module.exports;
 });
 
-$__System.registerDynamic("2e", [], true, function($__require, exports, module) {
+$__System.registerDynamic("2c", [], true, function($__require, exports, module) {
   ;
   var global = this,
       __define = global.define;
@@ -6537,12 +5299,12 @@ $__System.registerDynamic("2e", [], true, function($__require, exports, module) 
   return module.exports;
 });
 
-$__System.registerDynamic("40", ["2e"], true, function($__require, exports, module) {
+$__System.registerDynamic("3e", ["2c"], true, function($__require, exports, module) {
   ;
   var global = this,
       __define = global.define;
   global.define = undefined;
-  var toInteger = $__require('2e'),
+  var toInteger = $__require('2c'),
       min = Math.min;
   module.exports = function(it) {
     return it > 0 ? min(toInteger(it), 0x1fffffffffffff) : 0;
@@ -6564,13 +5326,13 @@ $__System.registerDynamic("13", [], true, function($__require, exports, module) 
   return module.exports;
 });
 
-$__System.registerDynamic("41", ["13", "36"], true, function($__require, exports, module) {
+$__System.registerDynamic("3f", ["13", "34"], true, function($__require, exports, module) {
   ;
   var global = this,
       __define = global.define;
   global.define = undefined;
   var cof = $__require('13'),
-      TAG = $__require('36')('toStringTag'),
+      TAG = $__require('34')('toStringTag'),
       ARG = cof(function() {
         return arguments;
       }()) == 'Arguments';
@@ -6584,7 +5346,7 @@ $__System.registerDynamic("41", ["13", "36"], true, function($__require, exports
   return module.exports;
 });
 
-$__System.registerDynamic("39", [], true, function($__require, exports, module) {
+$__System.registerDynamic("37", [], true, function($__require, exports, module) {
   ;
   var global = this,
       __define = global.define;
@@ -6594,14 +5356,14 @@ $__System.registerDynamic("39", [], true, function($__require, exports, module) 
   return module.exports;
 });
 
-$__System.registerDynamic("42", ["41", "36", "39", "18"], true, function($__require, exports, module) {
+$__System.registerDynamic("40", ["3f", "34", "37", "18"], true, function($__require, exports, module) {
   ;
   var global = this,
       __define = global.define;
   global.define = undefined;
-  var classof = $__require('41'),
-      ITERATOR = $__require('36')('iterator'),
-      Iterators = $__require('39');
+  var classof = $__require('3f'),
+      ITERATOR = $__require('34')('iterator'),
+      Iterators = $__require('37');
   module.exports = $__require('18').getIteratorMethod = function(it) {
     if (it != undefined)
       return it[ITERATOR] || it['@@iterator'] || Iterators[classof(it)];
@@ -6610,12 +5372,12 @@ $__System.registerDynamic("42", ["41", "36", "39", "18"], true, function($__requ
   return module.exports;
 });
 
-$__System.registerDynamic("43", ["3c"], true, function($__require, exports, module) {
+$__System.registerDynamic("41", ["3a"], true, function($__require, exports, module) {
   ;
   var global = this,
       __define = global.define;
   global.define = undefined;
-  var global = $__require('3c'),
+  var global = $__require('3a'),
       SHARED = '__core-js_shared__',
       store = global[SHARED] || (global[SHARED] = {});
   module.exports = function(key) {
@@ -6625,7 +5387,7 @@ $__System.registerDynamic("43", ["3c"], true, function($__require, exports, modu
   return module.exports;
 });
 
-$__System.registerDynamic("44", [], true, function($__require, exports, module) {
+$__System.registerDynamic("42", [], true, function($__require, exports, module) {
   ;
   var global = this,
       __define = global.define;
@@ -6639,7 +5401,7 @@ $__System.registerDynamic("44", [], true, function($__require, exports, module) 
   return module.exports;
 });
 
-$__System.registerDynamic("3c", [], true, function($__require, exports, module) {
+$__System.registerDynamic("3a", [], true, function($__require, exports, module) {
   ;
   var global = this,
       __define = global.define;
@@ -6651,14 +5413,14 @@ $__System.registerDynamic("3c", [], true, function($__require, exports, module) 
   return module.exports;
 });
 
-$__System.registerDynamic("36", ["43", "44", "3c"], true, function($__require, exports, module) {
+$__System.registerDynamic("34", ["41", "42", "3a"], true, function($__require, exports, module) {
   ;
   var global = this,
       __define = global.define;
   global.define = undefined;
-  var store = $__require('43')('wks'),
-      uid = $__require('44'),
-      Symbol = $__require('3c').Symbol;
+  var store = $__require('41')('wks'),
+      uid = $__require('42'),
+      Symbol = $__require('3a').Symbol;
   module.exports = function(name) {
     return store[name] || (store[name] = Symbol && Symbol[name] || (Symbol || uid)('Symbol.' + name));
   };
@@ -6666,12 +5428,12 @@ $__System.registerDynamic("36", ["43", "44", "3c"], true, function($__require, e
   return module.exports;
 });
 
-$__System.registerDynamic("45", ["36"], true, function($__require, exports, module) {
+$__System.registerDynamic("43", ["34"], true, function($__require, exports, module) {
   ;
   var global = this,
       __define = global.define;
   global.define = undefined;
-  var ITERATOR = $__require('36')('iterator'),
+  var ITERATOR = $__require('34')('iterator'),
       SAFE_CLOSING = false;
   try {
     var riter = [7][ITERATOR]();
@@ -6703,7 +5465,7 @@ $__System.registerDynamic("45", ["36"], true, function($__require, exports, modu
   return module.exports;
 });
 
-$__System.registerDynamic("46", ["23", "17", "3d", "3e", "3f", "40", "42", "45"], true, function($__require, exports, module) {
+$__System.registerDynamic("44", ["23", "17", "3b", "3c", "3d", "3e", "40", "43"], true, function($__require, exports, module) {
   "use strict";
   ;
   var global = this,
@@ -6711,12 +5473,12 @@ $__System.registerDynamic("46", ["23", "17", "3d", "3e", "3f", "40", "42", "45"]
   global.define = undefined;
   var ctx = $__require('23'),
       $export = $__require('17'),
-      toObject = $__require('3d'),
-      call = $__require('3e'),
-      isArrayIter = $__require('3f'),
-      toLength = $__require('40'),
-      getIterFn = $__require('42');
-  $export($export.S + $export.F * !$__require('45')(function(iter) {
+      toObject = $__require('3b'),
+      call = $__require('3c'),
+      isArrayIter = $__require('3d'),
+      toLength = $__require('3e'),
+      getIterFn = $__require('40');
+  $export($export.S + $export.F * !$__require('43')(function(iter) {
     Array.from(iter);
   }), 'Array', {from: function from(arrayLike) {
       var O = toObject(arrayLike),
@@ -6762,38 +5524,38 @@ $__System.registerDynamic("18", [], true, function($__require, exports, module) 
   return module.exports;
 });
 
-$__System.registerDynamic("47", ["3a", "46", "18"], true, function($__require, exports, module) {
+$__System.registerDynamic("45", ["38", "44", "18"], true, function($__require, exports, module) {
   ;
   var global = this,
       __define = global.define;
   global.define = undefined;
-  $__require('3a');
-  $__require('46');
+  $__require('38');
+  $__require('44');
   module.exports = $__require('18').Array.from;
   global.define = __define;
   return module.exports;
 });
 
-$__System.registerDynamic("48", ["47"], true, function($__require, exports, module) {
+$__System.registerDynamic("46", ["45"], true, function($__require, exports, module) {
   ;
   var global = this,
       __define = global.define;
   global.define = undefined;
   module.exports = {
-    "default": $__require('47'),
+    "default": $__require('45'),
     __esModule: true
   };
   global.define = __define;
   return module.exports;
 });
 
-$__System.registerDynamic("11", ["48"], true, function($__require, exports, module) {
+$__System.registerDynamic("11", ["46"], true, function($__require, exports, module) {
   "use strict";
   ;
   var global = this,
       __define = global.define;
   global.define = undefined;
-  var _Array$from = $__require('48')["default"];
+  var _Array$from = $__require('46')["default"];
   exports["default"] = function(arr) {
     if (Array.isArray(arr)) {
       for (var i = 0,
@@ -6807,31 +5569,6 @@ $__System.registerDynamic("11", ["48"], true, function($__require, exports, modu
   exports.__esModule = true;
   global.define = __define;
   return module.exports;
-});
-
-$__System.register('4', [], function (_export) {
-  /**
-   * A little hack for SystemJS Builder to replace the Underscore.js module loading it from any globally defined version
-   * from external script tags. This is used when creating a partial inclusive bundle via GlobalRuntime.js.
-   */
-
-  'use strict';
-
-  // Establish the root object, `window` (`self`) in the browser, or `global` on the server.
-  // We use `self` instead of `window` for `WebWorker` support.
-  var root;
-  return {
-    setters: [],
-    execute: function () {
-      root = typeof self === 'object' && self.self === self && self || typeof global === 'object' && global.global === global && global;
-
-      if (typeof root === 'undefined' || root === null) {
-        throw new Error('Could not find a valid global object.');
-      }
-
-      _export('default', root._);
-    }
-  };
 });
 
 $__System.register('5', [], function (_export) {
@@ -7056,7 +5793,7 @@ $__System.register('b', ['4', '5', '6', '8', '11'], function (_export) {
    };
 });
 
-$__System.register('49', ['4', '5', 'b'], function (_export) {
+$__System.register('47', ['4', '5', 'b'], function (_export) {
 
    /**
     * Map from CRUD to HTTP for our default `Backbone.sync` implementation.
@@ -7187,14 +5924,14 @@ $__System.register('49', ['4', '5', 'b'], function (_export) {
    };
 });
 
-$__System.register('4a', ['3', '9', '10', '29', '49', 'e', 'f', 'a', '2a'], function (_export) {
+$__System.register('48', ['2', '9', '10', '27', '28', '47', 'e', 'f', 'a'], function (_export) {
   /**
    * ModuleRuntime.js -- Provides the standard / default configuration that is the same as Backbone 1.2.3
    */
 
   'use strict';
 
-  var Backbone, Collection, Router, View, sync, Events, History, Model, extend, options, backbone;
+  var Backbone, Collection, Router, View, extend, sync, Events, History, Model, options, backbone;
   return {
     setters: [function (_) {
       Backbone = _['default'];
@@ -7205,15 +5942,15 @@ $__System.register('4a', ['3', '9', '10', '29', '49', 'e', 'f', 'a', '2a'], func
     }, function (_4) {
       View = _4['default'];
     }, function (_5) {
-      sync = _5['default'];
+      extend = _5['default'];
+    }, function (_6) {
+      sync = _6['default'];
     }, function (_e) {
       Events = _e['default'];
     }, function (_f) {
       History = _f['default'];
     }, function (_a) {
       Model = _a['default'];
-    }, function (_a2) {
-      extend = _a2['default'];
     }],
     execute: function () {
       options = {
@@ -7239,7 +5976,7 @@ $__System.register('4a', ['3', '9', '10', '29', '49', 'e', 'f', 'a', '2a'], func
   };
 });
 
-$__System.register('1', ['4a'], function (_export) {
+$__System.register('1', ['48'], function (_export) {
   /**
    * GlobalRuntime.js -- Initializes Backbone and sets it to "root".Backbone if it exists.
    */
@@ -7250,8 +5987,8 @@ $__System.register('1', ['4a'], function (_export) {
 
   var Backbone, root;
   return {
-    setters: [function (_a) {
-      Backbone = _a['default'];
+    setters: [function (_) {
+      Backbone = _['default'];
     }],
     execute: function () {
       root = typeof self === 'object' && self.self === self && self || typeof global === 'object' && global.global === global && global;
@@ -7269,5 +6006,5 @@ $__System.register('1', ['4a'], function (_export) {
 
 })
 (function(factory) {
-  factory();
+  factory(_, $);
 });
