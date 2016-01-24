@@ -58,7 +58,7 @@ export default function extend(protoProps, staticProps)
       // from the `protoProps.tagName` if it exists.
       if (protoProps.tagName)
       {
-         Object.defineProperty(child.prototype, "tagName", { get: () => { return protoProps.tagName; } });
+         Object.defineProperty(child.prototype, 'tagName', { get: () => { return protoProps.tagName; } });
       }
    }
 
