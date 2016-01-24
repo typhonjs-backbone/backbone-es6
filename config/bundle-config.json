@@ -4,26 +4,9 @@
       {
          "destBaseDir": "./dist",
          "destFilename": "backbone.js",
-         "formats": ["amd", "cjs", "umd"],
+         "formats": ["amd", "cjs"],
          "mangle": false,
          "minify": false,
-         "src": "src/ModuleRuntime.js",
-         "extraConfig":
-         {
-            "meta":
-            {
-               "jquery": { "build": false },
-               "underscore": { "build": false }
-            }
-         }
-      },
-
-      {
-         "destBaseDir": "./dist",
-         "destFilename": "backbone.min.js",
-         "formats": ["amd", "cjs", "umd"],
-         "mangle": true,
-         "minify": true,
          "src": "src/ModuleRuntime.js",
          "extraConfig":
          {
@@ -38,16 +21,24 @@
       {
          "destBaseDir": "./dist",
          "destFilename": "backbone.js",
-         "formats": ["global"],
+         "formats": ["umd", "global"],
          "mangle": false,
          "minify": false,
          "src": "src/GlobalRuntime.js",
          "extraConfig":
          {
-            "map":
+            "meta":
             {
-               "jquery": "src/delegateGlobalJQuery.js",
-               "underscore": "src/delegateGlobalUnderscore.js"
+               "jquery": { "build": false },
+               "underscore": { "build": false }
+            }
+         },
+         "builderOptions":
+         {
+            "globalDeps":
+            {
+               "jquery": "$",
+               "underscore": "_"
             }
          }
       },
@@ -55,16 +46,42 @@
       {
          "destBaseDir": "./dist",
          "destFilename": "backbone.min.js",
-         "formats": ["global"],
+         "formats": ["amd", "cjs"],
+         "mangle": true,
+         "minify": true,
+         "src": "src/ModuleRuntime.js",
+         "extraConfig":
+         {
+            "meta":
+            {
+               "jquery": { "build": false },
+               "underscore": { "build": false }
+            }
+         }
+      },
+
+      {
+         "destBaseDir": "./dist",
+         "destFilename": "backbone.min.js",
+         "formats": ["umd", "global"],
          "mangle": true,
          "minify": true,
          "src": "src/GlobalRuntime.js",
          "extraConfig":
          {
-            "map":
+            "meta":
             {
-               "jquery": "src/delegateGlobalJQuery.js",
-               "underscore": "src/delegateGlobalUnderscore.js"
+               "jquery": { "build": false },
+               "underscore": { "build": false }
+            }
+         },
+         "builderOptions":
+         {
+            "globalName": "Backbone",
+            "globalDeps":
+            {
+               "jquery": "$",
+               "underscore": "_"
             }
          }
       },
