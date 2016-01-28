@@ -14,9 +14,10 @@ backbone-es6 is a fork of Backbone (https://github.com/jashkenas/backbone) conve
 
 Another reason for backbone-es6 is supporting end to end documentation via ESDoc for ES6 frameworks and apps built on top of backbone-es6. Two ESDoc plugins, [esdoc-plugin-jspm](https://github.com/typhonjs/esdoc-plugin-jspm) & [esdoc-plugin-extends-replace](https://github.com/typhonjs/esdoc-plugin-extends-replace) along with a complete integrated set of Gulp tasks, [typhonjs-core-gulptasks](https://github.com/typhonjs/typhonjs-core-gulptasks) provide documentation generation across multiple modules / source roots via JSPM along with ESLint and several JSPM & NPM tasks.
 
-backbone-es6 uses [JSPM](http://www.jspm.io) / [SystemJS](https://github.com/systemjs/systemjs) for dependency management and bundling distributions. For an example of using JSPM / SystemJS directly with backbone-es6 & Backbone.localStorage including typhonjs-core-gulptasks support please see this demo repo:
+backbone-es6 uses [JSPM](http://www.jspm.io) / [SystemJS](https://github.com/systemjs/systemjs) for dependency management and bundling distributions. For an example of using JSPM / SystemJS directly with backbone-es6 & Backbone.localStorage including typhonjs-core-gulptasks support please see these demo repos:
 
 - https://github.com/typhonjs-demos/backbone-es6-localstorage-todos
+- https://github.com/typhonjs-demos/electron-backbone-es6-localstorage-todos  (Electron desktop version)
 
 When a new Backbone release is made (next 1.2.4) backbone-es6 will be updated. Tests from Backbone will be ported to backbone-es6 with the upcoming 1.2.4 release. 
 
