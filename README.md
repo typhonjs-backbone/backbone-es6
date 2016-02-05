@@ -1,7 +1,7 @@
 ![Backbone-ES6](http://i.imgur.com/KKkgP8P.png)
 
 [![Backbone](https://img.shields.io/badge/backbone-1.2.3-yellowgreen.svg?style=flat)](https://github.com/jashkenas/backbone)
-[![Documentation](http://js.docs.typhonrt.org/backbone-es6/badge.svg)](http://js.docs.typhonrt.org/backbone-es6/)
+[![Documentation](http://js.docs.typhonrt.org/typhonjs/backbone-es6/badge.svg)](http://js.docs.typhonrt.org/typhonjs/backbone-es6/)
 [![Code Style](https://img.shields.io/badge/code%20style-allman-yellowgreen.svg?style=flat)](https://en.wikipedia.org/wiki/Indent_style#Allman_style)
 [![License](https://img.shields.io/badge/license-MIT-yellowgreen.svg?style=flat)](https://github.com/typhonjs/backbone-es6/blob/master/LICENSE)
 
@@ -27,7 +27,7 @@ Please view the wiki for build instructions and other pertinent info:
 https://github.com/typhonjs/backbone-es6/wiki
 
 API documentation can be found in the `docs/` directory and online here:
-http://js.docs.typhonrt.org/backbone-es6/
+http://js.docs.typhonrt.org/typhonjs/backbone-es6/
 
 For original Backbone Docs, License, Tests, pre-packed downloads, see:
 http://backbonejs.org
