@@ -7,6 +7,7 @@
 
 [![Build Status](https://travis-ci.org/typhonjs/backbone-es6.svg)](https://travis-ci.org/typhonjs/backbone-es6)
 [![Dependency Status](https://www.versioneye.com/user/projects/5627b86536d0ab0021000f46/badge.svg?style=flat)](https://www.versioneye.com/user/projects/5627b86536d0ab0021000f46)
+[![Gitter](https://img.shields.io/gitter/room/typhonjs/TyphonJS.svg)](https://gitter.im/typhonjs/TyphonJS)
 
 Backbone supplies structure to JavaScript-heavy applications by providing models with key-value binding and custom events, collections with a rich API of enumerable functions, views with declarative event handling, and connects it all to your existing application over a RESTful JSON interface.
 
