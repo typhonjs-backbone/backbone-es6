@@ -3,7 +3,7 @@
 [![Backbone](https://img.shields.io/badge/backbone-1.2.3-yellowgreen.svg?style=flat)](https://github.com/jashkenas/backbone)
 [![Documentation](http://js.docs.typhonrt.org/typhonjs/backbone-es6/badge.svg)](http://js.docs.typhonrt.org/typhonjs/backbone-es6/)
 [![Code Style](https://img.shields.io/badge/code%20style-allman-yellowgreen.svg?style=flat)](https://en.wikipedia.org/wiki/Indent_style#Allman_style)
-[![License](https://img.shields.io/badge/license-MIT-yellowgreen.svg?style=flat)](https://github.com/typhonjs/backbone-es6/blob/master/LICENSE)
+[![License](https://img.shields.io/badge/license-MPLv2-yellowgreen.svg?style=flat)](https://github.com/typhonjs/backbone-es6/blob/master/LICENSE)
 
 [![Build Status](https://travis-ci.org/typhonjs-backbone/backbone-es6.svg?branch=master)](https://travis-ci.org/typhonjs-backbone/backbone-es6)
 [![Dependency Status](https://www.versioneye.com/user/projects/5627b86536d0ab0021000f46/badge.svg?style=flat)](https://www.versioneye.com/user/projects/5627b86536d0ab0021000f46)
@@ -42,4 +42,4 @@ Backbone (c) 2010-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporter
 
 backbone-es6 (c) 2015-present Michael Leahy, TyphonRT Inc. 
 
-backbone-es6 may be freely distributed under the MIT license.
+backbone-es6 may be freely distributed under the MPL v2.0 license.
