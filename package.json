@@ -1,20 +1,20 @@
 {
   "name": "backbone-es6",
   "version": "0.1.0",
-  "homepage": "https://github.com/typhonjs/backbone-es6",
+  "homepage": "https://github.com/typhonjs-backbone/backbone-es6",
   "description": "A fork of Backbone converting it to ES6.",
-  "license": "MIT",
+  "license": "MPL-2.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/typhonjs/backbone-es6/"
+    "url": "https://github.com/typhonjs-backbone/backbone-es6/"
   },
   "bugs": {
-    "url": "https://github.com/typhonjs/backbone-es6/issues"
+    "url": "https://github.com/typhonjs-backbone/backbone-es6/issues"
   },
   "jspm": {
     "main": "src/ModuleRuntime.js",
     "dependencies": {
-      "typhonjs-core-backbone-events": "github:typhonjs/typhonjs-core-backbone-events@master",
+      "typhonjs-core-backbone-events": "github:typhonjs-backbone/typhonjs-core-backbone-events@master",
       "underscore": "npm:underscore@^1.8.3"
     },
     "devDependencies": {
@@ -25,9 +25,10 @@
     }
   },
   "devDependencies": {
-    "gulp": "^3.9.0",
-    "jspm": "^0.16.26",
-    "typhonjs-config-eslint": "^0.2.1",
-    "typhonjs-core-gulptasks": "^0.5.0"
+    "gulp": "^3.0.0",
+    "jspm": "^0.16.0",
+    "typhonjs-config-eslint": "^0.4.0",
+    "typhonjs-core-gulptasks": "^0.6.0",
+    "typhonjs-npm-build-test": "^0.1.0"
   }
 }

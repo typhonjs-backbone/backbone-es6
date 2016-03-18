@@ -1,6 +1,7 @@
 .idea
 .DS_Store
 npm-debug.log
-coverage
-node_modules
-jspm_packages
+coverage/
+docs/
+node_modules/
+jspm_packages/

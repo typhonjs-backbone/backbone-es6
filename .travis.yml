@@ -1,12 +1,12 @@
 language: node_js
 
 node_js:
-  - "4.1"
+  - "5.8.0"
 
 before_script:
   - npm install -g gulp
   - npm install -g jspm
   - jspm install
 
-script: gulp test-basic --travis
+script: gulp jspm-test-basic
 
