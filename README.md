@@ -1,7 +1,7 @@
 ![Backbone-ES6](http://i.imgur.com/KKkgP8P.png)
 
-[![Backbone](https://img.shields.io/badge/backbone-1.2.3-yellowgreen.svg?style=flat)](https://github.com/jashkenas/backbone)
-[![Documentation](http://js.docs.typhonrt.org/typhonjs/backbone-es6/badge.svg)](http://js.docs.typhonrt.org/typhonjs/backbone-es6/)
+[![Backbone](https://img.shields.io/badge/backbone-1.3.3-yellowgreen.svg?style=flat)](https://github.com/jashkenas/backbone)
+[![Documentation](http://docs.typhonjs.io/typhonjs-backbone/backbone-es6/badge.svg)](http://docs.typhonjs.io/typhonjs-backbone/backbone-es6/)
 [![Code Style](https://img.shields.io/badge/code%20style-allman-yellowgreen.svg?style=flat)](https://en.wikipedia.org/wiki/Indent_style#Allman_style)
 [![License](https://img.shields.io/badge/license-MPLv2-yellowgreen.svg?style=flat)](https://github.com/typhonjs-backbone/backbone-es6/blob/master/LICENSE)
 [![Gitter](https://img.shields.io/gitter/room/typhonjs/TyphonJS.svg)](https://gitter.im/typhonjs/TyphonJS)
@@ -20,12 +20,12 @@ backbone-es6 uses [JSPM](http://www.jspm.io) / [SystemJS](https://github.com/sys
 - https://github.com/typhonjs-demos/backbone-es6-localstorage-todos
 - https://github.com/typhonjs-demos/electron-backbone-es6-localstorage-todos  (Electron desktop version)
 
-Update (03/21/16): In the coming weeks backbone-es6 is going to be updated with the latest Backbone 1.3.2 changes. A full test suite will also be created including Nightmare JS / browser testing. The final planned upgrade is to then modify backbone-es6 completing full modularization by splitting it into several separate repos which will still be collected and exposed through this repo. This final separation will allow each component of Backbone to potentially be used independently with minimal dependencies including server side usage. 
+Update (05/12/16): backbone-es6 has been updated with the latest Backbone 1.3.3 changes. After Backbone is updated to 1.4 and backbone-es6 is updated a full test suite will also be created including Nightmare JS / browser testing. The final planned upgrade is to then modify backbone-es6 completing full modularization by splitting it into several separate repos which will still be collected and exposed through this repo. This final separation will allow each component of Backbone to potentially be used independently with minimal dependencies including server side usage. 
 
-This repository contains several pre-packed downloads in the `dist/` directory. There are AMD, CJS, and Global distributions. The "global-inclusive" bundle includes the latest jQuery (2.2.0) and Underscore (1.8.3) libraries.
+This repository contains several pre-packed downloads in the `dist/` directory. There are AMD, CJS, and Global distributions. The "global-inclusive" bundle includes the latest jQuery (2.2.3) and Underscore (1.8.3) libraries.
 
 API documentation can be generated locally and is also found online here:
-http://js.docs.typhonrt.org/typhonjs/backbone-es6/
+http://docs.typhonjs.io/typhonjs-backbone/backbone-es6/
 
 For original Backbone Docs, License, Tests, pre-packed downloads, see:
 http://backbonejs.org
