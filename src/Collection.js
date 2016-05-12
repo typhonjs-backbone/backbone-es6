@@ -183,6 +183,8 @@ const s_SPLICE = (array, insert, at) =>
  * @see http://underscorejs.org/#every
  * @see http://underscorejs.org/#filter
  * @see http://underscorejs.org/#find
+ * @see http://underscorejs.org/#findIndex
+ * @see http://underscorejs.org/#findLastIndex
  * @see http://underscorejs.org/#first
  * @see http://underscorejs.org/#groupBy
  * @see http://underscorejs.org/#indexBy
@@ -241,11 +243,11 @@ class Collection extends Events
 {
    /**
     * When creating a Collection, you may choose to pass in the initial array of models. The collection's comparator
-    * may be included as an option. Passing false as the comparator option will prevent sorting. If you define an
+    * may be included as an option. Passing `false` as the comparator option will prevent sorting. If you define an
     * initialize function, it will be invoked when the collection is created. There are a couple of options that, if
-    * provided, are attached to the collection directly: model and comparator.
+    * provided, are attached to the collection directly: `model` and `comparator`.
     *
-    * Pass null for models to create an empty Collection with options.
+    * Pass `null` for `models` to create an empty Collection with options.
     *
     * @see http://backbonejs.org/#Collection-constructor
     *
@@ -329,7 +331,8 @@ class Collection extends Events
 
    /**
     * Get a model from a collection, specified by index. Useful if your collection is sorted, and if your collection
-    * isn't sorted, at will still retrieve models in insertion order.
+    * isn't sorted, at will still retrieve models in insertion order. When passed a negative index, it will retrieve
+    * the model from the back of the collection.
     *
     * @see http://backbonejs.org/#Collection-at
     *
@@ -524,25 +527,28 @@ Debug.log(`Collection - get - id: ${id}`);
    }
 
    /**
-    * Override this method to specify the attribute the collection will use to refer to its models in collection.get.
-    * By default returns the idAttribute of the collection's model class or failing that, 'id'. If your collection uses
-    * polymorphic models and those models have an idAttribute other than id you must override this method with your own
-    * custom logic.
+    * Override this method to return the value the collection will use to identify a model given its attributes. Useful
+    * for combining models from multiple tables with different `idAttribute` values into a single collection.
+    *
+    * By default returns the value of the attributes' `idAttribute` from the collection's model class or failing that,
+    * `id`. If your collection uses a model factory and those models have an `idAttribute` other than `id` you must
+    * override this method.
     *
     * @example
     * var Library = Backbone.Collection.extend({
-    *    model: function(attrs, options) {
-    *       if (condition) {
-    *          return new PublicDocument(attrs, options);
-    *       } else {
-    *          return new PrivateDocument(attrs, options);
-    *       }
-    *    },
-    *
-    *    modelId: function(attrs) {
-    *       return attrs.private ? 'private_id' : 'public_id';
-    *    }
+    *   modelId: function(attrs) {
+    *      return attrs.type + attrs.id;
+    *   }
     * });
+    *
+    * var library = new Library([
+    *   {type: 'dvd', id: 1},
+    *   {type: 'vhs', id: 1}
+    * ]);
+    *
+    * var dvdId = library.get('dvd1').id;
+    * var vhsId = library.get('vhs1').id;
+    * alert('dvd: ' + dvdId + ', vhs: ' + vhsId);
     *
     * @see http://backbonejs.org/#Collection-modelId
     *
@@ -671,8 +677,8 @@ Debug.log(`Collection - _prepareModel - 1 - attrs.parseObject: ${attrs.parseObje
    /**
     * Remove a model (or an array of models) from the collection, and return them. Each model can be a Model instance,
     * an id string or a JS object, any value acceptable as the id argument of collection.get. Fires a "remove" event
-    * for each model, and a single "update" event afterwards. The model's index before removal is available to
-    * listeners as options.index.
+    * for each model, and a single "update" event afterwards, unless  {silent: true}  is passed. The model's index
+    * before removal is available to listeners as options.index.
     *
     * @see http://backbonejs.org/#Collection-remove
     *
@@ -720,8 +726,9 @@ Debug.log(`Collection - _prepareModel - 1 - attrs.parseObject: ${attrs.parseObje
    /**
     * Adding and removing models one at a time is all well and good, but sometimes you have so many models to change
     * that you'd rather just update the collection in bulk. Use reset to replace a collection with a new list of models
-    * (or attribute hashes), triggering a single "reset" event at the end. Returns the newly-set models. For
-    * convenience, within a "reset" event, the list of any previous models is available as options.previousModels.
+    * (or attribute hashes), triggering a single "reset" event on completion, and without triggering any add or remove
+    * events on any models. Returns the newly-set models. For convenience, within a "reset" event, the list of any
+    * previous models is available as options.previousModels.
     * Pass null for models to empty your Collection with options.
     *
     * Calling collection.reset() without passing any models as arguments will empty the entire collection.

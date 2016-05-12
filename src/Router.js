@@ -93,10 +93,13 @@ const s_ROUTE_TO_REGEX = (route) =>
  * For example, a route of "search/:query/p:page" will match a fragment of #search/obama/p2, passing "obama" and "2" to
  * the action.
  *
- * A route of "file/*path" will match #file/nested/folder/file.txt, passing "nested/folder/file.txt" to the action.
+ * A route of "file/*path" will match #file/folder/file.txt, passing "folder/file.txt" to the action.
  *
  * A route of "docs/:section(/:subsection)" will match #docs/faq and #docs/faq/installing, passing "faq" to the action
  * in the first case, and passing "faq" and "installing" to the action in the second.
+ *
+ * A nested optional route of "docs(/:section)(/:subsection)" will match #docs, #docs/faq, and #docs/faq/installing,
+ * passing "faq" to the action in the second case, and passing "faq" and "installing" to the action in the third.
  *
  * Trailing slashes are treated as part of the URL, and (correctly) treated as a unique route when accessed. docs and
  * docs/ will fire different callbacks. If you can't avoid generating both types of URLs, you can define a "docs(/)"
