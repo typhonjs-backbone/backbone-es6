@@ -1,8 +1,7 @@
 !function(e){function r(e,r,o){return 4===arguments.length?t.apply(this,arguments):void n(e,{declarative:!0,deps:r,declare:o})}function t(e,r,t,o){n(e,{declarative:!1,deps:r,executingRequire:t,execute:o})}function n(e,r){r.name=e,e in p||(p[e]=r),r.normalizedDeps=r.deps}function o(e,r){if(r[e.groupIndex]=r[e.groupIndex]||[],-1==v.call(r[e.groupIndex],e)){r[e.groupIndex].push(e);for(var t=0,n=e.normalizedDeps.length;n>t;t++){var a=e.normalizedDeps[t],u=p[a];if(u&&!u.evaluated){var d=e.groupIndex+(u.declarative!=e.declarative);if(void 0===u.groupIndex||u.groupIndex<d){if(void 0!==u.groupIndex&&(r[u.groupIndex].splice(v.call(r[u.groupIndex],u),1),0==r[u.groupIndex].length))throw new TypeError("Mixed dependency cycle detected");u.groupIndex=d}o(u,r)}}}}function a(e){var r=p[e];r.groupIndex=0;var t=[];o(r,t);for(var n=!!r.declarative==t.length%2,a=t.length-1;a>=0;a--){for(var u=t[a],i=0;i<u.length;i++){var s=u[i];n?d(s):l(s)}n=!n}}function u(e){return x[e]||(x[e]={name:e,dependencies:[],exports:{},importers:[]})}function d(r){if(!r.module){var t=r.module=u(r.name),n=r.module.exports,o=r.declare.call(e,function(e,r){if(t.locked=!0,"object"==typeof e)for(var o in e)n[o]=e[o];else n[e]=r;for(var a=0,u=t.importers.length;u>a;a++){var d=t.importers[a];if(!d.locked)for(var i=0;i<d.dependencies.length;++i)d.dependencies[i]===t&&d.setters[i](n)}return t.locked=!1,r},r.name);t.setters=o.setters,t.execute=o.execute;for(var a=0,i=r.normalizedDeps.length;i>a;a++){var l,s=r.normalizedDeps[a],c=p[s],v=x[s];v?l=v.exports:c&&!c.declarative?l=c.esModule:c?(d(c),v=c.module,l=v.exports):l=f(s),v&&v.importers?(v.importers.push(t),t.dependencies.push(v)):t.dependencies.push(null),t.setters[a]&&t.setters[a](l)}}}function i(e){var r,t=p[e];if(t)t.declarative?c(e,[]):t.evaluated||l(t),r=t.module.exports;else if(r=f(e),!r)throw new Error("Unable to load dependency "+e+".");return(!t||t.declarative)&&r&&r.__useDefault?r["default"]:r}function l(r){if(!r.module){var t={},n=r.module={exports:t,id:r.name};if(!r.executingRequire)for(var o=0,a=r.normalizedDeps.length;a>o;o++){var u=r.normalizedDeps[o],d=p[u];d&&l(d)}r.evaluated=!0;var c=r.execute.call(e,function(e){for(var t=0,n=r.deps.length;n>t;t++)if(r.deps[t]==e)return i(r.normalizedDeps[t]);throw new TypeError("Module "+e+" not declared as a dependency.")},t,n);c&&(n.exports=c),t=n.exports,t&&t.__esModule?r.esModule=t:r.esModule=s(t)}}function s(r){if(r===e)return r;var t={};if("object"==typeof r||"function"==typeof r)if(g){var n;for(var o in r)(n=Object.getOwnPropertyDescriptor(r,o))&&h(t,o,n)}else{var a=r&&r.hasOwnProperty;for(var o in r)(!a||r.hasOwnProperty(o))&&(t[o]=r[o])}return t["default"]=r,h(t,"__useDefault",{value:!0}),t}function c(r,t){var n=p[r];if(n&&!n.evaluated&&n.declarative){t.push(r);for(var o=0,a=n.normalizedDeps.length;a>o;o++){var u=n.normalizedDeps[o];-1==v.call(t,u)&&(p[u]?c(u,t):f(u))}n.evaluated||(n.evaluated=!0,n.module.execute.call(e))}}function f(e){if(D[e])return D[e];if("@node/"==e.substr(0,6))return y(e.substr(6));var r=p[e];if(!r)throw"Module "+e+" not present.";return a(e),c(e,[]),p[e]=void 0,r.declarative&&h(r.module.exports,"__esModule",{value:!0}),D[e]=r.declarative?r.module.exports:r.esModule}var p={},v=Array.prototype.indexOf||function(e){for(var r=0,t=this.length;t>r;r++)if(this[r]===e)return r;return-1},g=!0;try{Object.getOwnPropertyDescriptor({a:0},"a")}catch(m){g=!1}var h;!function(){try{Object.defineProperty({},"a",{})&&(h=Object.defineProperty)}catch(e){h=function(e,r,t){try{e[r]=t.value||t.get.call(e)}catch(n){}}}}();var x={},y="undefined"!=typeof System&&System._nodeRequire||"undefined"!=typeof require&&require.resolve&&"undefined"!=typeof process&&require,D={"@empty":{}};return function(e,n,o){return function(a){a(function(a){for(var u={_nodeRequire:y,register:r,registerDynamic:t,get:f,set:function(e,r){D[e]=r},newModule:function(e){return e}},d=0;d<n.length;d++)(function(e,r){r&&r.__esModule?D[e]=r:D[e]=s(r)})(n[d],arguments[d]);o(u);var i=f(e[0]);if(e.length>1)for(var d=1;d<e.length;d++)f(e[d]);return i.__useDefault?i["default"]:i})}}}("undefined"!=typeof self?self:global)
 
-(["1"], ["3","4"], function($__System) {
+(["1","1"], ["3","4"], function($__System) {
 
-!function(){var t=$__System;if("undefined"!=typeof window&&"undefined"!=typeof document&&window.location)var s=location.protocol+"//"+location.hostname+(location.port?":"+location.port:"");t.set("@@cjs-helpers",t.newModule({getPathVars:function(t){var n,o=t.lastIndexOf("!");n=-1!=o?t.substr(0,o):t;var e=n.split("/");return e.pop(),e=e.join("/"),"file:///"==n.substr(0,8)?(n=n.substr(7),e=e.substr(7),isWindows&&(n=n.substr(1),e=e.substr(1))):s&&n.substr(0,s.length)===s&&(n=n.substr(s.length),e=e.substr(s.length)),{filename:n,dirname:e}}}))}();
 $__System.register('2', ['3', '4', '5', '6'], function (_export) {
   var $, _, BackboneProxy, _classCallCheck, Backbone;
 
@@ -29,10 +28,10 @@ $__System.register('2', ['3', '4', '5', '6'], function (_export) {
        *
        * ---------
        *
-       * Backbone-ES6
+       * backbone-es6
        * https://github.com/typhonjs/backbone-es6
        * (c) 2015 Michael Leahy
-       * Backbone-ES6 may be freely distributed under the MIT license.
+       * backbone-es6 may be freely distributed under the MPLv2 license.
        *
        * This fork of Backbone converts it to ES6 and provides extension through constructor injection for easy modification.
        * The only major difference from Backbone is that Backbone itself is not a global Events instance anymore. Please
@@ -41,7 +40,7 @@ $__System.register('2', ['3', '4', '5', '6'], function (_export) {
        * @see http://backbonejs.org
        * @see https://github.com/typhonjs/backbone-es6
        * @author Michael Leahy
-       * @version 1.2.3
+       * @version 1.3.3
        * @copyright Michael Leahy 2015
        */
       'use strict';
@@ -223,7 +222,7 @@ $__System.register('7', ['6', '8'], function (_export) {
 });
 
 $__System.register('9', ['4', '5', '6', '7', '8', 'c', 'd', 'e', 'a', 'b'], function (_export) {
-   var _, BackboneProxy, _classCallCheck, Debug, _createClass, _get, _inherits, Events, Model, Utils, s_ADD_OPTIONS, s_SET_OPTIONS, s_ADD_REFERENCE, s_ON_MODEL_EVENT, s_REMOVE_MODELS, s_REMOVE_REFERENCE, s_SPLICE, Collection, collectionMethods;
+   var _, BackboneProxy, _classCallCheck, Debug, _createClass, _get, _inherits, Events, Model, Utils, Collection, collectionMethods, s_ADD_OPTIONS, s_SET_OPTIONS, s_ADD_REFERENCE, s_ON_MODEL_EVENT, s_REMOVE_MODELS, s_REMOVE_REFERENCE, s_SPLICE;
 
    return {
       setters: [function (_4) {
@@ -249,170 +248,6 @@ $__System.register('9', ['4', '5', '6', '7', '8', 'c', 'd', 'e', 'a', 'b'], func
       }],
       execute: function () {
 
-         // Private / internal methods ---------------------------------------------------------------------------------------
-
-         /**
-          * Default options for `Collection#add`.
-          * @type {{add: boolean, remove: boolean}}
-          */
-         'use strict';
-
-         s_ADD_OPTIONS = { add: true, remove: false };
-
-         /**
-          * Default options for `Collection#set`.
-          * @type {{add: boolean, remove: boolean}}
-          */
-         s_SET_OPTIONS = { add: true, remove: true, merge: true };
-
-         /**
-          * Internal method to create a model's ties to a collection.
-          *
-          * @param {Collection}  collection  - A collection instance
-          * @param {Model}       model       - A model instance
-          */
-
-         s_ADD_REFERENCE = function s_ADD_REFERENCE(collection, model) {
-            collection._byId[model.cid] = model;
-            var id = collection.modelId(model.attributes);
-
-            Debug.log('Collection - s_ADD_REFERENCE - id: ' + id + '; model.cid: ' + model.cid, true);
-
-            if (!Utils.isNullOrUndef(id)) {
-               collection._byId[id] = model;
-            }
-            model.on('all', s_ON_MODEL_EVENT, collection);
-         };
-
-         /**
-          * Internal method called every time a model in the set fires an event. Sets need to update their indexes when models
-          * change ids. All other events simply proxy through. "add" and "remove" events that originate in other collections
-          * are ignored.
-          *
-          * Note: Because this is the callback added to the model via Events the "this" context is associated with the model.
-          *
-          * @param {string}      event       - Event name
-          * @param {Model}       model       - A model instance
-          * @param {Collection}  collection  - A collection instance
-          * @param {object}      options     - Optional parameters
-          */
-
-         s_ON_MODEL_EVENT = function s_ON_MODEL_EVENT(event, model, collection, options) {
-            Debug.log('Collection - s_ON_MODEL_EVENT - 0 - event: ' + event, true);
-
-            if ((event === 'add' || event === 'remove') && collection !== this) {
-               return;
-            }
-            if (event === 'destroy') {
-               this.remove(model, options);
-            }
-            if (event === 'change') {
-               var prevId = this.modelId(model.previousAttributes());
-               var id = this.modelId(model.attributes);
-
-               Debug.log('Collection - s_ON_MODEL_EVENT - 1 - change - id: ' + id + '; prevId: ' + prevId);
-
-               if (prevId !== id) {
-                  if (!Utils.isNullOrUndef(prevId)) {
-                     delete this._byId[prevId];
-                  }
-                  if (!Utils.isNullOrUndef(id)) {
-                     this._byId[id] = model;
-                  }
-               }
-            }
-
-            this.trigger.apply(this, arguments);
-         };
-
-         /**
-          * Internal method called by both remove and set.
-          *
-          * @param {Collection}     collection  - A collection instance
-          * @param {Array<Model>}   models      - A model instance
-          * @param {object}         options     - Optional parameters
-          * @returns {*}
-          */
-
-         s_REMOVE_MODELS = function s_REMOVE_MODELS(collection, models, options) {
-            var removed = [];
-
-            for (var i = 0; i < models.length; i++) {
-               var model = collection.get(models[i]);
-
-               Debug.log('Collection - s_REMOVE_MODELS - 0 - model: ' + model, true);
-
-               if (!model) {
-                  continue;
-               }
-
-               Debug.log('Collection - s_REMOVE_MODELS - 1 - model: ' + model.toJSON());
-
-               var index = collection.indexOf(model);
-
-               Debug.log('Collection - s_REMOVE_MODELS - 2 - index: ' + index);
-
-               collection.models.splice(index, 1);
-               collection.length--;
-
-               if (!options.silent) {
-                  options.index = index;
-                  model.trigger('remove', model, collection, options);
-               }
-
-               removed.push(model);
-               s_REMOVE_REFERENCE(collection, model, options);
-            }
-
-            return removed.length ? removed : false;
-         };
-
-         /**
-          * Internal method to sever a model's ties to a collection.
-          *
-          * @param {Collection}  collection  - A collection instance
-          * @param {Model}       model       - A model instance
-          */
-
-         s_REMOVE_REFERENCE = function s_REMOVE_REFERENCE(collection, model) {
-            delete collection._byId[model.cid];
-            var id = collection.modelId(model.attributes);
-
-            Debug.log('Collection - s_REMOVE_REFERENCE - id: ' + id + '; model.cid: ' + model.cid);
-
-            if (!Utils.isNullOrUndef(id)) {
-               delete collection._byId[id];
-            }
-            if (collection === model.collection) {
-               delete model.collection;
-            }
-            model.off('all', s_ON_MODEL_EVENT, collection);
-         };
-
-         /**
-          * Splices `insert` into `array` at index `at`.
-          *
-          * @param {Array}    array    - Target array to splice into
-          * @param {Array}    insert   - Array to insert
-          * @param {number}   at       - Index to splice at
-          */
-
-         s_SPLICE = function s_SPLICE(array, insert, at) {
-            at = Math.min(Math.max(at, 0), array.length);
-            var tail = new Array(array.length - at);
-            var length = insert.length;
-
-            for (var i = 0; i < tail.length; i++) {
-               tail[i] = array[i + at];
-            }
-            for (var i = 0; i < length; i++) {
-               array[i + at] = insert[i];
-            }
-            for (var i = 0; i < tail.length; i++) {
-               array[i + length + at] = tail[i];
-            }
-         };
-
          /**
           * Backbone.Collection - Collections are ordered sets of models. (http://backbonejs.org/#Collection)
           * -------------------
@@ -436,6 +271,8 @@ $__System.register('9', ['4', '5', '6', '7', '8', 'c', 'd', 'e', 'a', 'b'], func
           * @see http://underscorejs.org/#every
           * @see http://underscorejs.org/#filter
           * @see http://underscorejs.org/#find
+          * @see http://underscorejs.org/#findIndex
+          * @see http://underscorejs.org/#findLastIndex
           * @see http://underscorejs.org/#first
           * @see http://underscorejs.org/#groupBy
           * @see http://underscorejs.org/#indexBy
@@ -490,17 +327,18 @@ $__System.register('9', ['4', '5', '6', '7', '8', 'c', 'd', 'e', 'a', 'b'], func
           *
           * export default new MyCollection();   // If desired drop "new" to export the class itself and not an instance.
           */
+         'use strict';
 
          Collection = (function (_Events) {
             _inherits(Collection, _Events);
 
             /**
              * When creating a Collection, you may choose to pass in the initial array of models. The collection's comparator
-             * may be included as an option. Passing false as the comparator option will prevent sorting. If you define an
+             * may be included as an option. Passing `false` as the comparator option will prevent sorting. If you define an
              * initialize function, it will be invoked when the collection is created. There are a couple of options that, if
-             * provided, are attached to the collection directly: model and comparator.
+             * provided, are attached to the collection directly: `model` and `comparator`.
              *
-             * Pass null for models to create an empty Collection with options.
+             * Pass `null` for `models` to create an empty Collection with options.
              *
              * @see http://backbonejs.org/#Collection-constructor
              *
@@ -600,7 +438,8 @@ $__System.register('9', ['4', '5', '6', '7', '8', 'c', 'd', 'e', 'a', 'b'], func
 
                /**
                 * Get a model from a collection, specified by index. Useful if your collection is sorted, and if your collection
-                * isn't sorted, at will still retrieve models in insertion order.
+                * isn't sorted, at will still retrieve models in insertion order. When passed a negative index, it will retrieve
+                * the model from the back of the collection.
                 *
                 * @see http://backbonejs.org/#Collection-at
                 *
@@ -679,12 +518,12 @@ $__System.register('9', ['4', '5', '6', '7', '8', 'c', 'd', 'e', 'a', 'b'], func
                   var collection = this;
                   var success = options.success;
 
-                  options.success = function (model, resp, callbackOpts) {
+                  options.success = function (m, resp, callbackOpts) {
                      if (wait) {
-                        collection.add(model, callbackOpts);
+                        collection.add(m, callbackOpts);
                      }
                      if (success) {
-                        success.call(callbackOpts.context, model, resp, callbackOpts);
+                        success.call(callbackOpts.context, m, resp, callbackOpts);
                      }
                   };
 
@@ -768,7 +607,8 @@ $__System.register('9', ['4', '5', '6', '7', '8', 'c', 'd', 'e', 'a', 'b'], func
                }
 
                /**
-                * Get a model from a collection, specified by an id, a cid, or by passing in a model.
+                * Get a model from the set by id, cid, model object with id or cid properties, or an attributes object that is
+                * transformed through modelId.
                 *
                 * @example
                 * var book = library.get(110);
@@ -785,11 +625,23 @@ $__System.register('9', ['4', '5', '6', '7', '8', 'c', 'd', 'e', 'a', 'b'], func
                      return void 0;
                   }
 
-                  var id = this.modelId(Utils.isModel(obj) ? obj.attributes : obj);
+                  var id = this.modelId(obj.attributes || obj);
 
                   Debug.log('Collection - get - id: ' + id);
 
-                  return this._byId[obj] || this._byId[id] || this._byId[obj.cid];
+                  return this._byId[obj] || this._byId[id] || obj.cid && this._byId[obj.cid];
+               }
+
+               /**
+                * Returns `true` if the model is in the collection.
+                *
+                * @param {Model} obj   - An instance of a model.
+                * @returns {boolean}
+                */
+            }, {
+               key: 'has',
+               value: function has(obj) {
+                  return !Utils.isNullOrUndef(this.get(obj));
                }
 
                /**
@@ -803,25 +655,28 @@ $__System.register('9', ['4', '5', '6', '7', '8', 'c', 'd', 'e', 'a', 'b'], func
                value: function initialize() {}
 
                /**
-                * Override this method to specify the attribute the collection will use to refer to its models in collection.get.
-                * By default returns the idAttribute of the collection's model class or failing that, 'id'. If your collection uses
-                * polymorphic models and those models have an idAttribute other than id you must override this method with your own
-                * custom logic.
+                * Override this method to return the value the collection will use to identify a model given its attributes. Useful
+                * for combining models from multiple tables with different `idAttribute` values into a single collection.
+                *
+                * By default returns the value of the attributes' `idAttribute` from the collection's model class or failing that,
+                * `id`. If your collection uses a model factory and those models have an `idAttribute` other than `id` you must
+                * override this method.
                 *
                 * @example
                 * var Library = Backbone.Collection.extend({
-                *    model: function(attrs, options) {
-                *       if (condition) {
-                *          return new PublicDocument(attrs, options);
-                *       } else {
-                *          return new PrivateDocument(attrs, options);
-                *       }
-                *    },
-                *
-                *    modelId: function(attrs) {
-                *       return attrs.private ? 'private_id' : 'public_id';
-                *    }
+                *   modelId: function(attrs) {
+                *      return attrs.type + attrs.id;
+                *   }
                 * });
+                *
+                * var library = new Library([
+                *   {type: 'dvd', id: 1},
+                *   {type: 'vhs', id: 1}
+                * ]);
+                *
+                * var dvdId = library.get('dvd1').id;
+                * var vhsId = library.get('vhs1').id;
+                * alert('dvd: ' + dvdId + ', vhs: ' + vhsId);
                 *
                 * @see http://backbonejs.org/#Collection-modelId
                 *
@@ -888,7 +743,7 @@ $__System.register('9', ['4', '5', '6', '7', '8', 'c', 'd', 'e', 'a', 'b'], func
             }, {
                key: 'pluck',
                value: function pluck(attr) {
-                  return _.invoke(this.models, 'get', attr);
+                  return this.map('' + attr);
                }
 
                /**
@@ -959,8 +814,8 @@ $__System.register('9', ['4', '5', '6', '7', '8', 'c', 'd', 'e', 'a', 'b'], func
                /**
                 * Remove a model (or an array of models) from the collection, and return them. Each model can be a Model instance,
                 * an id string or a JS object, any value acceptable as the id argument of collection.get. Fires a "remove" event
-                * for each model, and a single "update" event afterwards. The model's index before removal is available to
-                * listeners as options.index.
+                * for each model, and a single "update" event afterwards, unless  {silent: true}  is passed. The model's index
+                * before removal is available to listeners as options.index.
                 *
                 * @see http://backbonejs.org/#Collection-remove
                 *
@@ -973,10 +828,11 @@ $__System.register('9', ['4', '5', '6', '7', '8', 'c', 'd', 'e', 'a', 'b'], func
                value: function remove(models, options) {
                   options = _.extend({}, options);
                   var singular = !_.isArray(models);
-                  models = singular ? [models] : _.clone(models);
+                  models = singular ? [models] : models.slice();
                   var removed = s_REMOVE_MODELS(this, models, options);
 
-                  if (!options.silent && removed) {
+                  if (!options.silent && removed.length) {
+                     options.changes = { added: [], merged: [], removed: removed };
                      this.trigger('update', this, options);
                   }
 
@@ -1008,8 +864,9 @@ $__System.register('9', ['4', '5', '6', '7', '8', 'c', 'd', 'e', 'a', 'b'], func
                /**
                 * Adding and removing models one at a time is all well and good, but sometimes you have so many models to change
                 * that you'd rather just update the collection in bulk. Use reset to replace a collection with a new list of models
-                * (or attribute hashes), triggering a single "reset" event at the end. Returns the newly-set models. For
-                * convenience, within a "reset" event, the list of any previous models is available as options.previousModels.
+                * (or attribute hashes), triggering a single "reset" event on completion, and without triggering any add or remove
+                * events on any models. Returns the newly-set models. For convenience, within a "reset" event, the list of any
+                * previous models is available as options.previousModels.
                 * Pass null for models to empty your Collection with options.
                 *
                 * Calling collection.reset() without passing any models as arguments will empty the entire collection.
@@ -1080,9 +937,9 @@ $__System.register('9', ['4', '5', '6', '7', '8', 'c', 'd', 'e', 'a', 'b'], func
                      return;
                   }
 
-                  options = _.defaults({}, options, s_SET_OPTIONS);
+                  options = _.extend({}, s_SET_OPTIONS, options);
                   if (options.parse && !Utils.isModel(models)) {
-                     models = this.parse(models, options);
+                     models = this.parse(models, options) || [];
                   }
 
                   var singular = !_.isArray(models);
@@ -1092,6 +949,9 @@ $__System.register('9', ['4', '5', '6', '7', '8', 'c', 'd', 'e', 'a', 'b'], func
                   if (!Utils.isNullOrUndef(at)) {
                      at = +at;
                   }
+                  if (at > this.length) {
+                     at = this.length;
+                  }
                   if (at < 0) {
                      at += this.length + 1;
                   }
@@ -1100,6 +960,7 @@ $__System.register('9', ['4', '5', '6', '7', '8', 'c', 'd', 'e', 'a', 'b'], func
 
                   var set = [];
                   var toAdd = [];
+                  var toMerge = [];
                   var toRemove = [];
                   var modelMap = {};
 
@@ -1130,6 +991,7 @@ $__System.register('9', ['4', '5', '6', '7', '8', 'c', 'd', 'e', 'a', 'b'], func
                               attrs = existing.parse(attrs, options);
                            }
                            existing.set(attrs, options);
+                           toMerge.push(existing);
                            if (sortable && !sort) {
                               sort = existing.hasChanged(sortAttr);
                            }
@@ -1182,8 +1044,8 @@ $__System.register('9', ['4', '5', '6', '7', '8', 'c', 'd', 'e', 'a', 'b'], func
                   var replace = !sortable && add && remove;
 
                   if (set.length && replace) {
-                     orderChanged = this.length !== set.length || _.some(this.models, function (model, index) {
-                        return model !== set[index];
+                     orderChanged = this.length !== set.length || _.some(this.models, function (m, index) {
+                        return m !== set[index];
                      });
 
                      Debug.log('Collection - set - 9 - set.length > 0 && replace - orderChanged: ' + orderChanged);
@@ -1212,7 +1074,7 @@ $__System.register('9', ['4', '5', '6', '7', '8', 'c', 'd', 'e', 'a', 'b'], func
                      this.sort({ silent: true });
                   }
 
-                  // Unless silenced, it's time to fire all appropriate add/sort events.
+                  // Unless silenced, it's time to fire all appropriate add/sort/update events.
                   if (!options.silent) {
                      Debug.log('Collection - set - 12 - !options.silent: ' + !options.silent);
 
@@ -1228,7 +1090,9 @@ $__System.register('9', ['4', '5', '6', '7', '8', 'c', 'd', 'e', 'a', 'b'], func
                      if (sort || orderChanged) {
                         this.trigger('sort', this, options);
                      }
-                     if (toAdd.length || toRemove.length) {
+
+                     if (toAdd.length || toRemove.length || toMerge.length) {
+                        options.changes = { added: toAdd, removed: toRemove, merged: toMerge };
                         this.trigger('update', this, options);
                      }
                   }
@@ -1395,18 +1259,189 @@ $__System.register('9', ['4', '5', '6', '7', '8', 'c', 'd', 'e', 'a', 'b'], func
          })(Events);
 
          collectionMethods = {
-            forEach: 3, each: 3, map: 3, collect: 3, reduce: 4,
-            foldl: 4, inject: 4, reduceRight: 4, foldr: 4, find: 3, detect: 3, filter: 3,
+            forEach: 3, each: 3, map: 3, collect: 3, reduce: 0,
+            foldl: 0, inject: 0, reduceRight: 0, foldr: 0, find: 3, detect: 3, filter: 3,
             select: 3, reject: 3, every: 3, all: 3, some: 3, any: 3, include: 3, includes: 3,
             contains: 3, invoke: 0, max: 3, min: 3, toArray: 1, size: 1, first: 3,
             head: 3, take: 3, initial: 3, rest: 3, tail: 3, drop: 3, last: 3,
             without: 0, difference: 0, indexOf: 3, shuffle: 1, lastIndexOf: 3,
             isEmpty: 1, chain: 1, sample: 3, partition: 3, groupBy: 3, countBy: 3,
-            sortBy: 3, indexBy: 3
+            sortBy: 3, indexBy: 3, findIndex: 3, findLastIndex: 3
          };
 
          // Mix in each Underscore method as a proxy to `Collection#models`.
          Utils.addUnderscoreMethods(Collection, collectionMethods, 'models');
+
+         // Private / internal methods ---------------------------------------------------------------------------------------
+
+         /**
+          * Default options for `Collection#add`.
+          * @type {{add: boolean, remove: boolean}}
+          */
+         s_ADD_OPTIONS = { add: true, remove: false };
+
+         /**
+          * Default options for `Collection#set`.
+          * @type {{add: boolean, remove: boolean}}
+          */
+         s_SET_OPTIONS = { add: true, remove: true, merge: true };
+
+         /**
+          * Internal method to create a model's ties to a collection.
+          *
+          * @param {Collection}  collection  - A collection instance
+          * @param {Model}       model       - A model instance
+          */
+
+         s_ADD_REFERENCE = function s_ADD_REFERENCE(collection, model) {
+            collection._byId[model.cid] = model;
+            var id = collection.modelId(model.attributes);
+
+            Debug.log('Collection - s_ADD_REFERENCE - id: ' + id + '; model.cid: ' + model.cid, true);
+
+            if (!Utils.isNullOrUndef(id)) {
+               collection._byId[id] = model;
+            }
+            model.on('all', s_ON_MODEL_EVENT, collection);
+         };
+
+         /**
+          * Internal method called every time a model in the set fires an event. Sets need to update their indexes when models
+          * change ids. All other events simply proxy through. "add" and "remove" events that originate in other collections
+          * are ignored.
+          *
+          * Note: Because this is the callback added to the model via Events the "this" context is associated with the model.
+          *
+          * @param {string}      event       - Event name
+          * @param {Model}       model       - A model instance
+          * @param {Collection}  collection  - A collection instance
+          * @param {object}      options     - Optional parameters
+          */
+
+         s_ON_MODEL_EVENT = function s_ON_MODEL_EVENT(event, model, collection, options) {
+            if (model) {
+               Debug.log('Collection - s_ON_MODEL_EVENT - 0 - event: ' + event, true);
+
+               if ((event === 'add' || event === 'remove') && collection !== this) {
+                  return;
+               }
+               if (event === 'destroy') {
+                  this.remove(model, options);
+               }
+               if (event === 'change') {
+                  var prevId = this.modelId(model.previousAttributes());
+                  var id = this.modelId(model.attributes);
+
+                  Debug.log('Collection - s_ON_MODEL_EVENT - 1 - change - id: ' + id + '; prevId: ' + prevId);
+
+                  if (prevId !== id) {
+                     if (!Utils.isNullOrUndef(prevId)) {
+                        delete this._byId[prevId];
+                     }
+                     if (!Utils.isNullOrUndef(id)) {
+                        this._byId[id] = model;
+                     }
+                  }
+               }
+
+               this.trigger.apply(this, arguments);
+            }
+         };
+
+         /**
+          * Internal method called by both remove and set.
+          *
+          * @param {Collection}     collection  - A collection instance
+          * @param {Array<Model>}   models      - A model instance
+          * @param {object}         options     - Optional parameters
+          * @returns {*}
+          */
+
+         s_REMOVE_MODELS = function s_REMOVE_MODELS(collection, models, options) {
+            var removed = [];
+
+            for (var i = 0; i < models.length; i++) {
+               var model = collection.get(models[i]);
+
+               Debug.log('Collection - s_REMOVE_MODELS - 0 - model: ' + model, true);
+
+               if (!model) {
+                  continue;
+               }
+
+               Debug.log('Collection - s_REMOVE_MODELS - 1 - model: ' + model.toJSON());
+
+               var index = collection.indexOf(model);
+
+               Debug.log('Collection - s_REMOVE_MODELS - 2 - index: ' + index);
+
+               collection.models.splice(index, 1);
+               collection.length--;
+
+               // Remove references before triggering 'remove' event to prevent an infinite loop. #3693
+               delete collection._byId[model.cid];
+               var id = collection.modelId(model.attributes);
+               if (!Utils.isNullOrUndef(id)) {
+                  delete collection._byId[id];
+               }
+
+               if (!options.silent) {
+                  options.index = index;
+                  model.trigger('remove', model, collection, options);
+               }
+
+               removed.push(model);
+               s_REMOVE_REFERENCE(collection, model, options);
+            }
+
+            return removed;
+         };
+
+         /**
+          * Internal method to sever a model's ties to a collection.
+          *
+          * @param {Collection}  collection  - A collection instance
+          * @param {Model}       model       - A model instance
+          */
+
+         s_REMOVE_REFERENCE = function s_REMOVE_REFERENCE(collection, model) {
+            delete collection._byId[model.cid];
+            var id = collection.modelId(model.attributes);
+
+            Debug.log('Collection - s_REMOVE_REFERENCE - id: ' + id + '; model.cid: ' + model.cid);
+
+            if (!Utils.isNullOrUndef(id)) {
+               delete collection._byId[id];
+            }
+            if (collection === model.collection) {
+               delete model.collection;
+            }
+            model.off('all', s_ON_MODEL_EVENT, collection);
+         };
+
+         /**
+          * Splices `insert` into `array` at index `at`.
+          *
+          * @param {Array}    array    - Target array to splice into
+          * @param {Array}    insert   - Array to insert
+          * @param {number}   at       - Index to splice at
+          */
+
+         s_SPLICE = function s_SPLICE(array, insert, at) {
+            at = Math.min(Math.max(at, 0), array.length);
+            var tail = new Array(array.length - at);
+            var length = insert.length;
+
+            for (var i = 0; i < tail.length; i++) {
+               tail[i] = array[i + at];
+            }
+            for (var i = 0; i < length; i++) {
+               array[i + at] = insert[i];
+            }
+            for (var i = 0; i < tail.length; i++) {
+               array[i + length + at] = tail[i];
+            }
+         };
 
          /**
           * Exports the Collection class.
@@ -1418,7 +1453,7 @@ $__System.register('9', ['4', '5', '6', '7', '8', 'c', 'd', 'e', 'a', 'b'], func
 });
 
 $__System.register('f', ['4', '6', '8', 'c', 'd', 'e', 'b'], function (_export) {
-   var _, _classCallCheck, _createClass, _get, _inherits, Events, Utils, s_ROUTE_STRIPPER, s_ROOT_STRIPPER, s_PATH_STRIPPER, s_UPDATE_HASH, History;
+   var _, _classCallCheck, _createClass, _get, _inherits, Events, Utils, History, s_ROUTE_STRIPPER, s_ROOT_STRIPPER, s_PATH_STRIPPER, s_UPDATE_HASH;
 
    return {
       setters: [function (_4) {
@@ -1437,43 +1472,6 @@ $__System.register('f', ['4', '6', '8', 'c', 'd', 'e', 'b'], function (_export) 
          Utils = _b['default'];
       }],
       execute: function () {
-
-         // Private / internal methods ---------------------------------------------------------------------------------------
-
-         /**
-          * Cached regex for stripping a leading hash/slash and trailing space.
-          */
-         'use strict';
-
-         s_ROUTE_STRIPPER = /^[#\/]|\s+$/g;
-
-         /**
-          * Cached regex for stripping leading and trailing slashes.
-          */
-         s_ROOT_STRIPPER = /^\/+|\/+$/g;
-
-         /**
-          * Cached regex for stripping urls of hash.
-          */
-         s_PATH_STRIPPER = /#.*$/;
-
-         /**
-          * Update the hash location, either replacing the current entry, or adding a new one to the browser history.
-          *
-          * @param {object}   location - URL / current location
-          * @param {string}   fragment - URL fragment
-          * @param {boolean}  replace  - conditional replace
-          */
-
-         s_UPDATE_HASH = function s_UPDATE_HASH(location, fragment, replace) {
-            if (replace) {
-               var href = location.href.replace(/(javascript:|#).*$/, '');
-               location.replace(href + '#' + fragment);
-            } else {
-               // Some browsers require that `hash` contains a leading #.
-               location.hash = '#' + fragment;
-            }
-         };
 
          /**
           * Backbone.History - History serves as a global router. (http://backbonejs.org/#History)
@@ -1496,6 +1494,7 @@ $__System.register('f', ['4', '6', '8', 'c', 'd', 'e', 'b'], function (_export) 
           * real URLs, or [onhashchange](https://developer.mozilla.org/en-US/docs/DOM/window.onhashchange) and URL fragments.
           * If the browser supports neither (old IE, natch), falls back to polling.
           */
+         'use strict';
 
          History = (function (_Events) {
             _inherits(History, _Events);
@@ -1541,6 +1540,12 @@ $__System.register('f', ['4', '6', '8', 'c', 'd', 'e', 'b'], function (_export) 
                 */
                this.interval = 50;
             }
+
+            // Private / internal methods ---------------------------------------------------------------------------------------
+
+            /**
+             * Cached regex for stripping a leading hash/slash and trailing space.
+             */
 
             /**
              * Are we at the app root?
@@ -1682,8 +1687,8 @@ $__System.register('f', ['4', '6', '8', 'c', 'd', 'e', 'b'], function (_export) 
                key: 'matchRoot',
                value: function matchRoot() {
                   var path = this.decodeFragment(this.location.pathname);
-                  var root = path.slice(0, this.root.length - 1) + '/';
-                  return root === this.root;
+                  var rootPath = path.slice(0, this.root.length - 1) + '/';
+                  return rootPath === this.root;
                }
 
                /**
@@ -1711,13 +1716,13 @@ $__System.register('f', ['4', '6', '8', 'c', 'd', 'e', 'b'], function (_export) 
                   fragment = this.getFragment(fragment || '');
 
                   // Don't include a trailing slash on the root.
-                  var root = this.root;
+                  var rootPath = this.root;
 
                   if (fragment === '' || fragment.charAt(0) === '?') {
-                     root = root.slice(0, -1) || '/';
+                     rootPath = rootPath.slice(0, -1) || '/';
                   }
 
-                  var url = root + fragment;
+                  var url = rootPath + fragment;
 
                   // Strip the hash and decode for matching.
                   fragment = this.decodeFragment(fragment.replace(s_PATH_STRIPPER, ''));
@@ -1838,8 +1843,8 @@ $__System.register('f', ['4', '6', '8', 'c', 'd', 'e', 'b'], function (_export) 
                      // If we've started off with a route from a `pushState`-enabled
                      // browser, but we're currently in a browser that doesn't support it...
                      if (!this._hasPushState && !this.atRoot()) {
-                        var root = this.root.slice(0, -1) || '/';
-                        this.location.replace(root + '#' + this.getPath());
+                        var rootPath = this.root.slice(0, -1) || '/';
+                        this.location.replace(rootPath + '#' + this.getPath());
 
                         // Return immediately as browser will do redirect to new url
                         return true;
@@ -1945,6 +1950,36 @@ $__System.register('f', ['4', '6', '8', 'c', 'd', 'e', 'b'], function (_export) 
          })(Events);
 
          _export('default', History);
+
+         s_ROUTE_STRIPPER = /^[#\/]|\s+$/g;
+
+         /**
+          * Cached regex for stripping leading and trailing slashes.
+          */
+         s_ROOT_STRIPPER = /^\/+|\/+$/g;
+
+         /**
+          * Cached regex for stripping urls of hash.
+          */
+         s_PATH_STRIPPER = /#.*$/;
+
+         /**
+          * Update the hash location, either replacing the current entry, or adding a new one to the browser history.
+          *
+          * @param {object}   location - URL / current location
+          * @param {string}   fragment - URL fragment
+          * @param {boolean}  replace  - conditional replace
+          */
+
+         s_UPDATE_HASH = function s_UPDATE_HASH(location, fragment, replace) {
+            if (replace) {
+               var href = location.href.replace(/(javascript:|#).*$/, '');
+               location.replace(href + '#' + fragment);
+            } else {
+               // Some browsers require that `hash` contains a leading #.
+               location.hash = '#' + fragment;
+            }
+         };
       }
    };
 });
@@ -2218,7 +2253,8 @@ $__System.register('a', ['4', '5', '6', '8', 'c', 'd', 'e', 'b'], function (_exp
                   attrs = this.parse(attrs, options) || {};
                }
 
-               attrs = _.defaults({}, attrs, _.result(this, 'defaults'));
+               var defaults = _.result(this, 'defaults');
+               attrs = _.defaults(_.extend({}, defaults, attrs), defaults);
 
                this.set(attrs, options);
 
@@ -2531,7 +2567,7 @@ $__System.register('a', ['4', '5', '6', '8', 'c', 'd', 'e', 'b'], function (_exp
             }, {
                key: 'isValid',
                value: function isValid(options) {
-                  return this._validate({}, _.defaults({ validate: true }, options));
+                  return this._validate({}, _.extend({}, options, { validate: true }));
                }
 
                /**
@@ -2675,10 +2711,8 @@ $__System.register('a', ['4', '5', '6', '8', 'c', 'd', 'e', 'b'], function (_exp
                      if (!this.set(attrs, options)) {
                         return false;
                      }
-                  } else {
-                     if (!this._validate(attrs, options)) {
-                        return false;
-                     }
+                  } else if (!this._validate(attrs, options)) {
+                     return false;
                   }
 
                   // After a successful server-side save, the client is (optionally)
@@ -2795,11 +2829,13 @@ $__System.register('a', ['4', '5', '6', '8', 'c', 'd', 'e', 'b'], function (_exp
                      }
                   }
 
-                  /**
-                   * Update the `id`.
-                   * @type {*}
-                   */
-                  this.id = this.get(this.idAttribute);
+                  if (this.idAttribute in attrs) {
+                     /**
+                      * Update the `id`.
+                      * @type {*}
+                      */
+                     this.id = this.get(this.idAttribute);
+                  }
 
                   // Trigger all relevant attribute changes.
                   if (!silent) {
@@ -2958,7 +2994,7 @@ $__System.register('a', ['4', '5', '6', '8', 'c', 'd', 'e', 'b'], function (_exp
 });
 
 $__System.register('10', ['4', '5', '6', '8', '11', 'c', 'd', 'e'], function (_export) {
-   var _, BackboneProxy, _classCallCheck, _createClass, _toConsumableArray, _get, _inherits, Events, s_ESCAPE_REGEX, s_NAMED_PARAM, s_OPTIONAL_PARAM, s_SPLAT_PARAM, s_BIND_ROUTES, s_EXTRACT_PARAMETERS, s_ROUTE_TO_REGEX, Router;
+   var _, BackboneProxy, _classCallCheck, _createClass, _toConsumableArray, _get, _inherits, Events, Router, s_ESCAPE_REGEX, s_NAMED_PARAM, s_OPTIONAL_PARAM, s_SPLAT_PARAM, s_BIND_ROUTES, s_EXTRACT_PARAMETERS, s_ROUTE_TO_REGEX;
 
    return {
       setters: [function (_5) {
@@ -2979,73 +3015,6 @@ $__System.register('10', ['4', '5', '6', '8', '11', 'c', 'd', 'e'], function (_e
          Events = _e['default'];
       }],
       execute: function () {
-
-         // Private / internal methods ---------------------------------------------------------------------------------------
-
-         /**
-          * Cached regular expressions for matching named param parts and splatted parts of route strings.
-          * @type {RegExp}
-          */
-         'use strict';
-
-         s_ESCAPE_REGEX = /[\-{}\[\]+?.,\\\^$|#\s]/g;
-         s_NAMED_PARAM = /(\(\?)?:\w+/g;
-         s_OPTIONAL_PARAM = /\((.*?)\)/g;
-         s_SPLAT_PARAM = /\*\w+/g;
-
-         /**
-          * Bind all defined routes to `Backbone.history`. We have to reverse the order of the routes here to support behavior
-          * where the most general routes can be defined at the bottom of the route map.
-          *
-          * @param {Router}   router   - Instance of `Backbone.Router`.
-          */
-
-         s_BIND_ROUTES = function s_BIND_ROUTES(router) {
-            if (!router.routes) {
-               return;
-            }
-
-            router.routes = _.result(router, 'routes');
-
-            _.each(_.keys(router.routes), function (route) {
-               router.route(route, router.routes[route]);
-            });
-         };
-
-         /**
-          * Given a route, and a URL fragment that it matches, return the array of extracted decoded parameters. Empty or
-          * unmatched parameters will be treated as `null` to normalize cross-browser behavior.
-          *
-          * @param {string}   route - A route string or regex.
-          * @param {string}   fragment - URL fragment.
-          * @returns {*}
-          */
-
-         s_EXTRACT_PARAMETERS = function s_EXTRACT_PARAMETERS(route, fragment) {
-            var params = route.exec(fragment).slice(1);
-
-            return _.map(params, function (param, i) {
-               // Don't decode the search params.
-               if (i === params.length - 1) {
-                  return param || null;
-               }
-               return param ? decodeURIComponent(param) : null;
-            });
-         };
-
-         /**
-          * Convert a route string into a regular expression, suitable for matching against the current location hash.
-          *
-          * @param {string}   route - A route string or regex.
-          * @returns {RegExp}
-          */
-
-         s_ROUTE_TO_REGEX = function s_ROUTE_TO_REGEX(route) {
-            route = route.replace(s_ESCAPE_REGEX, '\\$&').replace(s_OPTIONAL_PARAM, '(?:$1)?').replace(s_NAMED_PARAM, function (match, optional) {
-               return optional ? match : '([^/?]+)';
-            }).replace(s_SPLAT_PARAM, '([^?]*?)');
-            return new RegExp('^' + route + '(?:\\?([\\s\\S]*))?$');
-         };
 
          /**
           * Backbone.Router - Provides methods for routing client-side pages, and connecting them to actions and events.
@@ -3069,10 +3038,13 @@ $__System.register('10', ['4', '5', '6', '8', '11', 'c', 'd', 'e'], function (_e
           * For example, a route of "search/:query/p:page" will match a fragment of #search/obama/p2, passing "obama" and "2" to
           * the action.
           *
-          * A route of "file/*path" will match #file/nested/folder/file.txt, passing "nested/folder/file.txt" to the action.
+          * A route of "file/*path" will match #file/folder/file.txt, passing "folder/file.txt" to the action.
           *
           * A route of "docs/:section(/:subsection)" will match #docs/faq and #docs/faq/installing, passing "faq" to the action
           * in the first case, and passing "faq" and "installing" to the action in the second.
+          *
+          * A nested optional route of "docs(/:section)(/:subsection)" will match #docs, #docs/faq, and #docs/faq/installing,
+          * passing "faq" to the action in the second case, and passing "faq" and "installing" to the action in the third.
           *
           * Trailing slashes are treated as part of the URL, and (correctly) treated as a unique route when accessed. docs and
           * docs/ will fire different callbacks. If you can't avoid generating both types of URLs, you can define a "docs(/)"
@@ -3140,6 +3112,7 @@ $__System.register('10', ['4', '5', '6', '8', '11', 'c', 'd', 'e'], function (_e
           * Basic default "no route router":
           * new Backbone.Router({ routes: { '*actions': 'defaultRoute' } });
           */
+         'use strict';
 
          Router = (function (_Events) {
             _inherits(Router, _Events);
@@ -3175,6 +3148,13 @@ $__System.register('10', ['4', '5', '6', '8', '11', 'c', 'd', 'e'], function (_e
 
                this.initialize.apply(this, arguments);
             }
+
+            // Private / internal methods ---------------------------------------------------------------------------------------
+
+            /**
+             * Cached regular expressions for matching named param parts and splatted parts of route strings.
+             * @type {RegExp}
+             */
 
             /* eslint-disable no-unused-vars */
             /**
@@ -3274,42 +3254,99 @@ $__System.register('10', ['4', '5', '6', '8', '11', 'c', 'd', 'e'], function (_e
          })(Events);
 
          _export('default', Router);
+
+         s_ESCAPE_REGEX = /[\-{}\[\]+?.,\\\^$|#\s]/g;
+         s_NAMED_PARAM = /(\(\?)?:\w+/g;
+         s_OPTIONAL_PARAM = /\((.*?)\)/g;
+         s_SPLAT_PARAM = /\*\w+/g;
+
+         /**
+          * Bind all defined routes to `Backbone.history`. We have to reverse the order of the routes here to support behavior
+          * where the most general routes can be defined at the bottom of the route map.
+          *
+          * @param {Router}   router   - Instance of `Backbone.Router`.
+          */
+
+         s_BIND_ROUTES = function s_BIND_ROUTES(router) {
+            if (!router.routes) {
+               return;
+            }
+
+            router.routes = _.result(router, 'routes');
+
+            _.each(_.keys(router.routes), function (route) {
+               router.route(route, router.routes[route]);
+            });
+         };
+
+         /**
+          * Given a route, and a URL fragment that it matches, return the array of extracted decoded parameters. Empty or
+          * unmatched parameters will be treated as `null` to normalize cross-browser behavior.
+          *
+          * @param {string}   route - A route string or regex.
+          * @param {string}   fragment - URL fragment.
+          * @returns {*}
+          */
+
+         s_EXTRACT_PARAMETERS = function s_EXTRACT_PARAMETERS(route, fragment) {
+            var params = route.exec(fragment).slice(1);
+
+            return _.map(params, function (param, i) {
+               // Don't decode the search params.
+               if (i === params.length - 1) {
+                  return param || null;
+               }
+               return param ? decodeURIComponent(param) : null;
+            });
+         };
+
+         /**
+          * Convert a route string into a regular expression, suitable for matching against the current location hash.
+          *
+          * @param {string}   route - A route string or regex.
+          * @returns {RegExp}
+          */
+
+         s_ROUTE_TO_REGEX = function s_ROUTE_TO_REGEX(route) {
+            route = route.replace(s_ESCAPE_REGEX, '\\$&').replace(s_OPTIONAL_PARAM, '(?:$1)?').replace(s_NAMED_PARAM, function (match, optional) {
+               return optional ? match : '([^/?]+)';
+            }).replace(s_SPLAT_PARAM, '([^?]*?)');
+            return new RegExp('^' + route + '(?:\\?([\\s\\S]*))?$');
+         };
       }
    };
 });
 
 $__System.registerDynamic("12", ["13"], true, function($__require, exports, module) {
   ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
+  var define,
+      global = this,
+      GLOBAL = this;
   var cof = $__require('13');
   module.exports = Object('z').propertyIsEnumerable(0) ? Object : function(it) {
     return cof(it) == 'String' ? it.split('') : Object(it);
   };
-  global.define = __define;
   return module.exports;
 });
 
 $__System.registerDynamic("14", ["12", "15"], true, function($__require, exports, module) {
   ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
+  var define,
+      global = this,
+      GLOBAL = this;
   var IObject = $__require('12'),
       defined = $__require('15');
   module.exports = function(it) {
     return IObject(defined(it));
   };
-  global.define = __define;
   return module.exports;
 });
 
 $__System.registerDynamic("16", ["17", "18", "19"], true, function($__require, exports, module) {
   ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
+  var define,
+      global = this,
+      GLOBAL = this;
   var $export = $__require('17'),
       core = $__require('18'),
       fails = $__require('19');
@@ -3321,58 +3358,54 @@ $__System.registerDynamic("16", ["17", "18", "19"], true, function($__require, e
       fn(1);
     }), 'Object', exp);
   };
-  global.define = __define;
   return module.exports;
 });
 
 $__System.registerDynamic("1a", ["14", "16"], true, function($__require, exports, module) {
   ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
+  var define,
+      global = this,
+      GLOBAL = this;
   var toIObject = $__require('14');
   $__require('16')('getOwnPropertyDescriptor', function($getOwnPropertyDescriptor) {
     return function getOwnPropertyDescriptor(it, key) {
       return $getOwnPropertyDescriptor(toIObject(it), key);
     };
   });
-  global.define = __define;
   return module.exports;
 });
 
 $__System.registerDynamic("1b", ["1c", "1a"], true, function($__require, exports, module) {
   ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
+  var define,
+      global = this,
+      GLOBAL = this;
   var $ = $__require('1c');
   $__require('1a');
   module.exports = function getOwnPropertyDescriptor(it, key) {
     return $.getDesc(it, key);
   };
-  global.define = __define;
   return module.exports;
 });
 
 $__System.registerDynamic("1d", ["1b"], true, function($__require, exports, module) {
   ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
+  var define,
+      global = this,
+      GLOBAL = this;
   module.exports = {
     "default": $__require('1b'),
     __esModule: true
   };
-  global.define = __define;
   return module.exports;
 });
 
 $__System.registerDynamic("c", ["1d"], true, function($__require, exports, module) {
   "use strict";
   ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
+  var define,
+      global = this,
+      GLOBAL = this;
   var _Object$getOwnPropertyDescriptor = $__require('1d')["default"];
   exports["default"] = function get(_x, _x2, _x3) {
     var _again = true;
@@ -3408,41 +3441,38 @@ $__System.registerDynamic("c", ["1d"], true, function($__require, exports, modul
     }
   };
   exports.__esModule = true;
-  global.define = __define;
   return module.exports;
 });
 
 $__System.registerDynamic("1e", ["1c"], true, function($__require, exports, module) {
   ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
+  var define,
+      global = this,
+      GLOBAL = this;
   var $ = $__require('1c');
   module.exports = function create(P, D) {
     return $.create(P, D);
   };
-  global.define = __define;
   return module.exports;
 });
 
 $__System.registerDynamic("1f", ["1e"], true, function($__require, exports, module) {
   ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
+  var define,
+      global = this,
+      GLOBAL = this;
   module.exports = {
     "default": $__require('1e'),
     __esModule: true
   };
-  global.define = __define;
   return module.exports;
 });
 
 $__System.registerDynamic("20", ["1c", "21", "22", "23"], true, function($__require, exports, module) {
   ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
+  var define,
+      global = this,
+      GLOBAL = this;
   var getDesc = $__require('1c').getDesc,
       isObject = $__require('21'),
       anObject = $__require('22');
@@ -3471,51 +3501,47 @@ $__System.registerDynamic("20", ["1c", "21", "22", "23"], true, function($__requ
     }({}, false) : undefined),
     check: check
   };
-  global.define = __define;
   return module.exports;
 });
 
 $__System.registerDynamic("24", ["17", "20"], true, function($__require, exports, module) {
   ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
+  var define,
+      global = this,
+      GLOBAL = this;
   var $export = $__require('17');
   $export($export.S, 'Object', {setPrototypeOf: $__require('20').set});
-  global.define = __define;
   return module.exports;
 });
 
 $__System.registerDynamic("25", ["24", "18"], true, function($__require, exports, module) {
   ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
+  var define,
+      global = this,
+      GLOBAL = this;
   $__require('24');
   module.exports = $__require('18').Object.setPrototypeOf;
-  global.define = __define;
   return module.exports;
 });
 
 $__System.registerDynamic("26", ["25"], true, function($__require, exports, module) {
   ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
+  var define,
+      global = this,
+      GLOBAL = this;
   module.exports = {
     "default": $__require('25'),
     __esModule: true
   };
-  global.define = __define;
   return module.exports;
 });
 
 $__System.registerDynamic("d", ["1f", "26"], true, function($__require, exports, module) {
   "use strict";
   ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
+  var define,
+      global = this,
+      GLOBAL = this;
   var _Object$create = $__require('1f')["default"];
   var _Object$setPrototypeOf = $__require('26')["default"];
   exports["default"] = function(subClass, superClass) {
@@ -3532,12 +3558,11 @@ $__System.registerDynamic("d", ["1f", "26"], true, function($__require, exports,
       _Object$setPrototypeOf ? _Object$setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
   };
   exports.__esModule = true;
-  global.define = __define;
   return module.exports;
 });
 
 $__System.register('e', ['4', '6', '8'], function (_export) {
-   var _, _classCallCheck, _createClass, s_EVENT_SPLITTER, s_EVENTS_API, s_INTERNAL_ON, s_OFF_API, s_ON_API, s_ONCE_MAP, s_TRIGGER_API, s_TRIGGER_EVENTS, Events;
+   var _, _classCallCheck, _createClass, Events, s_EVENT_SPLITTER, s_EVENTS_API, s_INTERNAL_ON, s_OFF_API, s_ON_API, s_ONCE_MAP, s_TRIGGER_API, s_TRIGGER_EVENTS;
 
    return {
       setters: [function (_4) {
@@ -3548,264 +3573,6 @@ $__System.register('e', ['4', '6', '8'], function (_export) {
          _createClass = _2['default'];
       }],
       execute: function () {
-
-         // Private / internal methods ---------------------------------------------------------------------------------------
-
-         /**
-          * Regular expression used to split event strings.
-          * @type {RegExp}
-          */
-         'use strict';
-
-         s_EVENT_SPLITTER = /\s+/;
-
-         /**
-          * Iterates over the standard `event, callback` (as well as the fancy multiple space-separated events `"change blur",
-          * callback` and jQuery-style event maps `{event: callback}`).
-          *
-          * @param {function} iteratee    - Event operation to invoke.
-          * @param {Object.<{callback: function, context: object, ctx: object, listening:{}}>} events - Events object
-          * @param {string|object} name   - A single event name, compound event names, or a hash of event names.
-          * @param {function} callback    - Event callback function
-          * @param {object}   opts        - Optional parameters
-          * @returns {*}
-          */
-
-         s_EVENTS_API = function s_EVENTS_API(iteratee, events, name, callback, opts) {
-            var i = 0,
-                names = undefined;
-            if (name && typeof name === 'object') {
-               // Handle event maps.
-               if (callback !== void 0 && 'context' in opts && opts.context === void 0) {
-                  opts.context = callback;
-               }
-               for (names = _.keys(name); i < names.length; i++) {
-                  events = s_EVENTS_API(iteratee, events, names[i], name[names[i]], opts);
-               }
-            } else if (name && s_EVENT_SPLITTER.test(name)) {
-               // Handle space separated event names by delegating them individually.
-               for (names = name.split(s_EVENT_SPLITTER); i < names.length; i++) {
-                  events = iteratee(events, names[i], callback, opts);
-               }
-            } else {
-               // Finally, standard events.
-               events = iteratee(events, name, callback, opts);
-            }
-            return events;
-         };
-
-         /**
-          * Guard the `listening` argument from the public API.
-          *
-          * @param {Events}   obj      - The Events instance
-          * @param {string}   name     - Event name
-          * @param {function} callback - Event callback
-          * @param {object}   context  - Event context
-          * @param {Object.<{obj: object, objId: string, id: string, listeningTo: object, count: number}>} listening -
-          *                              Listening object
-          * @returns {*}
-          */
-
-         s_INTERNAL_ON = function s_INTERNAL_ON(obj, name, callback, context, listening) {
-            obj._events = s_EVENTS_API(s_ON_API, obj._events || {}, name, callback, { context: context, ctx: obj, listening: listening });
-
-            if (listening) {
-               var listeners = obj._listeners || (obj._listeners = {});
-               listeners[listening.id] = listening;
-            }
-
-            return obj;
-         };
-
-         /**
-          * The reducing API that removes a callback from the `events` object.
-          *
-          * @param {Object.<{callback: function, context: object, ctx: object, listening:{}}>} events - Events object
-          * @param {string}   name     - Event name
-          * @param {function} callback - Event callback
-          * @param {object}   options  - Optional parameters
-          * @returns {*}
-          */
-
-         s_OFF_API = function s_OFF_API(events, name, callback, options) {
-            if (!events) {
-               return;
-            }
-
-            var i = 0,
-                listening = undefined;
-            var context = options.context,
-                listeners = options.listeners;
-
-            // Delete all events listeners and "drop" events.
-            if (!name && !callback && !context) {
-               var ids = _.keys(listeners);
-               for (; i < ids.length; i++) {
-                  listening = listeners[ids[i]];
-                  delete listeners[listening.id];
-                  delete listening.listeningTo[listening.objId];
-               }
-               return;
-            }
-
-            var names = name ? [name] : _.keys(events);
-            for (; i < names.length; i++) {
-               name = names[i];
-               var handlers = events[name];
-
-               // Bail out if there are no events stored.
-               if (!handlers) {
-                  break;
-               }
-
-               // Replace events if there are any remaining.  Otherwise, clean up.
-               var remaining = [];
-               for (var j = 0; j < handlers.length; j++) {
-                  var handler = handlers[j];
-                  if (callback && callback !== handler.callback && callback !== handler.callback._callback || context && context !== handler.context) {
-                     remaining.push(handler);
-                  } else {
-                     listening = handler.listening;
-                     if (listening && --listening.count === 0) {
-                        delete listeners[listening.id];
-                        delete listening.listeningTo[listening.objId];
-                     }
-                  }
-               }
-
-               // Update tail event if the list has any events.  Otherwise, clean up.
-               if (remaining.length) {
-                  events[name] = remaining;
-               } else {
-                  delete events[name];
-               }
-            }
-            if (_.size(events)) {
-               return events;
-            }
-         };
-
-         /**
-          * The reducing API that adds a callback to the `events` object.
-          *
-          * @param {Object.<{callback: function, context: object, ctx: object, listening:{}}>} events - Events object
-          * @param {string}   name     - Event name
-          * @param {function} callback - Event callback
-          * @param {object}   options  - Optional parameters
-          * @returns {*}
-          */
-
-         s_ON_API = function s_ON_API(events, name, callback, options) {
-            if (callback) {
-               var handlers = events[name] || (events[name] = []);
-               var context = options.context,
-                   ctx = options.ctx,
-                   listening = options.listening;
-
-               if (listening) {
-                  listening.count++;
-               }
-
-               handlers.push({ callback: callback, context: context, ctx: context || ctx, listening: listening });
-            }
-            return events;
-         };
-
-         /**
-          * Reduces the event callbacks into a map of `{event: onceWrapper}`. `offer` unbinds the `onceWrapper` after
-          * it has been called.
-          *
-          * @param {Object.<{callback: function, context: object, ctx: object, listening:{}}>} map - Events object
-          * @param {string}   name     - Event name
-          * @param {function} callback - Event callback
-          * @param {function} offer    - Function to invoke after event has been triggered once; `off()`
-          * @returns {*}
-          */
-
-         s_ONCE_MAP = function s_ONCE_MAP(map, name, callback, offer) {
-            if (callback) {
-               (function () {
-                  var once = map[name] = _.once(function () {
-                     offer(name, once);
-                     callback.apply(this, arguments);
-                  });
-                  once._callback = callback;
-               })();
-            }
-            return map;
-         };
-
-         /**
-          * Handles triggering the appropriate event callbacks.
-          *
-          * @param {Object.<{callback: function, context: object, ctx: object, listening:{}}>} objEvents - Events object
-          * @param {string}   name  - Event name
-          * @param {function} cb    - Event callback
-          * @param {Array<*>} args  - Event arguments
-          * @returns {*}
-          */
-
-         s_TRIGGER_API = function s_TRIGGER_API(objEvents, name, cb, args) {
-            if (objEvents) {
-               var events = objEvents[name];
-               var allEvents = objEvents.all;
-               if (events && allEvents) {
-                  allEvents = allEvents.slice();
-               }
-               if (events) {
-                  s_TRIGGER_EVENTS(events, args);
-               }
-               if (allEvents) {
-                  s_TRIGGER_EVENTS(allEvents, [name].concat(args));
-               }
-            }
-            return objEvents;
-         };
-
-         /**
-          * A difficult-to-believe, but optimized internal dispatch function for triggering events. Tries to keep the usual
-          * cases speedy (most internal Backbone events have 3 arguments).
-          *
-          * @param {Object.<{callback: function, context: object, ctx: object, listening:{}}>}  events - events array
-          * @param {Array<*>} args - event argument array
-          */
-
-         s_TRIGGER_EVENTS = function s_TRIGGER_EVENTS(events, args) {
-            var ev = undefined,
-                i = -1;
-            var a1 = args[0],
-                a2 = args[1],
-                a3 = args[2],
-                l = events.length;
-
-            switch (args.length) {
-               case 0:
-                  while (++i < l) {
-                     (ev = events[i]).callback.call(ev.ctx);
-                  }
-                  return;
-               case 1:
-                  while (++i < l) {
-                     (ev = events[i]).callback.call(ev.ctx, a1);
-                  }
-                  return;
-               case 2:
-                  while (++i < l) {
-                     (ev = events[i]).callback.call(ev.ctx, a1, a2);
-                  }
-                  return;
-               case 3:
-                  while (++i < l) {
-                     (ev = events[i]).callback.call(ev.ctx, a1, a2, a3);
-                  }
-                  return;
-               default:
-                  while (++i < l) {
-                     (ev = events[i]).callback.apply(ev.ctx, args);
-                  }
-                  return;
-            }
-         };
 
          /**
           * Backbone.Events - Provides the ability to bind and trigger custom named events. (http://backbonejs.org/#Events)
@@ -3826,20 +3593,21 @@ $__System.register('e', ['4', '6', '8'], function (_export) {
           * "remove" (model, collection, options) — when a model is removed from a collection.
           * "update" (collection, options) — single event triggered after any number of models have been added or removed from a
           * collection.
-          * "reset" (collection, options) — when the collection's entire contents have been replaced.
+          * "reset" (collection, options) — when the collection's entire contents have been reset.
           * "sort" (collection, options) — when the collection has been re-sorted.
           * "change" (model, options) — when a model's attributes have changed.
           * "change:[attribute]" (model, value, options) — when a specific attribute has been updated.
           * "destroy" (model, collection, options) — when a model is destroyed.
           * "request" (model_or_collection, xhr, options) — when a model or collection has started a request to the server.
-          * "sync" (model_or_collection, resp, options) — when a model or collection has been successfully synced with the
+          * "sync" (model_or_collection, response, options) — when a model or collection has been successfully synced with the
           * server.
-          * "error" (model_or_collection, resp, options) — when a model's or collection's request to the server has failed.
+          * "error" (model_or_collection, response, options) — when a model's or collection's request to the server has failed.
           * "invalid" (model, error, options) — when a model's validation fails on the client.
           * "route:[name]" (params) — Fired by the router when a specific route is matched.
           * "route" (route, params) — Fired by the router when any route has been matched.
           * "route" (router, route, params) — Fired by history when any route has been matched.
-          * "all" — this special event fires for any triggered event, passing the event name as the first argument.
+          * "all" — this special event fires for any triggered event, passing the event name as the first argument followed by
+          * all trigger arguments.
           *
           * Generally speaking, when calling a function that emits an event (model.set, collection.add, and so on...), if you'd
           * like to prevent the event from being triggered, you may pass {silent: true} as an option. Note that this is rarely,
@@ -3869,6 +3637,7 @@ $__System.register('e', ['4', '6', '8'], function (_export) {
           * This module / Events instance can then be imported by full path or if consuming in a modular runtime by creating
           * a mapped path to it.
           */
+         'use strict';
 
          Events = (function () {
             /** */
@@ -3876,6 +3645,13 @@ $__System.register('e', ['4', '6', '8'], function (_export) {
             function Events() {
                _classCallCheck(this, Events);
             }
+
+            // Private / internal methods ---------------------------------------------------------------------------------------
+
+            /**
+             * Regular expression used to split event strings.
+             * @type {RegExp}
+             */
 
             /**
              * Delegates to `on`.
@@ -3978,6 +3754,7 @@ $__System.register('e', ['4', '6', '8'], function (_export) {
             }, {
                key: 'off',
                value: function off(name, callback, context) {
+                  /* istanbul ignore if */
                   if (!this._events) {
                      return this;
                   }
@@ -4042,7 +3819,12 @@ $__System.register('e', ['4', '6', '8'], function (_export) {
                value: function once(name, callback, context) {
                   // Map the event into a `{event: once}` object.
                   var events = s_EVENTS_API(s_ONCE_MAP, {}, name, callback, _.bind(this.off, this));
-                  return this.on(events, void 0, context);
+
+                  if (typeof name === 'string' && (context === null || typeof context === 'undefined')) {
+                     callback = void 0;
+                  }
+
+                  return this.on(events, callback, context);
                }
 
                /**
@@ -4082,9 +3864,6 @@ $__System.register('e', ['4', '6', '8'], function (_export) {
 
                      listening.obj.off(name, callback, this);
                   }
-                  if (_.isEmpty(listeningTo)) {
-                     this._listeningTo = void 0;
-                  }
 
                   return this;
                }
@@ -4101,6 +3880,7 @@ $__System.register('e', ['4', '6', '8'], function (_export) {
             }, {
                key: 'trigger',
                value: function trigger(name) {
+                  /* istanbul ignore if */
                   if (!this._events) {
                      return this;
                   }
@@ -4133,12 +3913,262 @@ $__System.register('e', ['4', '6', '8'], function (_export) {
          })();
 
          _export('default', Events);
+
+         s_EVENT_SPLITTER = /\s+/;
+
+         /**
+          * Iterates over the standard `event, callback` (as well as the fancy multiple space-separated events `"change blur",
+          * callback` and jQuery-style event maps `{event: callback}`).
+          *
+          * @param {function} iteratee    - Event operation to invoke.
+          * @param {Object.<{callback: function, context: object, ctx: object, listening:{}}>} events - Events object
+          * @param {string|object} name   - A single event name, compound event names, or a hash of event names.
+          * @param {function} callback    - Event callback function
+          * @param {object}   opts        - Optional parameters
+          * @returns {*}
+          */
+
+         s_EVENTS_API = function s_EVENTS_API(iteratee, events, name, callback, opts) {
+            var i = 0,
+                names = undefined;
+            if (name && typeof name === 'object') {
+               // Handle event maps.
+               if (callback !== void 0 && 'context' in opts && opts.context === void 0) {
+                  opts.context = callback;
+               }
+               for (names = _.keys(name); i < names.length; i++) {
+                  events = s_EVENTS_API(iteratee, events, names[i], name[names[i]], opts);
+               }
+            } else if (name && s_EVENT_SPLITTER.test(name)) {
+               // Handle space-separated event names by delegating them individually.
+               for (names = name.split(s_EVENT_SPLITTER); i < names.length; i++) {
+                  events = iteratee(events, names[i], callback, opts);
+               }
+            } else {
+               // Finally, standard events.
+               events = iteratee(events, name, callback, opts);
+            }
+            return events;
+         };
+
+         /**
+          * Guard the `listening` argument from the public API.
+          *
+          * @param {Events}   obj      - The Events instance
+          * @param {string}   name     - Event name
+          * @param {function} callback - Event callback
+          * @param {object}   context  - Event context
+          * @param {Object.<{obj: object, objId: string, id: string, listeningTo: object, count: number}>} listening -
+          *                              Listening object
+          * @returns {*}
+          */
+
+         s_INTERNAL_ON = function s_INTERNAL_ON(obj, name, callback, context, listening) {
+            obj._events = s_EVENTS_API(s_ON_API, obj._events || {}, name, callback, { context: context, ctx: obj, listening: listening });
+
+            if (listening) {
+               var listeners = obj._listeners || (obj._listeners = {});
+               listeners[listening.id] = listening;
+            }
+
+            return obj;
+         };
+
+         /**
+          * The reducing API that removes a callback from the `events` object.
+          *
+          * @param {Object.<{callback: function, context: object, ctx: object, listening:{}}>} events - Events object
+          * @param {string}   name     - Event name
+          * @param {function} callback - Event callback
+          * @param {object}   options  - Optional parameters
+          * @returns {*}
+          */
+
+         s_OFF_API = function s_OFF_API(events, name, callback, options) {
+            if (!events) {
+               return;
+            }
+
+            var i = 0,
+                listening = undefined;
+            var context = options.context,
+                listeners = options.listeners;
+
+            // Delete all events listeners and "drop" events.
+            if (!name && !callback && !context) {
+               var ids = _.keys(listeners);
+               for (; i < ids.length; i++) {
+                  listening = listeners[ids[i]];
+                  delete listeners[listening.id];
+                  delete listening.listeningTo[listening.objId];
+               }
+               return;
+            }
+
+            var names = name ? [name] : _.keys(events);
+            for (; i < names.length; i++) {
+               name = names[i];
+               var handlers = events[name];
+
+               // Bail out if there are no events stored.
+               /* istanbul ignore if */
+               if (!handlers) {
+                  break;
+               }
+
+               // Replace events if there are any remaining.  Otherwise, clean up.
+               var remaining = [];
+               for (var j = 0; j < handlers.length; j++) {
+                  var handler = handlers[j];
+                  if (callback && callback !== handler.callback && callback !== handler.callback._callback || context && context !== handler.context) {
+                     remaining.push(handler);
+                  } else {
+                     listening = handler.listening;
+                     if (listening && --listening.count === 0) {
+                        delete listeners[listening.id];
+                        delete listening.listeningTo[listening.objId];
+                     }
+                  }
+               }
+
+               // Update tail event if the list has any events.  Otherwise, clean up.
+               if (remaining.length) {
+                  events[name] = remaining;
+               } else {
+                  delete events[name];
+               }
+            }
+
+            return events;
+         };
+
+         /**
+          * The reducing API that adds a callback to the `events` object.
+          *
+          * @param {Object.<{callback: function, context: object, ctx: object, listening:{}}>} events - Events object
+          * @param {string}   name     - Event name
+          * @param {function} callback - Event callback
+          * @param {object}   options  - Optional parameters
+          * @returns {*}
+          */
+
+         s_ON_API = function s_ON_API(events, name, callback, options) {
+            if (callback) {
+               var handlers = events[name] || (events[name] = []);
+               var context = options.context,
+                   ctx = options.ctx,
+                   listening = options.listening;
+
+               if (listening) {
+                  listening.count++;
+               }
+
+               handlers.push({ callback: callback, context: context, ctx: context || ctx, listening: listening });
+            }
+            return events;
+         };
+
+         /**
+          * Reduces the event callbacks into a map of `{event: onceWrapper}`. `offer` unbinds the `onceWrapper` after
+          * it has been called.
+          *
+          * @param {Object.<{callback: function, context: object, ctx: object, listening:{}}>} map - Events object
+          * @param {string}   name     - Event name
+          * @param {function} callback - Event callback
+          * @param {function} offer    - Function to invoke after event has been triggered once; `off()`
+          * @returns {*}
+          */
+
+         s_ONCE_MAP = function s_ONCE_MAP(map, name, callback, offer) {
+            if (callback) {
+               (function () {
+                  var once = map[name] = _.once(function () {
+                     offer(name, once);
+                     callback.apply(this, arguments);
+                  });
+                  once._callback = callback;
+               })();
+            }
+            return map;
+         };
+
+         /**
+          * Handles triggering the appropriate event callbacks.
+          *
+          * @param {Object.<{callback: function, context: object, ctx: object, listening:{}}>} objEvents - Events object
+          * @param {string}   name  - Event name
+          * @param {function} callback - Event callback
+          * @param {Array<*>} args  - Event arguments
+          * @returns {*}
+          */
+
+         s_TRIGGER_API = function s_TRIGGER_API(objEvents, name, callback, args) {
+            if (objEvents) {
+               var events = objEvents[name];
+               var allEvents = objEvents.all;
+               if (events && allEvents) {
+                  allEvents = allEvents.slice();
+               }
+               if (events) {
+                  s_TRIGGER_EVENTS(events, args);
+               }
+               if (allEvents) {
+                  s_TRIGGER_EVENTS(allEvents, [name].concat(args));
+               }
+            }
+            return objEvents;
+         };
+
+         /**
+          * A difficult-to-believe, but optimized internal dispatch function for triggering events. Tries to keep the usual
+          * cases speedy (most internal Backbone events have 3 arguments).
+          *
+          * @param {Object.<{callback: function, context: object, ctx: object, listening:{}}>}  events - events array
+          * @param {Array<*>} args - event argument array
+          */
+
+         s_TRIGGER_EVENTS = function s_TRIGGER_EVENTS(events, args) {
+            var ev = undefined,
+                i = -1;
+            var a1 = args[0],
+                a2 = args[1],
+                a3 = args[2],
+                l = events.length;
+
+            switch (args.length) {
+               case 0:
+                  while (++i < l) {
+                     (ev = events[i]).callback.call(ev.ctx);
+                  }
+                  return;
+               case 1:
+                  while (++i < l) {
+                     (ev = events[i]).callback.call(ev.ctx, a1);
+                  }
+                  return;
+               case 2:
+                  while (++i < l) {
+                     (ev = events[i]).callback.call(ev.ctx, a1, a2);
+                  }
+                  return;
+               case 3:
+                  while (++i < l) {
+                     (ev = events[i]).callback.call(ev.ctx, a1, a2, a3);
+                  }
+                  return;
+               default:
+                  while (++i < l) {
+                     (ev = events[i]).callback.apply(ev.ctx, args);
+                  }
+                  return;
+            }
+         };
       }
    };
 });
 
 $__System.register('27', ['4', '5', '6', '8', 'c', 'd', 'e'], function (_export) {
-  var _, BackboneProxy, _classCallCheck, _createClass, _get, _inherits, Events, s_DELEGATE_EVENT_SPLITTER, s_VIEW_OPTIONS, View;
+  var _, BackboneProxy, _classCallCheck, _createClass, _get, _inherits, Events, View, s_DELEGATE_EVENT_SPLITTER, s_VIEW_OPTIONS;
 
   return {
     setters: [function (_4) {
@@ -4157,22 +4187,6 @@ $__System.register('27', ['4', '5', '6', '8', 'c', 'd', 'e'], function (_export)
       Events = _e['default'];
     }],
     execute: function () {
-
-      // Private / internal methods ---------------------------------------------------------------------------------------
-
-      /**
-       * Cached regex to split keys for `delegate`.
-       * @type {RegExp}
-       */
-      'use strict';
-
-      s_DELEGATE_EVENT_SPLITTER = /^(\S+)\s*(.*)$/;
-
-      /**
-       * List of view options to be set as properties.
-       * @type {string[]}
-       */
-      s_VIEW_OPTIONS = ['model', 'collection', 'el', 'id', 'attributes', 'className', 'tagName', 'events'];
 
       /**
        * Backbone.View - Represents a logical chunk of UI in the DOM. (http://backbonejs.org/#View)
@@ -4223,6 +4237,7 @@ $__System.register('27', ['4', '5', '6', '8', 'c', 'd', 'e'], function (_export)
        *       }
        *    }
        */
+      'use strict';
 
       View = (function (_Events) {
         _inherits(View, _Events);
@@ -4268,6 +4283,13 @@ $__System.register('27', ['4', '5', '6', '8', 'c', 'd', 'e'], function (_export)
           this._ensureElement();
           this.initialize.apply(this, arguments);
         }
+
+        // Private / internal methods ---------------------------------------------------------------------------------------
+
+        /**
+         * Cached regex to split keys for `delegate`.
+         * @type {RegExp}
+         */
 
         /**
          * If jQuery is included on the page, each view has a $ function that runs queries scoped within the view's element.
@@ -4647,6 +4669,14 @@ $__System.register('27', ['4', '5', '6', '8', 'c', 'd', 'e'], function (_export)
       })(Events);
 
       _export('default', View);
+
+      s_DELEGATE_EVENT_SPLITTER = /^(\S+)\s*(.*)$/;
+
+      /**
+       * List of view options to be set as properties.
+       * @type {string[]}
+       */
+      s_VIEW_OPTIONS = ['model', 'collection', 'el', 'id', 'attributes', 'className', 'tagName', 'events'];
     }
   };
 });
@@ -4692,25 +4722,17 @@ $__System.register('28', ['4'], function (_export) {
       // Add static properties to the constructor function, if supplied.
       _.extend(child, parent, staticProps);
 
-      // Set the prototype chain to inherit from `parent`, without calling `parent` constructor function.
-      var Surrogate = function Surrogate() {
-         this.constructor = child;
-      };
+      // Set the prototype chain to inherit from `parent`, without calling
+      // `parent`'s constructor function and add the prototype properties.
+      child.prototype = _.create(parent.prototype, protoProps);
+      child.prototype.constructor = child;
 
-      Surrogate.prototype = parent.prototype;
-      child.prototype = new Surrogate();
-
-      // Add prototype properties (instance properties) to the subclass, if supplied.
-      if (protoProps) {
-         _.extend(child.prototype, protoProps);
-
-         // backbone-es6 addition: Because View defines a getter for tagName we must actually redefine this getter
-         // from the `protoProps.tagName` if it exists.
-         if (protoProps.tagName) {
-            Object.defineProperty(child.prototype, 'tagName', { get: function get() {
-                  return protoProps.tagName;
-               } });
-         }
+      // backbone-es6 addition: Because View defines a getter for tagName we must actually redefine this getter
+      // from the `protoProps.tagName` if it exists.
+      if (protoProps && protoProps.tagName) {
+         Object.defineProperty(child.prototype, 'tagName', { get: function get() {
+               return protoProps.tagName;
+            } });
       }
 
       // Set a convenience property in case the parent's prototype is needed later.
@@ -4729,36 +4751,34 @@ $__System.register('28', ['4'], function (_export) {
 
 $__System.registerDynamic("29", ["1c"], true, function($__require, exports, module) {
   ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
+  var define,
+      global = this,
+      GLOBAL = this;
   var $ = $__require('1c');
   module.exports = function defineProperty(it, key, desc) {
     return $.setDesc(it, key, desc);
   };
-  global.define = __define;
   return module.exports;
 });
 
 $__System.registerDynamic("2a", ["29"], true, function($__require, exports, module) {
   ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
+  var define,
+      global = this,
+      GLOBAL = this;
   module.exports = {
     "default": $__require('29'),
     __esModule: true
   };
-  global.define = __define;
   return module.exports;
 });
 
 $__System.registerDynamic("8", ["2a"], true, function($__require, exports, module) {
   "use strict";
   ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
+  var define,
+      global = this,
+      GLOBAL = this;
   var _Object$defineProperty = $__require('2a')["default"];
   exports["default"] = (function() {
     function defineProperties(target, props) {
@@ -4780,31 +4800,29 @@ $__System.registerDynamic("8", ["2a"], true, function($__require, exports, modul
     };
   })();
   exports.__esModule = true;
-  global.define = __define;
   return module.exports;
 });
 
 $__System.registerDynamic("6", [], true, function($__require, exports, module) {
   "use strict";
   ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
+  var define,
+      global = this,
+      GLOBAL = this;
   exports["default"] = function(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
       throw new TypeError("Cannot call a class as a function");
     }
   };
   exports.__esModule = true;
-  global.define = __define;
   return module.exports;
 });
 
 $__System.registerDynamic("2b", ["2c", "15"], true, function($__require, exports, module) {
   ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
+  var define,
+      global = this,
+      GLOBAL = this;
   var toInteger = $__require('2c'),
       defined = $__require('15');
   module.exports = function(TO_STRING) {
@@ -4820,35 +4838,32 @@ $__System.registerDynamic("2b", ["2c", "15"], true, function($__require, exports
       return a < 0xd800 || a > 0xdbff || i + 1 === l || (b = s.charCodeAt(i + 1)) < 0xdc00 || b > 0xdfff ? TO_STRING ? s.charAt(i) : a : TO_STRING ? s.slice(i, i + 2) : (a - 0xd800 << 10) + (b - 0xdc00) + 0x10000;
     };
   };
-  global.define = __define;
   return module.exports;
 });
 
 $__System.registerDynamic("2d", [], true, function($__require, exports, module) {
   ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
+  var define,
+      global = this,
+      GLOBAL = this;
   module.exports = true;
-  global.define = __define;
   return module.exports;
 });
 
 $__System.registerDynamic("2e", ["2f"], true, function($__require, exports, module) {
   ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
+  var define,
+      global = this,
+      GLOBAL = this;
   module.exports = $__require('2f');
-  global.define = __define;
   return module.exports;
 });
 
 $__System.registerDynamic("30", [], true, function($__require, exports, module) {
   ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
+  var define,
+      global = this,
+      GLOBAL = this;
   module.exports = function(bitmap, value) {
     return {
       enumerable: !(bitmap & 1),
@@ -4857,15 +4872,14 @@ $__System.registerDynamic("30", [], true, function($__require, exports, module) 
       value: value
     };
   };
-  global.define = __define;
   return module.exports;
 });
 
 $__System.registerDynamic("19", [], true, function($__require, exports, module) {
   ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
+  var define,
+      global = this,
+      GLOBAL = this;
   module.exports = function(exec) {
     try {
       return !!exec();
@@ -4873,29 +4887,27 @@ $__System.registerDynamic("19", [], true, function($__require, exports, module) 
       return true;
     }
   };
-  global.define = __define;
   return module.exports;
 });
 
 $__System.registerDynamic("31", ["19"], true, function($__require, exports, module) {
   ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
+  var define,
+      global = this,
+      GLOBAL = this;
   module.exports = !$__require('19')(function() {
     return Object.defineProperty({}, 'a', {get: function() {
         return 7;
       }}).a != 7;
   });
-  global.define = __define;
   return module.exports;
 });
 
 $__System.registerDynamic("2f", ["1c", "30", "31"], true, function($__require, exports, module) {
   ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
+  var define,
+      global = this,
+      GLOBAL = this;
   var $ = $__require('1c'),
       createDesc = $__require('30');
   module.exports = $__require('31') ? function(object, key, value) {
@@ -4904,16 +4916,15 @@ $__System.registerDynamic("2f", ["1c", "30", "31"], true, function($__require, e
     object[key] = value;
     return object;
   };
-  global.define = __define;
   return module.exports;
 });
 
 $__System.registerDynamic("32", ["1c", "30", "33", "2f", "34"], true, function($__require, exports, module) {
   "use strict";
   ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
+  var define,
+      global = this,
+      GLOBAL = this;
   var $ = $__require('1c'),
       descriptor = $__require('30'),
       setToStringTag = $__require('33'),
@@ -4925,28 +4936,26 @@ $__System.registerDynamic("32", ["1c", "30", "33", "2f", "34"], true, function($
     Constructor.prototype = $.create(IteratorPrototype, {next: descriptor(1, next)});
     setToStringTag(Constructor, NAME + ' Iterator');
   };
-  global.define = __define;
   return module.exports;
 });
 
 $__System.registerDynamic("35", [], true, function($__require, exports, module) {
   ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
+  var define,
+      global = this,
+      GLOBAL = this;
   var hasOwnProperty = {}.hasOwnProperty;
   module.exports = function(it, key) {
     return hasOwnProperty.call(it, key);
   };
-  global.define = __define;
   return module.exports;
 });
 
 $__System.registerDynamic("33", ["1c", "35", "34"], true, function($__require, exports, module) {
   ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
+  var define,
+      global = this,
+      GLOBAL = this;
   var def = $__require('1c').setDesc,
       has = $__require('35'),
       TAG = $__require('34')('toStringTag');
@@ -4957,15 +4966,14 @@ $__System.registerDynamic("33", ["1c", "35", "34"], true, function($__require, e
         value: tag
       });
   };
-  global.define = __define;
   return module.exports;
 });
 
 $__System.registerDynamic("1c", [], true, function($__require, exports, module) {
   ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
+  var define,
+      global = this,
+      GLOBAL = this;
   var $Object = Object;
   module.exports = {
     create: $Object.create,
@@ -4979,16 +4987,15 @@ $__System.registerDynamic("1c", [], true, function($__require, exports, module) 
     getSymbols: $Object.getOwnPropertySymbols,
     each: [].forEach
   };
-  global.define = __define;
   return module.exports;
 });
 
 $__System.registerDynamic("36", ["2d", "17", "2e", "2f", "35", "37", "32", "33", "1c", "34"], true, function($__require, exports, module) {
   "use strict";
   ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
+  var define,
+      global = this,
+      GLOBAL = this;
   var LIBRARY = $__require('2d'),
       $export = $__require('17'),
       redefine = $__require('2e'),
@@ -5066,16 +5073,15 @@ $__System.registerDynamic("36", ["2d", "17", "2e", "2f", "35", "37", "32", "33",
     }
     return methods;
   };
-  global.define = __define;
   return module.exports;
 });
 
 $__System.registerDynamic("38", ["2b", "36"], true, function($__require, exports, module) {
   "use strict";
   ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
+  var define,
+      global = this,
+      GLOBAL = this;
   var $at = $__require('2b')(true);
   $__require('36')(String, 'String', function(iterated) {
     this._t = String(iterated);
@@ -5096,29 +5102,27 @@ $__System.registerDynamic("38", ["2b", "36"], true, function($__require, exports
       done: false
     };
   });
-  global.define = __define;
   return module.exports;
 });
 
 $__System.registerDynamic("39", [], true, function($__require, exports, module) {
   ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
+  var define,
+      global = this,
+      GLOBAL = this;
   module.exports = function(it) {
     if (typeof it != 'function')
       throw TypeError(it + ' is not a function!');
     return it;
   };
-  global.define = __define;
   return module.exports;
 });
 
 $__System.registerDynamic("23", ["39"], true, function($__require, exports, module) {
   ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
+  var define,
+      global = this,
+      GLOBAL = this;
   var aFunction = $__require('39');
   module.exports = function(fn, that, length) {
     aFunction(fn);
@@ -5142,15 +5146,14 @@ $__System.registerDynamic("23", ["39"], true, function($__require, exports, modu
       return fn.apply(that, arguments);
     };
   };
-  global.define = __define;
   return module.exports;
 });
 
 $__System.registerDynamic("17", ["3a", "18", "23"], true, function($__require, exports, module) {
   ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
+  var define,
+      global = this,
+      GLOBAL = this;
   var global = $__require('3a'),
       core = $__require('18'),
       ctx = $__require('23'),
@@ -5192,69 +5195,64 @@ $__System.registerDynamic("17", ["3a", "18", "23"], true, function($__require, e
   $export.B = 16;
   $export.W = 32;
   module.exports = $export;
-  global.define = __define;
   return module.exports;
 });
 
 $__System.registerDynamic("15", [], true, function($__require, exports, module) {
   ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
+  var define,
+      global = this,
+      GLOBAL = this;
   module.exports = function(it) {
     if (it == undefined)
       throw TypeError("Can't call method on  " + it);
     return it;
   };
-  global.define = __define;
   return module.exports;
 });
 
 $__System.registerDynamic("3b", ["15"], true, function($__require, exports, module) {
   ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
+  var define,
+      global = this,
+      GLOBAL = this;
   var defined = $__require('15');
   module.exports = function(it) {
     return Object(defined(it));
   };
-  global.define = __define;
   return module.exports;
 });
 
 $__System.registerDynamic("21", [], true, function($__require, exports, module) {
   ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
+  var define,
+      global = this,
+      GLOBAL = this;
   module.exports = function(it) {
     return typeof it === 'object' ? it !== null : typeof it === 'function';
   };
-  global.define = __define;
   return module.exports;
 });
 
 $__System.registerDynamic("22", ["21"], true, function($__require, exports, module) {
   ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
+  var define,
+      global = this,
+      GLOBAL = this;
   var isObject = $__require('21');
   module.exports = function(it) {
     if (!isObject(it))
       throw TypeError(it + ' is not an object!');
     return it;
   };
-  global.define = __define;
   return module.exports;
 });
 
 $__System.registerDynamic("3c", ["22"], true, function($__require, exports, module) {
   ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
+  var define,
+      global = this,
+      GLOBAL = this;
   var anObject = $__require('22');
   module.exports = function(iterator, fn, value, entries) {
     try {
@@ -5266,71 +5264,66 @@ $__System.registerDynamic("3c", ["22"], true, function($__require, exports, modu
       throw e;
     }
   };
-  global.define = __define;
   return module.exports;
 });
 
 $__System.registerDynamic("3d", ["37", "34"], true, function($__require, exports, module) {
   ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
+  var define,
+      global = this,
+      GLOBAL = this;
   var Iterators = $__require('37'),
       ITERATOR = $__require('34')('iterator'),
       ArrayProto = Array.prototype;
   module.exports = function(it) {
     return it !== undefined && (Iterators.Array === it || ArrayProto[ITERATOR] === it);
   };
-  global.define = __define;
   return module.exports;
 });
 
 $__System.registerDynamic("2c", [], true, function($__require, exports, module) {
   ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
+  var define,
+      global = this,
+      GLOBAL = this;
   var ceil = Math.ceil,
       floor = Math.floor;
   module.exports = function(it) {
     return isNaN(it = +it) ? 0 : (it > 0 ? floor : ceil)(it);
   };
-  global.define = __define;
   return module.exports;
 });
 
 $__System.registerDynamic("3e", ["2c"], true, function($__require, exports, module) {
   ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
+  var define,
+      global = this,
+      GLOBAL = this;
   var toInteger = $__require('2c'),
       min = Math.min;
   module.exports = function(it) {
     return it > 0 ? min(toInteger(it), 0x1fffffffffffff) : 0;
   };
-  global.define = __define;
   return module.exports;
 });
 
 $__System.registerDynamic("13", [], true, function($__require, exports, module) {
   ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
+  var define,
+      global = this,
+      GLOBAL = this;
   var toString = {}.toString;
   module.exports = function(it) {
     return toString.call(it).slice(8, -1);
   };
-  global.define = __define;
   return module.exports;
 });
 
 $__System.registerDynamic("3f", ["13", "34"], true, function($__require, exports, module) {
   ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
+  var define,
+      global = this,
+      GLOBAL = this;
   var cof = $__require('13'),
       TAG = $__require('34')('toStringTag'),
       ARG = cof(function() {
@@ -5342,25 +5335,23 @@ $__System.registerDynamic("3f", ["13", "34"], true, function($__require, exports
         B;
     return it === undefined ? 'Undefined' : it === null ? 'Null' : typeof(T = (O = Object(it))[TAG]) == 'string' ? T : ARG ? cof(O) : (B = cof(O)) == 'Object' && typeof O.callee == 'function' ? 'Arguments' : B;
   };
-  global.define = __define;
   return module.exports;
 });
 
 $__System.registerDynamic("37", [], true, function($__require, exports, module) {
   ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
+  var define,
+      global = this,
+      GLOBAL = this;
   module.exports = {};
-  global.define = __define;
   return module.exports;
 });
 
 $__System.registerDynamic("40", ["3f", "34", "37", "18"], true, function($__require, exports, module) {
   ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
+  var define,
+      global = this,
+      GLOBAL = this;
   var classof = $__require('3f'),
       ITERATOR = $__require('34')('iterator'),
       Iterators = $__require('37');
@@ -5368,71 +5359,66 @@ $__System.registerDynamic("40", ["3f", "34", "37", "18"], true, function($__requ
     if (it != undefined)
       return it[ITERATOR] || it['@@iterator'] || Iterators[classof(it)];
   };
-  global.define = __define;
   return module.exports;
 });
 
 $__System.registerDynamic("41", ["3a"], true, function($__require, exports, module) {
   ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
+  var define,
+      global = this,
+      GLOBAL = this;
   var global = $__require('3a'),
       SHARED = '__core-js_shared__',
       store = global[SHARED] || (global[SHARED] = {});
   module.exports = function(key) {
     return store[key] || (store[key] = {});
   };
-  global.define = __define;
   return module.exports;
 });
 
 $__System.registerDynamic("42", [], true, function($__require, exports, module) {
   ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
+  var define,
+      global = this,
+      GLOBAL = this;
   var id = 0,
       px = Math.random();
   module.exports = function(key) {
     return 'Symbol('.concat(key === undefined ? '' : key, ')_', (++id + px).toString(36));
   };
-  global.define = __define;
   return module.exports;
 });
 
 $__System.registerDynamic("3a", [], true, function($__require, exports, module) {
   ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
+  var define,
+      global = this,
+      GLOBAL = this;
   var global = module.exports = typeof window != 'undefined' && window.Math == Math ? window : typeof self != 'undefined' && self.Math == Math ? self : Function('return this')();
   if (typeof __g == 'number')
     __g = global;
-  global.define = __define;
   return module.exports;
 });
 
 $__System.registerDynamic("34", ["41", "42", "3a"], true, function($__require, exports, module) {
   ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
+  var define,
+      global = this,
+      GLOBAL = this;
   var store = $__require('41')('wks'),
       uid = $__require('42'),
       Symbol = $__require('3a').Symbol;
   module.exports = function(name) {
     return store[name] || (store[name] = Symbol && Symbol[name] || (Symbol || uid)('Symbol.' + name));
   };
-  global.define = __define;
   return module.exports;
 });
 
 $__System.registerDynamic("43", ["34"], true, function($__require, exports, module) {
   ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
+  var define,
+      global = this,
+      GLOBAL = this;
   var ITERATOR = $__require('34')('iterator'),
       SAFE_CLOSING = false;
   try {
@@ -5461,16 +5447,15 @@ $__System.registerDynamic("43", ["34"], true, function($__require, exports, modu
     } catch (e) {}
     return safe;
   };
-  global.define = __define;
   return module.exports;
 });
 
 $__System.registerDynamic("44", ["23", "17", "3b", "3c", "3d", "3e", "40", "43"], true, function($__require, exports, module) {
   "use strict";
   ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
+  var define,
+      global = this,
+      GLOBAL = this;
   var ctx = $__require('23'),
       $export = $__require('17'),
       toObject = $__require('3b'),
@@ -5508,53 +5493,49 @@ $__System.registerDynamic("44", ["23", "17", "3b", "3c", "3d", "3e", "40", "43"]
       result.length = index;
       return result;
     }});
-  global.define = __define;
   return module.exports;
 });
 
 $__System.registerDynamic("18", [], true, function($__require, exports, module) {
   ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
+  var define,
+      global = this,
+      GLOBAL = this;
   var core = module.exports = {version: '1.2.6'};
   if (typeof __e == 'number')
     __e = core;
-  global.define = __define;
   return module.exports;
 });
 
 $__System.registerDynamic("45", ["38", "44", "18"], true, function($__require, exports, module) {
   ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
+  var define,
+      global = this,
+      GLOBAL = this;
   $__require('38');
   $__require('44');
   module.exports = $__require('18').Array.from;
-  global.define = __define;
   return module.exports;
 });
 
 $__System.registerDynamic("46", ["45"], true, function($__require, exports, module) {
   ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
+  var define,
+      global = this,
+      GLOBAL = this;
   module.exports = {
     "default": $__require('45'),
     __esModule: true
   };
-  global.define = __define;
   return module.exports;
 });
 
 $__System.registerDynamic("11", ["46"], true, function($__require, exports, module) {
   "use strict";
   ;
-  var global = this,
-      __define = global.define;
-  global.define = undefined;
+  var define,
+      global = this,
+      GLOBAL = this;
   var _Array$from = $__require('46')["default"];
   exports["default"] = function(arr) {
     if (Array.isArray(arr)) {
@@ -5567,7 +5548,6 @@ $__System.registerDynamic("11", ["46"], true, function($__require, exports, modu
     }
   };
   exports.__esModule = true;
-  global.define = __define;
   return module.exports;
 });
 
@@ -5604,7 +5584,7 @@ $__System.register('5', [], function (_export) {
 });
 
 $__System.register('b', ['4', '5', '6', '8', '11'], function (_export) {
-   var _, BackboneProxy, _classCallCheck, _createClass, _toConsumableArray, s_ADD_METHOD, s_CB, s_MODEL_MATCHER, Utils;
+   var _, BackboneProxy, _classCallCheck, _createClass, _toConsumableArray, Utils, s_ADD_METHOD, s_CB, s_MODEL_MATCHER;
 
    return {
       setters: [function (_5) {
@@ -5620,81 +5600,6 @@ $__System.register('b', ['4', '5', '6', '8', '11'], function (_export) {
       }],
       execute: function () {
 
-         // Private / internal methods ---------------------------------------------------------------------------------------
-
-         /**
-          * Creates an optimized function that dispatches to an associated Underscore function.
-          *
-          * @param {number}   length      - Length of variables for given Underscore method to dispatch.
-          * @param {string}   method      - Function name of Underscore to invoke.
-          * @param {string}   attribute   - Attribute to associate with the Underscore function invoked.
-          * @returns {Function}
-          */
-         'use strict';
-
-         s_ADD_METHOD = function s_ADD_METHOD(length, method, attribute) {
-            switch (length) {
-               case 1:
-                  return function () {
-                     return _[method](this[attribute]);
-                  };
-               case 2:
-                  return function (value) {
-                     return _[method](this[attribute], value);
-                  };
-               case 3:
-                  return function (iteratee, context) {
-                     return _[method](this[attribute], s_CB(iteratee), context);
-                  };
-               case 4:
-                  return function (iteratee, defaultVal, context) {
-                     return _[method](this[attribute], s_CB(iteratee), defaultVal, context);
-                  };
-               default:
-                  return function () {
-                     var args = Array.prototype.slice.call(arguments);
-                     args.unshift(this[attribute]);
-                     return _[method].apply(_, _toConsumableArray(args));
-                  };
-            }
-         };
-
-         /**
-          * Support `collection.sortBy('attr')` and `collection.findWhere({id: 1})`.
-          *
-          * @param {*} iteratee  -
-          * @returns {*}
-          */
-
-         s_CB = function s_CB(iteratee) {
-            if (_.isFunction(iteratee)) {
-               return iteratee;
-            }
-            if (_.isObject(iteratee) && !Utils.isModel(iteratee)) {
-               return s_MODEL_MATCHER(iteratee);
-            }
-            if (_.isString(iteratee)) {
-               return function (model) {
-                  return model.get(iteratee);
-               };
-            }
-            return iteratee;
-         };
-
-         /**
-          * Creates a matching function against `attrs`.
-          *
-          * @param {*} attrs -
-          * @returns {Function}
-          */
-
-         s_MODEL_MATCHER = function s_MODEL_MATCHER(attrs) {
-            var matcher = _.matches(attrs);
-            return function (model) {
-               return matcher(model.attributes);
-            };
-         };
-
          /**
           * Provides static utility functions.
           * --------
@@ -5708,11 +5613,23 @@ $__System.register('b', ['4', '5', '6', '8', '11'], function (_export) {
           * collection.filter(function(model) { return model.get('age') > 10 });
           * collection.each(this.addView);
           */
+         'use strict';
 
          Utils = (function () {
             function Utils() {
                _classCallCheck(this, Utils);
             }
+
+            // Private / internal methods ---------------------------------------------------------------------------------------
+
+            /**
+             * Creates an optimized function that dispatches to an associated Underscore function.
+             *
+             * @param {number}   length      - Length of variables for given Underscore method to dispatch.
+             * @param {string}   method      - Function name of Underscore to invoke.
+             * @param {string}   attribute   - Attribute to associate with the Underscore function invoked.
+             * @returns {Function}
+             */
 
             _createClass(Utils, null, [{
                key: 'addUnderscoreMethods',
@@ -5789,6 +5706,69 @@ $__System.register('b', ['4', '5', '6', '8', '11'], function (_export) {
          })();
 
          _export('default', Utils);
+
+         s_ADD_METHOD = function s_ADD_METHOD(length, method, attribute) {
+            switch (length) {
+               case 1:
+                  return function () {
+                     return _[method](this[attribute]);
+                  };
+               case 2:
+                  return function (value) {
+                     return _[method](this[attribute], value);
+                  };
+               case 3:
+                  return function (iteratee, context) {
+                     return _[method](this[attribute], s_CB(iteratee), context);
+                  };
+               case 4:
+                  return function (iteratee, defaultVal, context) {
+                     return _[method](this[attribute], s_CB(iteratee), defaultVal, context);
+                  };
+               default:
+                  return function () {
+                     var args = Array.prototype.slice.call(arguments);
+                     args.unshift(this[attribute]);
+                     return _[method].apply(_, _toConsumableArray(args));
+                  };
+            }
+         };
+
+         /**
+          * Support `collection.sortBy('attr')` and `collection.findWhere({id: 1})`.
+          *
+          * @param {*} iteratee  -
+          * @returns {*}
+          */
+
+         s_CB = function s_CB(iteratee) {
+            if (_.isFunction(iteratee)) {
+               return iteratee;
+            }
+            if (_.isObject(iteratee) && !Utils.isModel(iteratee)) {
+               return s_MODEL_MATCHER(iteratee);
+            }
+            if (_.isString(iteratee)) {
+               return function (model) {
+                  return model.get(iteratee);
+               };
+            }
+            return iteratee;
+         };
+
+         /**
+          * Creates a matching function against `attrs`.
+          *
+          * @param {*} attrs -
+          * @returns {Function}
+          */
+
+         s_MODEL_MATCHER = function s_MODEL_MATCHER(attrs) {
+            var matcher = _.matches(attrs);
+            return function (model) {
+               return matcher(model.attributes);
+            };
+         };
       }
    };
 });
@@ -5955,7 +5935,7 @@ $__System.register('1', ['2', '9', '10', '27', '28', '47', 'e', 'f', 'a'], funct
     execute: function () {
       options = {
         // Current version of the library. Keep in sync with Backbone version supported.
-        VERSION: '1.2.3',
+        VERSION: '1.3.3',
 
         // Turn on `emulateHTTP` to support legacy HTTP servers. Setting this option will fake `"PATCH"`, `"PUT"` and
         // `"DELETE"` requests via the `_method` parameter and set a `X-Http-Method-Override` header.
