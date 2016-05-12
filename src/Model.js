@@ -772,11 +772,14 @@ class Model extends Events
          }
       }
 
-      /**
-       * Update the `id`.
-       * @type {*}
-       */
-      if (this.idAttribute in attrs) { this.id = this.get(this.idAttribute); }
+      if (this.idAttribute in attrs)
+      {
+         /**
+          * Update the `id`.
+          * @type {*}
+          */
+         this.id = this.get(this.idAttribute);
+      }
 
       // Trigger all relevant attribute changes.
       if (!silent)

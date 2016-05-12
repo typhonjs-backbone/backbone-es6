@@ -25,6 +25,8 @@
     }
   },
   "devDependencies": {
+    "esdoc-plugin-dependency-graphs": "^0.0.3",
+    "esdoc-plugin-enhanced-navigation": "^0.0.7",
     "gulp": "^3.0.0",
     "jspm": "^0.16.0",
     "typhonjs-config-eslint": "^0.4.0",
