@@ -1,4 +1,4 @@
-![Backbone-ES6](http://i.imgur.com/KKkgP8P.png)
+![backbone-es6](https://i.imgur.com/KKkgP8P.png)
 
 [![Backbone](https://img.shields.io/badge/backbone-1.3.3-yellowgreen.svg?style=flat)](https://github.com/jashkenas/backbone)
 [![Documentation](http://docs.typhonjs.io/typhonjs-backbone/backbone-es6/badge.svg)](http://docs.typhonjs.io/typhonjs-backbone/backbone-es6/)
