@@ -8,158 +8,6 @@ import Utils         from './Utils.js';
 
 import Debug         from './Debug.js';
 
-// Private / internal methods ---------------------------------------------------------------------------------------
-
-/**
- * Default options for `Collection#add`.
- * @type {{add: boolean, remove: boolean}}
- */
-const s_ADD_OPTIONS = { add: true, remove: false };
-
-/**
- * Default options for `Collection#set`.
- * @type {{add: boolean, remove: boolean}}
- */
-const s_SET_OPTIONS = { add: true, remove: true, merge: true };
-
-/**
- * Internal method to create a model's ties to a collection.
- *
- * @param {Collection}  collection  - A collection instance
- * @param {Model}       model       - A model instance
- */
-const s_ADD_REFERENCE = (collection, model) =>
-{
-   collection._byId[model.cid] = model;
-   const id = collection.modelId(model.attributes);
-
-Debug.log(`Collection - s_ADD_REFERENCE - id: ${id}; model.cid: ${model.cid}`, true);
-
-   if (!Utils.isNullOrUndef(id)) { collection._byId[id] = model; }
-   model.on('all', s_ON_MODEL_EVENT, collection);
-};
-
-/**
- * Internal method called every time a model in the set fires an event. Sets need to update their indexes when models
- * change ids. All other events simply proxy through. "add" and "remove" events that originate in other collections
- * are ignored.
- *
- * Note: Because this is the callback added to the model via Events the "this" context is associated with the model.
- *
- * @param {string}      event       - Event name
- * @param {Model}       model       - A model instance
- * @param {Collection}  collection  - A collection instance
- * @param {object}      options     - Optional parameters
- */
-const s_ON_MODEL_EVENT = function(event, model, collection, options)
-{
-   if (model)
-   {
-Debug.log(`Collection - s_ON_MODEL_EVENT - 0 - event: ${event}`, true);
-
-      if ((event === 'add' || event === 'remove') && collection !== this) { return; }
-      if (event === 'destroy') { this.remove(model, options); }
-      if (event === 'change')
-      {
-         const prevId = this.modelId(model.previousAttributes());
-         const id = this.modelId(model.attributes);
-
-Debug.log(`Collection - s_ON_MODEL_EVENT - 1 - change - id: ${id}; prevId: ${prevId}`);
-
-         if (prevId !== id)
-         {
-            if (!Utils.isNullOrUndef(prevId)) { delete this._byId[prevId]; }
-            if (!Utils.isNullOrUndef(id)) { this._byId[id] = model; }
-         }
-      }
-
-      this.trigger(...arguments);
-   }
-};
-
-/**
- * Internal method called by both remove and set.
- *
- * @param {Collection}     collection  - A collection instance
- * @param {Array<Model>}   models      - A model instance
- * @param {object}         options     - Optional parameters
- * @returns {*}
- */
-const s_REMOVE_MODELS = (collection, models, options) =>
-{
-   const removed = [];
-
-   for (let i = 0; i < models.length; i++)
-   {
-      const model = collection.get(models[i]);
-
-Debug.log(`Collection - s_REMOVE_MODELS - 0 - model: ${model}`, true);
-
-      if (!model) { continue; }
-
-Debug.log(`Collection - s_REMOVE_MODELS - 1 - model: ${model.toJSON()}`);
-
-      const index = collection.indexOf(model);
-
-Debug.log(`Collection - s_REMOVE_MODELS - 2 - index: ${index}`);
-
-      collection.models.splice(index, 1);
-      collection.length--;
-
-      // Remove references before triggering 'remove' event to prevent an infinite loop. #3693
-      delete collection._byId[model.cid];
-      const id = collection.modelId(model.attributes);
-      if (!Utils.isNullOrUndef(id)) { delete collection._byId[id]; }
-
-      if (!options.silent)
-      {
-         options.index = index;
-         model.trigger('remove', model, collection, options);
-      }
-
-      removed.push(model);
-      s_REMOVE_REFERENCE(collection, model, options);
-   }
-
-   return removed;
-};
-
-/**
- * Internal method to sever a model's ties to a collection.
- *
- * @param {Collection}  collection  - A collection instance
- * @param {Model}       model       - A model instance
- */
-const s_REMOVE_REFERENCE = (collection, model) =>
-{
-   delete collection._byId[model.cid];
-   const id = collection.modelId(model.attributes);
-
-Debug.log(`Collection - s_REMOVE_REFERENCE - id: ${id}; model.cid: ${model.cid}`);
-
-   if (!Utils.isNullOrUndef(id)) { delete collection._byId[id]; }
-   if (collection === model.collection) { delete model.collection; }
-   model.off('all', s_ON_MODEL_EVENT, collection);
-};
-
-/**
- * Splices `insert` into `array` at index `at`.
- *
- * @param {Array}    array    - Target array to splice into
- * @param {Array}    insert   - Array to insert
- * @param {number}   at       - Index to splice at
- */
-const s_SPLICE = (array, insert, at) =>
-{
-   at = Math.min(Math.max(at, 0), array.length);
-   const tail = new Array(array.length - at);
-   const length = insert.length;
-
-   for (let i = 0; i < tail.length; i++) { tail[i] = array[i + at]; }
-   for (let i = 0; i < length; i++) { array[i + at] = insert[i]; }
-   for (let i = 0; i < tail.length; i++) { array[i + length + at] = tail[i]; }
-};
-
 /**
  * Backbone.Collection - Collections are ordered sets of models. (http://backbonejs.org/#Collection)
  * -------------------
@@ -1112,6 +960,158 @@ const collectionMethods =
 
 // Mix in each Underscore method as a proxy to `Collection#models`.
 Utils.addUnderscoreMethods(Collection, collectionMethods, 'models');
+
+// Private / internal methods ---------------------------------------------------------------------------------------
+
+/**
+ * Default options for `Collection#add`.
+ * @type {{add: boolean, remove: boolean}}
+ */
+const s_ADD_OPTIONS = { add: true, remove: false };
+
+/**
+ * Default options for `Collection#set`.
+ * @type {{add: boolean, remove: boolean}}
+ */
+const s_SET_OPTIONS = { add: true, remove: true, merge: true };
+
+/**
+ * Internal method to create a model's ties to a collection.
+ *
+ * @param {Collection}  collection  - A collection instance
+ * @param {Model}       model       - A model instance
+ */
+const s_ADD_REFERENCE = (collection, model) =>
+{
+   collection._byId[model.cid] = model;
+   const id = collection.modelId(model.attributes);
+
+   Debug.log(`Collection - s_ADD_REFERENCE - id: ${id}; model.cid: ${model.cid}`, true);
+
+   if (!Utils.isNullOrUndef(id)) { collection._byId[id] = model; }
+   model.on('all', s_ON_MODEL_EVENT, collection);
+};
+
+/**
+ * Internal method called every time a model in the set fires an event. Sets need to update their indexes when models
+ * change ids. All other events simply proxy through. "add" and "remove" events that originate in other collections
+ * are ignored.
+ *
+ * Note: Because this is the callback added to the model via Events the "this" context is associated with the model.
+ *
+ * @param {string}      event       - Event name
+ * @param {Model}       model       - A model instance
+ * @param {Collection}  collection  - A collection instance
+ * @param {object}      options     - Optional parameters
+ */
+const s_ON_MODEL_EVENT = function(event, model, collection, options)
+{
+   if (model)
+   {
+      Debug.log(`Collection - s_ON_MODEL_EVENT - 0 - event: ${event}`, true);
+
+      if ((event === 'add' || event === 'remove') && collection !== this) { return; }
+      if (event === 'destroy') { this.remove(model, options); }
+      if (event === 'change')
+      {
+         const prevId = this.modelId(model.previousAttributes());
+         const id = this.modelId(model.attributes);
+
+         Debug.log(`Collection - s_ON_MODEL_EVENT - 1 - change - id: ${id}; prevId: ${prevId}`);
+
+         if (prevId !== id)
+         {
+            if (!Utils.isNullOrUndef(prevId)) { delete this._byId[prevId]; }
+            if (!Utils.isNullOrUndef(id)) { this._byId[id] = model; }
+         }
+      }
+
+      this.trigger(...arguments);
+   }
+};
+
+/**
+ * Internal method called by both remove and set.
+ *
+ * @param {Collection}     collection  - A collection instance
+ * @param {Array<Model>}   models      - A model instance
+ * @param {object}         options     - Optional parameters
+ * @returns {*}
+ */
+const s_REMOVE_MODELS = (collection, models, options) =>
+{
+   const removed = [];
+
+   for (let i = 0; i < models.length; i++)
+   {
+      const model = collection.get(models[i]);
+
+      Debug.log(`Collection - s_REMOVE_MODELS - 0 - model: ${model}`, true);
+
+      if (!model) { continue; }
+
+      Debug.log(`Collection - s_REMOVE_MODELS - 1 - model: ${model.toJSON()}`);
+
+      const index = collection.indexOf(model);
+
+      Debug.log(`Collection - s_REMOVE_MODELS - 2 - index: ${index}`);
+
+      collection.models.splice(index, 1);
+      collection.length--;
+
+      // Remove references before triggering 'remove' event to prevent an infinite loop. #3693
+      delete collection._byId[model.cid];
+      const id = collection.modelId(model.attributes);
+      if (!Utils.isNullOrUndef(id)) { delete collection._byId[id]; }
+
+      if (!options.silent)
+      {
+         options.index = index;
+         model.trigger('remove', model, collection, options);
+      }
+
+      removed.push(model);
+      s_REMOVE_REFERENCE(collection, model, options);
+   }
+
+   return removed;
+};
+
+/**
+ * Internal method to sever a model's ties to a collection.
+ *
+ * @param {Collection}  collection  - A collection instance
+ * @param {Model}       model       - A model instance
+ */
+const s_REMOVE_REFERENCE = (collection, model) =>
+{
+   delete collection._byId[model.cid];
+   const id = collection.modelId(model.attributes);
+
+   Debug.log(`Collection - s_REMOVE_REFERENCE - id: ${id}; model.cid: ${model.cid}`);
+
+   if (!Utils.isNullOrUndef(id)) { delete collection._byId[id]; }
+   if (collection === model.collection) { delete model.collection; }
+   model.off('all', s_ON_MODEL_EVENT, collection);
+};
+
+/**
+ * Splices `insert` into `array` at index `at`.
+ *
+ * @param {Array}    array    - Target array to splice into
+ * @param {Array}    insert   - Array to insert
+ * @param {number}   at       - Index to splice at
+ */
+const s_SPLICE = (array, insert, at) =>
+{
+   at = Math.min(Math.max(at, 0), array.length);
+   const tail = new Array(array.length - at);
+   const length = insert.length;
+
+   for (let i = 0; i < tail.length; i++) { tail[i] = array[i + at]; }
+   for (let i = 0; i < length; i++) { array[i + at] = insert[i]; }
+   for (let i = 0; i < tail.length; i++) { array[i + length + at] = tail[i]; }
+};
 
 /**
  * Exports the Collection class.

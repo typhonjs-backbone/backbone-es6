@@ -3,6 +3,84 @@
 import _             from 'underscore';
 import BackboneProxy from './BackboneProxy.js';
 
+/**
+ * Provides static utility functions.
+ * --------
+ *
+ * Proxy Backbone class methods to Underscore functions, wrapping the model's `attributes` object or collection's
+ * `models` array behind the scenes.
+ *
+ * `Function#apply` can be slow so we use the method's arg count, if we know it.
+ *
+ * @example
+ * collection.filter(function(model) { return model.get('age') > 10 });
+ * collection.each(this.addView);
+ */
+export default class Utils
+{
+   /**
+    * Adds Underscore methods if they exist from keys of the `methods` hash to `Class` running against the variable
+    * defined by `attribute`
+    *
+    * @param {Class}    Class       -  Class to add Underscore methods to.
+    * @param {object}   methods     -  Hash with keys as method names and values as argument length.
+    * @param {string}   attribute   -  The variable to run Underscore methods against. Often "attributes"
+    */
+   static addUnderscoreMethods(Class, methods, attribute)
+   {
+      _.each(methods, (length, method) =>
+      {
+         if (_[method]) { Class.prototype[method] = s_ADD_METHOD(length, method, attribute); }
+      });
+   }
+
+   /**
+    * Method for checking whether an unknown variable is an instance of `Backbone.Model`.
+    *
+    * @param {*}  unknown - Variable to test.
+    * @returns {boolean}
+    */
+   static isModel(unknown)
+   {
+      return unknown instanceof BackboneProxy.backbone.Model;
+   }
+
+   /**
+    * Method for checking whether a variable is undefined or null.
+    *
+    * @param {*}  unknown - Variable to test.
+    * @returns {boolean}
+    */
+   static isNullOrUndef(unknown)
+   {
+      return unknown === null || typeof unknown === 'undefined';
+   }
+
+   /**
+    * Throw an error when a URL is needed, and none is supplied.
+    */
+   static urlError()
+   {
+      throw new Error('A "url" property or function must be specified');
+   }
+
+   /**
+    * Wrap an optional error callback with a fallback error event.
+    *
+    * @param {Model|Collection}  model    - Model or Collection target to construct and error callback against.
+    * @param {object}            options  - Options hash to store error callback inside.
+    */
+   static wrapError(model, options)
+   {
+      const error = options.error;
+      options.error = (resp) =>
+      {
+         if (error) { error.call(options.context, model, resp, options); }
+         model.trigger('error', model, resp, options);
+      };
+   }
+}
+
 // Private / internal methods ---------------------------------------------------------------------------------------
 
 /**
@@ -81,81 +159,3 @@ const s_MODEL_MATCHER = (attrs) =>
       return matcher(model.attributes);
    };
 };
-
-/**
- * Provides static utility functions.
- * --------
- *
- * Proxy Backbone class methods to Underscore functions, wrapping the model's `attributes` object or collection's
- * `models` array behind the scenes.
- *
- * `Function#apply` can be slow so we use the method's arg count, if we know it.
- *
- * @example
- * collection.filter(function(model) { return model.get('age') > 10 });
- * collection.each(this.addView);
- */
-export default class Utils
-{
-   /**
-    * Adds Underscore methods if they exist from keys of the `methods` hash to `Class` running against the variable
-    * defined by `attribute`
-    *
-    * @param {Class}    Class       -  Class to add Underscore methods to.
-    * @param {object}   methods     -  Hash with keys as method names and values as argument length.
-    * @param {string}   attribute   -  The variable to run Underscore methods against. Often "attributes"
-    */
-   static addUnderscoreMethods(Class, methods, attribute)
-   {
-      _.each(methods, (length, method) =>
-      {
-         if (_[method]) { Class.prototype[method] = s_ADD_METHOD(length, method, attribute); }
-      });
-   }
-
-   /**
-    * Method for checking whether an unknown variable is an instance of `Backbone.Model`.
-    *
-    * @param {*}  unknown - Variable to test.
-    * @returns {boolean}
-    */
-   static isModel(unknown)
-   {
-      return unknown instanceof BackboneProxy.backbone.Model;
-   }
-
-   /**
-    * Method for checking whether a variable is undefined or null.
-    *
-    * @param {*}  unknown - Variable to test.
-    * @returns {boolean}
-    */
-   static isNullOrUndef(unknown)
-   {
-      return unknown === null || typeof unknown === 'undefined';
-   }
-
-   /**
-    * Throw an error when a URL is needed, and none is supplied.
-    */
-   static urlError()
-   {
-      throw new Error('A "url" property or function must be specified');
-   }
-
-   /**
-    * Wrap an optional error callback with a fallback error event.
-    *
-    * @param {Model|Collection}  model    - Model or Collection target to construct and error callback against.
-    * @param {object}            options  - Options hash to store error callback inside.
-    */
-   static wrapError(model, options)
-   {
-      const error = options.error;
-      options.error = (resp) =>
-      {
-         if (error) { error.call(options.context, model, resp, options); }
-         model.trigger('error', model, resp, options);
-      };
-   }
-}

@@ -4,44 +4,6 @@ import _       from 'underscore';
 import Events  from 'typhonjs-core-backbone-events/src/Events.js';
 import Utils   from './Utils.js';
 
-// Private / internal methods ---------------------------------------------------------------------------------------
-
-/**
- * Cached regex for stripping a leading hash/slash and trailing space.
- */
-const s_ROUTE_STRIPPER = /^[#\/]|\s+$/g;
-
-/**
- * Cached regex for stripping leading and trailing slashes.
- */
-const s_ROOT_STRIPPER = /^\/+|\/+$/g;
-
-/**
- * Cached regex for stripping urls of hash.
- */
-const s_PATH_STRIPPER = /#.*$/;
-
-/**
- * Update the hash location, either replacing the current entry, or adding a new one to the browser history.
- *
- * @param {object}   location - URL / current location
- * @param {string}   fragment - URL fragment
- * @param {boolean}  replace  - conditional replace
- */
-const s_UPDATE_HASH = (location, fragment, replace) =>
-{
-   if (replace)
-   {
-      const href = location.href.replace(/(javascript:|#).*$/, '');
-      location.replace(`${href}#${fragment}`);
-   }
-   else
-   {
-      // Some browsers require that `hash` contains a leading #.
-      location.hash = `#${fragment}`;
-   }
-};
-
 /**
  * Backbone.History - History serves as a global router. (http://backbonejs.org/#History)
  * ----------------
@@ -501,3 +463,41 @@ export default class History extends Events
       this.handlers.unshift({ route, callback });
    }
 }
+
+// Private / internal methods ---------------------------------------------------------------------------------------
+
+/**
+ * Cached regex for stripping a leading hash/slash and trailing space.
+ */
+const s_ROUTE_STRIPPER = /^[#\/]|\s+$/g;
+
+/**
+ * Cached regex for stripping leading and trailing slashes.
+ */
+const s_ROOT_STRIPPER = /^\/+|\/+$/g;
+
+/**
+ * Cached regex for stripping urls of hash.
+ */
+const s_PATH_STRIPPER = /#.*$/;
+
+/**
+ * Update the hash location, either replacing the current entry, or adding a new one to the browser history.
+ *
+ * @param {object}   location - URL / current location
+ * @param {string}   fragment - URL fragment
+ * @param {boolean}  replace  - conditional replace
+ */
+const s_UPDATE_HASH = (location, fragment, replace) =>
+{
+   if (replace)
+   {
+      const href = location.href.replace(/(javascript:|#).*$/, '');
+      location.replace(`${href}#${fragment}`);
+   }
+   else
+   {
+      // Some browsers require that `hash` contains a leading #.
+      location.hash = `#${fragment}`;
+   }
+};

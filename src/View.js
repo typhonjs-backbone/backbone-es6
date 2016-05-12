@@ -4,20 +4,6 @@ import _             from 'underscore';
 import BackboneProxy from './BackboneProxy.js';
 import Events        from 'typhonjs-core-backbone-events/src/Events.js';
 
-// Private / internal methods ---------------------------------------------------------------------------------------
-
-/**
- * Cached regex to split keys for `delegate`.
- * @type {RegExp}
- */
-const s_DELEGATE_EVENT_SPLITTER = /^(\S+)\s*(.*)$/;
-
-/**
- * List of view options to be set as properties.
- * @type {string[]}
- */
-const s_VIEW_OPTIONS = ['model', 'collection', 'el', 'id', 'attributes', 'className', 'tagName', 'events'];
-
 /**
  * Backbone.View - Represents a logical chunk of UI in the DOM. (http://backbonejs.org/#View)
  * -------------
@@ -454,3 +440,17 @@ export default class View extends Events
       return this;
    }
 }
+
+// Private / internal methods ---------------------------------------------------------------------------------------
+
+/**
+ * Cached regex to split keys for `delegate`.
+ * @type {RegExp}
+ */
+const s_DELEGATE_EVENT_SPLITTER = /^(\S+)\s*(.*)$/;
+
+/**
+ * List of view options to be set as properties.
+ * @type {string[]}
+ */
+const s_VIEW_OPTIONS = ['model', 'collection', 'el', 'id', 'attributes', 'className', 'tagName', 'events'];

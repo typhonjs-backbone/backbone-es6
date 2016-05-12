@@ -4,73 +4,6 @@ import _             from 'underscore';
 import BackboneProxy from './BackboneProxy.js';
 import Events        from 'typhonjs-core-backbone-events/src/Events.js';
 
-// Private / internal methods ---------------------------------------------------------------------------------------
-
-/**
- * Cached regular expressions for matching named param parts and splatted parts of route strings.
- * @type {RegExp}
- */
-const s_ESCAPE_REGEX = /[\-{}\[\]+?.,\\\^$|#\s]/g;
-const s_NAMED_PARAM = /(\(\?)?:\w+/g;
-const s_OPTIONAL_PARAM = /\((.*?)\)/g;
-const s_SPLAT_PARAM = /\*\w+/g;
-
-/**
- * Bind all defined routes to `Backbone.history`. We have to reverse the order of the routes here to support behavior
- * where the most general routes can be defined at the bottom of the route map.
- *
- * @param {Router}   router   - Instance of `Backbone.Router`.
- */
-const s_BIND_ROUTES = (router) =>
-{
-   if (!router.routes) { return; }
-
-   router.routes = _.result(router, 'routes');
-
-   _.each(_.keys(router.routes), (route) =>
-   {
-      router.route(route, router.routes[route]);
-   });
-};
-
-/**
- * Given a route, and a URL fragment that it matches, return the array of extracted decoded parameters. Empty or
- * unmatched parameters will be treated as `null` to normalize cross-browser behavior.
- *
- * @param {string}   route - A route string or regex.
- * @param {string}   fragment - URL fragment.
- * @returns {*}
- */
-const s_EXTRACT_PARAMETERS = (route, fragment) =>
-{
-   const params = route.exec(fragment).slice(1);
-
-   return _.map(params, (param, i) =>
-   {
-      // Don't decode the search params.
-      if (i === params.length - 1) { return param || null; }
-      return param ? decodeURIComponent(param) : null;
-   });
-};
-
-/**
- * Convert a route string into a regular expression, suitable for matching against the current location hash.
- *
- * @param {string}   route - A route string or regex.
- * @returns {RegExp}
- */
-const s_ROUTE_TO_REGEX = (route) =>
-{
-   route = route.replace(s_ESCAPE_REGEX, '\\$&')
-    .replace(s_OPTIONAL_PARAM, '(?:$1)?')
-    .replace(s_NAMED_PARAM, (match, optional) =>
-    {
-       return optional ? match : '([^/?]+)';
-    })
-    .replace(s_SPLAT_PARAM, '([^?]*?)');
-   return new RegExp(`^${route}(?:\\?([\\s\\S]*))?$`);
-};
-
 /**
  * Backbone.Router - Provides methods for routing client-side pages, and connecting them to actions and events.
  * (http://backbonejs.org/#Router)
@@ -282,3 +215,70 @@ export default class Router extends Events
       return this;
    }
 }
+
+// Private / internal methods ---------------------------------------------------------------------------------------
+
+/**
+ * Cached regular expressions for matching named param parts and splatted parts of route strings.
+ * @type {RegExp}
+ */
+const s_ESCAPE_REGEX = /[\-{}\[\]+?.,\\\^$|#\s]/g;
+const s_NAMED_PARAM = /(\(\?)?:\w+/g;
+const s_OPTIONAL_PARAM = /\((.*?)\)/g;
+const s_SPLAT_PARAM = /\*\w+/g;
+
+/**
+ * Bind all defined routes to `Backbone.history`. We have to reverse the order of the routes here to support behavior
+ * where the most general routes can be defined at the bottom of the route map.
+ *
+ * @param {Router}   router   - Instance of `Backbone.Router`.
+ */
+const s_BIND_ROUTES = (router) =>
+{
+   if (!router.routes) { return; }
+
+   router.routes = _.result(router, 'routes');
+
+   _.each(_.keys(router.routes), (route) =>
+   {
+      router.route(route, router.routes[route]);
+   });
+};
+
+/**
+ * Given a route, and a URL fragment that it matches, return the array of extracted decoded parameters. Empty or
+ * unmatched parameters will be treated as `null` to normalize cross-browser behavior.
+ *
+ * @param {string}   route - A route string or regex.
+ * @param {string}   fragment - URL fragment.
+ * @returns {*}
+ */
+const s_EXTRACT_PARAMETERS = (route, fragment) =>
+{
+   const params = route.exec(fragment).slice(1);
+
+   return _.map(params, (param, i) =>
+   {
+      // Don't decode the search params.
+      if (i === params.length - 1) { return param || null; }
+      return param ? decodeURIComponent(param) : null;
+   });
+};
+
+/**
+ * Convert a route string into a regular expression, suitable for matching against the current location hash.
+ *
+ * @param {string}   route - A route string or regex.
+ * @returns {RegExp}
+ */
+const s_ROUTE_TO_REGEX = (route) =>
+{
+   route = route.replace(s_ESCAPE_REGEX, '\\$&')
+    .replace(s_OPTIONAL_PARAM, '(?:$1)?')
+    .replace(s_NAMED_PARAM, (match, optional) =>
+    {
+       return optional ? match : '([^/?]+)';
+    })
+    .replace(s_SPLAT_PARAM, '([^?]*?)');
+   return new RegExp(`^${route}(?:\\?([\\s\\S]*))?$`);
+};
