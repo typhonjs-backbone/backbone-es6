@@ -238,7 +238,8 @@ class Model extends Events
 
       if (options.parse) { attrs = this.parse(attrs, options) || {}; }
 
-      attrs = _.defaults({}, attrs, _.result(this, 'defaults'));
+      const defaults = _.result(this, 'defaults');
+      attrs = _.defaults(_.extend({}, defaults, attrs), defaults);
 
       this.set(attrs, options);
 
@@ -520,7 +521,7 @@ class Model extends Events
     */
    isValid(options)
    {
-      return this._validate({}, _.defaults({ validate: true }, options));
+      return this._validate({}, _.extend({}, options, { validate: true }));
    }
 
    /**
@@ -658,10 +659,11 @@ class Model extends Events
       {
          if (!this.set(attrs, options)) { return false; }
       }
-      else
+      else if (!this._validate(attrs, options))
       {
-         if (!this._validate(attrs, options)) { return false; }
+         return false;
       }
+
 
       // After a successful server-side save, the client is (optionally)
       // updated with the server-side state.
@@ -774,7 +776,7 @@ class Model extends Events
        * Update the `id`.
        * @type {*}
        */
-      this.id = this.get(this.idAttribute);
+      if (this.idAttribute in attrs) { this.id = this.get(this.idAttribute); }
 
       // Trigger all relevant attribute changes.
       if (!silent)

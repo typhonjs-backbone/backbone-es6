@@ -40,26 +40,16 @@ export default function extend(protoProps, staticProps)
    // Add static properties to the constructor function, if supplied.
    _.extend(child, parent, staticProps);
 
-   // Set the prototype chain to inherit from `parent`, without calling `parent` constructor function.
-   const Surrogate = function()
+   // Set the prototype chain to inherit from `parent`, without calling
+   // `parent`'s constructor function and add the prototype properties.
+   child.prototype = _.create(parent.prototype, protoProps);
+   child.prototype.constructor = child;
+
+   // backbone-es6 addition: Because View defines a getter for tagName we must actually redefine this getter
+   // from the `protoProps.tagName` if it exists.
+   if (protoProps && protoProps.tagName)
    {
-      this.constructor = child;
-   };
-
-   Surrogate.prototype = parent.prototype;
-   child.prototype = new Surrogate();
-
-   // Add prototype properties (instance properties) to the subclass, if supplied.
-   if (protoProps)
-   {
-      _.extend(child.prototype, protoProps);
-
-      // backbone-es6 addition: Because View defines a getter for tagName we must actually redefine this getter
-      // from the `protoProps.tagName` if it exists.
-      if (protoProps.tagName)
-      {
-         Object.defineProperty(child.prototype, 'tagName', { get: () => { return protoProps.tagName; } });
-      }
+      Object.defineProperty(child.prototype, 'tagName', { get: () => { return protoProps.tagName; } });
    }
 
    // Set a convenience property in case the parent's prototype is needed later.

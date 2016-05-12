@@ -237,8 +237,8 @@ export default class History extends Events
    matchRoot()
    {
       const path = this.decodeFragment(this.location.pathname);
-      const root = `${path.slice(0, this.root.length - 1)}/`;
-      return root === this.root;
+      const rootPath = `${path.slice(0, this.root.length - 1)}/`;
+      return rootPath === this.root;
    }
 
    /**
@@ -261,14 +261,14 @@ export default class History extends Events
       fragment = this.getFragment(fragment || '');
 
       // Don't include a trailing slash on the root.
-      let root = this.root;
+      let rootPath = this.root;
 
       if (fragment === '' || fragment.charAt(0) === '?')
       {
-         root = root.slice(0, -1) || '/';
+         rootPath = rootPath.slice(0, -1) || '/';
       }
 
-      const url = root + fragment;
+      const url = rootPath + fragment;
 
       // Strip the hash and decode for matching.
       fragment = this.decodeFragment(fragment.replace(s_PATH_STRIPPER, ''));
@@ -292,7 +292,7 @@ export default class History extends Events
       {
          s_UPDATE_HASH(this.location, fragment, options.replace);
 
-         if (this.iframe && (fragment !== this.getHash(this.iframe.contentWindow)))
+         if (this.iframe && fragment !== this.getHash(this.iframe.contentWindow))
          {
             const iWindow = this.iframe.contentWindow;
 
@@ -391,8 +391,8 @@ export default class History extends Events
          // browser, but we're currently in a browser that doesn't support it...
          if (!this._hasPushState && !this.atRoot())
          {
-            const root = this.root.slice(0, -1) || '/';
-            this.location.replace(`${root}#${this.getPath()}`);
+            const rootPath = this.root.slice(0, -1) || '/';
+            this.location.replace(`${rootPath}#${this.getPath()}`);
 
             // Return immediately as browser will do redirect to new url
             return true;
@@ -404,7 +404,6 @@ export default class History extends Events
          {
             this.navigate(this.getHash(), { replace: true });
          }
-
       }
 
       // Proxy an iframe to handle location events if the browser doesn't support the `hashchange` event, HTML5

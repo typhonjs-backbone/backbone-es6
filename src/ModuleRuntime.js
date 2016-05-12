@@ -18,7 +18,7 @@ import sync          from './sync.js';
 const options =
 {
    // Current version of the library. Keep in sync with Backbone version supported.
-   VERSION: '1.2.3',
+   VERSION: '1.3.3',
 
    // Turn on `emulateHTTP` to support legacy HTTP servers. Setting this option will fake `"PATCH"`, `"PUT"` and
    // `"DELETE"` requests via the `_method` parameter and set a `X-Http-Method-Override` header.

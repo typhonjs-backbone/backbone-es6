@@ -15,10 +15,10 @@ import BackboneProxy from './BackboneProxy.js';
  *
  * ---------
  *
- * Backbone-ES6
+ * backbone-es6
  * https://github.com/typhonjs/backbone-es6
  * (c) 2015 Michael Leahy
- * Backbone-ES6 may be freely distributed under the MIT license.
+ * backbone-es6 may be freely distributed under the MPLv2 license.
  *
  * This fork of Backbone converts it to ES6 and provides extension through constructor injection for easy modification.
  * The only major difference from Backbone is that Backbone itself is not a global Events instance anymore. Please
@@ -27,7 +27,7 @@ import BackboneProxy from './BackboneProxy.js';
  * @see http://backbonejs.org
  * @see https://github.com/typhonjs/backbone-es6
  * @author Michael Leahy
- * @version 1.2.3
+ * @version 1.3.3
  * @copyright Michael Leahy 2015
  */
 export default class Backbone

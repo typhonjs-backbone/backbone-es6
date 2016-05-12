@@ -53,25 +53,28 @@ Debug.log(`Collection - s_ADD_REFERENCE - id: ${id}; model.cid: ${model.cid}`, t
  */
 const s_ON_MODEL_EVENT = function(event, model, collection, options)
 {
+   if (model)
+   {
 Debug.log(`Collection - s_ON_MODEL_EVENT - 0 - event: ${event}`, true);
 
-   if ((event === 'add' || event === 'remove') && collection !== this) { return; }
-   if (event === 'destroy') { this.remove(model, options); }
-   if (event === 'change')
-   {
-      const prevId = this.modelId(model.previousAttributes());
-      const id = this.modelId(model.attributes);
+      if ((event === 'add' || event === 'remove') && collection !== this) { return; }
+      if (event === 'destroy') { this.remove(model, options); }
+      if (event === 'change')
+      {
+         const prevId = this.modelId(model.previousAttributes());
+         const id = this.modelId(model.attributes);
 
 Debug.log(`Collection - s_ON_MODEL_EVENT - 1 - change - id: ${id}; prevId: ${prevId}`);
 
-      if (prevId !== id)
-      {
-         if (!Utils.isNullOrUndef(prevId)) { delete this._byId[prevId]; }
-         if (!Utils.isNullOrUndef(id)) { this._byId[id] = model; }
+         if (prevId !== id)
+         {
+            if (!Utils.isNullOrUndef(prevId)) { delete this._byId[prevId]; }
+            if (!Utils.isNullOrUndef(id)) { this._byId[id] = model; }
+         }
       }
-   }
 
-   this.trigger(...arguments);
+      this.trigger(...arguments);
+   }
 };
 
 /**
@@ -103,6 +106,11 @@ Debug.log(`Collection - s_REMOVE_MODELS - 2 - index: ${index}`);
       collection.models.splice(index, 1);
       collection.length--;
 
+      // Remove references before triggering 'remove' event to prevent an infinite loop. #3693
+      delete collection._byId[model.cid];
+      const id = collection.modelId(model.attributes);
+      if (!Utils.isNullOrUndef(id)) { delete collection._byId[id]; }
+
       if (!options.silent)
       {
          options.index = index;
@@ -113,7 +121,7 @@ Debug.log(`Collection - s_REMOVE_MODELS - 2 - index: ${index}`);
       s_REMOVE_REFERENCE(collection, model, options);
    }
 
-   return removed.length ? removed : false;
+   return removed;
 };
 
 /**
@@ -391,10 +399,10 @@ class Collection extends Events
       const collection = this;
       const success = options.success;
 
-      options.success = function(model, resp, callbackOpts)
+      options.success = (m, resp, callbackOpts) =>
       {
-         if (wait) { collection.add(model, callbackOpts); }
-         if (success) { success.call(callbackOpts.context, model, resp, callbackOpts); }
+         if (wait) { collection.add(m, callbackOpts); }
+         if (success) { success.call(callbackOpts.context, m, resp, callbackOpts); }
       };
 
       model.save(null, options);
@@ -472,7 +480,8 @@ Debug.log(`Collection - fetch - success callback - method: ${method}`, true);
    }
 
    /**
-    * Get a model from a collection, specified by an id, a cid, or by passing in a model.
+    * Get a model from the set by id, cid, model object with id or cid properties, or an attributes object that is
+    * transformed through modelId.
     *
     * @example
     * var book = library.get(110);
@@ -486,11 +495,22 @@ Debug.log(`Collection - fetch - success callback - method: ${method}`, true);
    {
       if (Utils.isNullOrUndef(obj)) { return void 0; }
 
-      const id = this.modelId(Utils.isModel(obj) ? obj.attributes : obj);
+      const id = this.modelId(obj.attributes || obj);
 
 Debug.log(`Collection - get - id: ${id}`);
 
-      return this._byId[obj] || this._byId[id] || this._byId[obj.cid];
+      return this._byId[obj] || this._byId[id] || obj.cid && this._byId[obj.cid];
+   }
+
+   /**
+    * Returns `true` if the model is in the collection.
+    *
+    * @param {Model} obj   - An instance of a model.
+    * @returns {boolean}
+    */
+   has(obj)
+   {
+      return !Utils.isNullOrUndef(this.get(obj));
    }
 
    /**
@@ -586,7 +606,7 @@ Debug.log(`Collection - modelId - 1 - attrs: ${JSON.stringify(attrs)}`);
     */
    pluck(attr)
    {
-      return _.invoke(this.models, 'get', attr);
+      return this.map(`${attr}`);
    }
 
    /**
@@ -664,10 +684,14 @@ Debug.log(`Collection - _prepareModel - 1 - attrs.parseObject: ${attrs.parseObje
    {
       options = _.extend({}, options);
       const singular = !_.isArray(models);
-      models = singular ? [models] : _.clone(models);
+      models = singular ? [models] : models.slice();
       const removed = s_REMOVE_MODELS(this, models, options);
 
-      if (!options.silent && removed) { this.trigger('update', this, options); }
+      if (!options.silent && removed.length)
+      {
+         options.changes = { added: [], merged: [], removed };
+         this.trigger('update', this, options);
+      }
 
       return singular ? removed[0] : removed;
    }
@@ -760,20 +784,22 @@ Debug.log(`Collection - _prepareModel - 1 - attrs.parseObject: ${attrs.parseObje
 Debug.log(`Collection - set - 0`, true);
       if (Utils.isNullOrUndef(models)) { return; }
 
-      options = _.defaults({}, options, s_SET_OPTIONS);
-      if (options.parse && !Utils.isModel(models)) { models = this.parse(models, options); }
+      options = _.extend({}, s_SET_OPTIONS, options);
+      if (options.parse && !Utils.isModel(models)) { models = this.parse(models, options) || []; }
 
       const singular = !_.isArray(models);
       models = singular ? [models] : models.slice();
 
       let at = options.at;
       if (!Utils.isNullOrUndef(at)) { at = +at; }
+      if (at > this.length) { at = this.length; }
       if (at < 0) { at += this.length + 1; }
 
 Debug.log(`Collection - set - 1 - at: ${at}; models.length: ${models.length}`);
 
       const set = [];
       const toAdd = [];
+      const toMerge = [];
       const toRemove = [];
       const modelMap = {};
 
@@ -805,6 +831,7 @@ Debug.log(`Collection - set - 3 - merge && model !== existing`);
                let attrs = Utils.isModel(model) ? model.attributes : model;
                if (options.parse) { attrs = existing.parse(attrs, options); }
                existing.set(attrs, options);
+               toMerge.push(existing);
                if (sortable && !sort) { sort = existing.hasChanged(sortAttr); }
             }
 
@@ -864,9 +891,9 @@ Debug.log(`Collection - set - 8 - before invoking s_REMOVE_MODELS`);
 
       if (set.length && replace)
       {
-         orderChanged = this.length !== set.length || _.some(this.models, (model, index) =>
+         orderChanged = this.length !== set.length || _.some(this.models, (m, index) =>
          {
-            return model !== set[index];
+            return m !== set[index];
          });
 
 Debug.log(`Collection - set - 9 - set.length > 0 && replace - orderChanged: ${orderChanged}`);
@@ -896,7 +923,7 @@ Debug.log(`Collection - set - 11 - sorting silent`);
          this.sort({ silent: true });
       }
 
-      // Unless silenced, it's time to fire all appropriate add/sort events.
+      // Unless silenced, it's time to fire all appropriate add/sort/update events.
       if (!options.silent)
       {
 Debug.log(`Collection - set - 12 - !options.silent: ${!options.silent}`);
@@ -910,7 +937,12 @@ Debug.log(`Collection - set - 12 - !options.silent: ${!options.silent}`);
          }
 
          if (sort || orderChanged) { this.trigger('sort', this, options); }
-         if (toAdd.length || toRemove.length) { this.trigger('update', this, options); }
+
+         if (toAdd.length || toRemove.length || toMerge.length)
+         {
+            options.changes = { added: toAdd, removed: toRemove, merged: toMerge };
+            this.trigger('update', this, options);
+         }
       }
 
       // Return the added (or merged) model (or models).
@@ -1061,14 +1093,14 @@ Debug.log("Collection - sync", true);
 // is actually implemented right here:
 const collectionMethods =
 {
-   forEach: 3, each: 3, map: 3, collect: 3, reduce: 4,
-   foldl: 4, inject: 4, reduceRight: 4, foldr: 4, find: 3, detect: 3, filter: 3,
+   forEach: 3, each: 3, map: 3, collect: 3, reduce: 0,
+   foldl: 0, inject: 0, reduceRight: 0, foldr: 0, find: 3, detect: 3, filter: 3,
    select: 3, reject: 3, every: 3, all: 3, some: 3, any: 3, include: 3, includes: 3,
    contains: 3, invoke: 0, max: 3, min: 3, toArray: 1, size: 1, first: 3,
    head: 3, take: 3, initial: 3, rest: 3, tail: 3, drop: 3, last: 3,
    without: 0, difference: 0, indexOf: 3, shuffle: 1, lastIndexOf: 3,
    isEmpty: 1, chain: 1, sample: 3, partition: 3, groupBy: 3, countBy: 3,
-   sortBy: 3, indexBy: 3
+   sortBy: 3, indexBy: 3, findIndex: 3, findLastIndex: 3
 };
 
 // Mix in each Underscore method as a proxy to `Collection#models`.
